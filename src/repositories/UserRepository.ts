@@ -1,22 +1,25 @@
-import User from "../models/User";
+import User from "../domain/User";
+import UserModel from "../models/User";
 
 class UserRepository {
-  async createUser(name: string, username: string, password: string) {
+  async createUser(
+    name: string,
+    username: string,
+    password: string
+  ): Promise<User> {
     try {
-      const user = new User({ name, username, password });
+      const user = new UserModel({ name, username, password });
       await user.save();
-      return {
-        name: name,
-        username: username,
-      };
+      return new User(user._id, user.name, user.username, user.password);
     } catch (error) {
       throw new Error("Failed to register user");
     }
   }
 
-  async getUserByUsername(username: string) {
+  async getUserByUsername(username: string): Promise<User> {
     try {
-      return await User.findOne({ username });
+      const user = await UserModel.findOne({ username });
+      return new User(user._id, user.name, user.username, user.password);
     } catch (error) {
       throw new Error("Failed to get user by username");
     }
