@@ -23,4 +23,4 @@ const {
   
   const UserModel = model("user", UserSchema)
   
-  module.exports = UserModel
+  export default UserModel

@@ -1,15 +1,23 @@
-const authService = require("../services/AuthService");
+import LoginRequest from "dto/LoginRequest";
+import authService from "../services/AuthService";
 
-const login = async (req, res) => {
+const login = async (loginRequest: LoginRequest) => {
   try {
-    const { username, password } = req.body;
-    const token = await authService.login(username, password);
-    res.status(200)
-    res.json({ token });
+    const token = await authService.login(loginRequest);
+    return {
+      status: 200,
+      body:{
+        token: token,
+      }
+    }
   } catch (error) {
-    res.status(500)
-    res.json({ error: "Login failed" });
+    return {
+      status: 200,
+      body:{
+        error: "Login failed",
+      }
+    }
   }
 };
 
-module.exports = { login };
+export default { login };

@@ -1,15 +1,19 @@
-const userService = require('../services/UserService');
+import User from "dto/User";
+import userService from "../services/UserService";
 
-const registerUser = async (req, res) => {
+const registerUser = async (user: User) => {
   try {
-    const { name, username, password } = req.body;
-    const user = await userService.registerUser(name, username, password);
-    res.status(201)
-    res.json(user);
+    const registeredUser = await userService.registerUser(user);
+    return {
+      status: 200,
+      body: registeredUser,
+    };
   } catch (error) {
-    res.status(500)
-    res.json({ error: "Registration failed" });
+    return {
+      status: 500,
+      body: { error: "Registration failed" },
+    };
   }
-}
+};
 
-module.exports = { registerUser };
+export default { registerUser };

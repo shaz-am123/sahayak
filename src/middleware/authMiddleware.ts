@@ -1,5 +1,5 @@
+const dotenv = require('dotenv');
 import jwt from "jsonwebtoken";
-import * as dotenv from "dotenv";
 import { Request, Response, NextFunction } from "express";
 
 dotenv.config();

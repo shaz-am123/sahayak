@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const userController = require('../controllers/UserController');
-const verifyToken = require('../middleware/authMiddleware');
+import userController from '../controllers/UserController';
+import verifyToken from '../middleware/authMiddleware';
 
 // router.get("/", verifyToken, userController.getUsers);
 export default router;

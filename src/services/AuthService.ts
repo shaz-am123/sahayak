@@ -1,8 +1,10 @@
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const userRepository = require("../repositories/UserRepository");
+import LoginRequest from "dto/LoginRequest";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
+import userRepository from "../repositories/UserRepository";
 
-const login = async (username, password) => {
+const login = async (loginRequest: LoginRequest) => {
+  const {username, password} = loginRequest
   const user = await userRepository.getUserByUsername(username);
   if (!user) {
     throw new Error("Authentication failed");
@@ -16,4 +18,4 @@ const login = async (username, password) => {
   });
 };
 
-module.exports = { login };
+export default { login };
