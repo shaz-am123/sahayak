@@ -1,14 +1,24 @@
 import RegistrationRequest from "dto/RegistrationRequest";
 import userService from "../services/UserService";
 import HttpResponse from "../dto/HttpResponse";
+import { CustomValidationError } from "../../errors/CustomValidationError";
 
 class UserController {
-  async registerUser(user: RegistrationRequest): Promise<HttpResponse> {
+  async registerUser(
+    registrationRequest: RegistrationRequest
+  ): Promise<HttpResponse> {
     try {
-      const registeredUser = await userService.registerUser(user);
+      await registrationRequest.validateRequest();
+      const registeredUser = await userService.registerUser(
+        registrationRequest
+      );
       return new HttpResponse(200, registeredUser);
-    } catch (error) {
-      return new HttpResponse(500, { error: "Registration failed" });
+    } catch (error: any) {
+      if (error instanceof CustomValidationError) {
+        return new HttpResponse(400, { error: error.validationErrors });
+      }
+      
+      return new HttpResponse(500, { error: error.message });
     }
   }
 }

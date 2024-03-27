@@ -21,7 +21,7 @@ class UserRepository {
       const user = await UserModel.findOne({ username });
       return new User(user._id, user.name, user.username, user.password);
     } catch (error) {
-      throw new Error("Failed to get user by username");
+      throw new Error("User with username " + username + " does not exist");
     }
   }
 }
