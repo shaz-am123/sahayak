@@ -18,7 +18,7 @@ class AuthService {
       expiresIn: "1h",
     });
 
-    return new LoginResponse(user.id, user.username, token);
+    return new LoginResponse(user.id!, user.username, token);
   }
 }
 

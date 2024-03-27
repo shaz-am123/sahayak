@@ -15,7 +15,7 @@ const {
         maxlength: 50,
         unique: true
     },
-    password: {
+    hashedPassword: {
         type: String,
         required: true,
     },

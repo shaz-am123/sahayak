@@ -1,10 +1,10 @@
 class User {
-    id: string
+    id: string | null;
     name: string;
     username: string;
     hashedPassword: string;
 
-    constructor(id: string, name: string, username: string, hashedPassword: string) {
+    constructor(id: string | null, name: string, username: string, hashedPassword: string) {
         this.id = id;
         this.name = name;
         this.username = username;
