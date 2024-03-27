@@ -1,25 +1,20 @@
 import LoginRequest from "dto/LoginRequest";
 import authService from "../services/AuthService";
+import HttpResponse from "../dto/HttpResponse";
 
 class AuthController {
-  async login(loginRequest: LoginRequest) {
+  async login(loginRequest: LoginRequest): Promise<HttpResponse> {
     try {
-      const token = await authService.login(loginRequest);
-      return {
-        status: 200,
-        body: {
-          token: token,
-        },
-      };
+      const loginResponse = await authService.login(loginRequest);
+      return new HttpResponse(200, loginResponse);
     } catch (error) {
-      return {
-        status: 200,
-        body: {
-          error: "Login failed",
-        },
-      };
+      return new HttpResponse(500, {
+        error: "Login failed",
+      });
     }
   }
 }
 
-export default new AuthController();
+const authController = new AuthController();
+
+export default authController;

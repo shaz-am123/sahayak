@@ -2,13 +2,13 @@ import express from "express";
 const router = express.Router();
 import userController from "../controllers/UserController";
 import authController from "../controllers/AuthController";
-import User from "dto/User";
+import RegistrationRequest from "dto/RegistrationRequest";
 import LoginRequest from "dto/LoginRequest";
 
 router.post(
   "/register",
   async (req: express.Request, res: express.Response) => {
-    const user: User = {
+    const user: RegistrationRequest = {
       name: req.body.name,
       username: req.body.username,
       password: req.body.password,
