@@ -20,7 +20,10 @@ router.post(
 );
 
 router.post("/login", async (req: express.Request, res: express.Response) => {
-  const loginRequest: LoginRequest = req.body as LoginRequest;
+  const loginRequest = new LoginRequest(
+    req.body.username,
+    req.body.password
+  );
   const loginResponse = await authController.login(loginRequest);
   res.status(loginResponse.status).json(loginResponse.body);
 });
