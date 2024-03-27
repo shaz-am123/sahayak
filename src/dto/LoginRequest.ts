@@ -1,5 +1,5 @@
 import { IsNotEmpty, Matches, MaxLength, MinLength, validate } from "class-validator";
-import { CustomValidationError } from "../../errors/CustomValidationError";
+import { CustomValidationError } from "../errors/CustomValidationError";
 
 class LoginRequest {
     @IsNotEmpty({ message: "Username is required" })

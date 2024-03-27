@@ -5,7 +5,7 @@ import {
   MinLength,
   validate,
 } from "class-validator";
-import { CustomValidationError } from "../../errors/CustomValidationError";
+import { CustomValidationError } from "../errors/CustomValidationError";
 
 class RegistrationRequest {
   @IsNotEmpty({ message: "Name is required" })

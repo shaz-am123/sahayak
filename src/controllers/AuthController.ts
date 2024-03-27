@@ -1,7 +1,7 @@
 import LoginRequest from "dto/LoginRequest";
 import authService from "../services/AuthService";
 import HttpResponse from "../dto/HttpResponse";
-import { CustomValidationError } from "../../errors/CustomValidationError";
+import { CustomValidationError } from "../errors/CustomValidationError";
 
 class AuthController {
   async login(loginRequest: LoginRequest): Promise<HttpResponse> {

@@ -1,7 +1,7 @@
 import RegistrationRequest from "dto/RegistrationRequest";
 import userService from "../services/UserService";
 import HttpResponse from "../dto/HttpResponse";
-import { CustomValidationError } from "../../errors/CustomValidationError";
+import { CustomValidationError } from "../errors/CustomValidationError";
 
 class UserController {
   async registerUser(
