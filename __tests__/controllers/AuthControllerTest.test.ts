@@ -15,7 +15,7 @@ jest.mock("../../src/services/AuthService", () => ({
   },
 }));
 
-describe("user registration tests", () => {
+describe("user controller tests", () => {
   const authServiceMock = AuthService.getInstance() as jest.Mocked<AuthService>
   const authController = AuthController.getInstance(authServiceMock);
 

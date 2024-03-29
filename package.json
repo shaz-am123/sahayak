@@ -42,7 +42,7 @@
   },
   "scripts": {
     "start": "nodemon",
-    "test": "jest --watch"
+    "test": "jest"
   },
   "author": "Shubham Prasad",
   "license": "ISC"
