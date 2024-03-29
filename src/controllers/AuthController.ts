@@ -3,16 +3,13 @@ import { AuthService } from "../services/AuthService";
 import HttpResponse from "../dto/HttpResponse";
 import { CustomValidationError } from "../errors/CustomValidationError";
 import RegistrationRequest from "../dto/RegistrationRequest";
-import { AuthRepository } from "../repositories/AuthRepository";
 
 export class AuthController {
   private static instance: AuthController;
     private authService: AuthService;
-    private authRepository: AuthRepository;
 
     private constructor() {
         this.authService = AuthService.getInstance();
-        this.authRepository = AuthRepository.getInstance();
     }
 
     public static getInstance(): AuthController {
