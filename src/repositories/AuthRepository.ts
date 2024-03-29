@@ -1,15 +1,24 @@
 import User from "../domain/User";
 import UserModel from "../models/User";
 
-class AuthRepository {
+export class AuthRepository {
+  private static instance: AuthRepository;
+
+  private constructor() {}
+
+  public static getInstance(): AuthRepository {
+    if (!AuthRepository.instance) {
+      AuthRepository.instance = new AuthRepository();
+    }
+    return AuthRepository.instance;
+  }
+
   async createUser(user: User): Promise<User> {
-    const userEntity = new UserModel(
-      {
-        name: user.name,
-        username: user.username,
-        hashedPassword: user.hashedPassword
-      }
-    );
+    const userEntity = new UserModel({
+      name: user.name,
+      username: user.username,
+      hashedPassword: user.hashedPassword,
+    });
     await userEntity.save();
     return new User(
       userEntity._id,
@@ -27,6 +36,3 @@ class AuthRepository {
     return new User(user._id, user.name, user.username, user.hashedPassword);
   }
 }
-
-const authRepository = new AuthRepository();
-export default authRepository;

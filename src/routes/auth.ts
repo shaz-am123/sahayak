@@ -1,9 +1,10 @@
 import express from "express";
 const router = express.Router();
-import userController from "../controllers/UserController";
-import authController from "../controllers/AuthController";
+import { AuthController } from "../controllers/AuthController";
 import RegistrationRequest from "../dto/RegistrationRequest";
 import LoginRequest from "../dto/LoginRequest";
+
+const authController = AuthController.getInstance();
 
 router.post(
   "/register",
@@ -14,16 +15,15 @@ router.post(
       req.body.password
     );
 
-    const registrationResponse = await userController.registerUser(registrationRequest);
+    const registrationResponse = await authController.registerUser(
+      registrationRequest
+    );
     res.status(registrationResponse.status).json(registrationResponse.body);
   }
 );
 
 router.post("/login", async (req: express.Request, res: express.Response) => {
-  const loginRequest = new LoginRequest(
-    req.body.username,
-    req.body.password
-  );
+  const loginRequest = new LoginRequest(req.body.username, req.body.password);
   const loginResponse = await authController.login(loginRequest);
   res.status(loginResponse.status).json(loginResponse.body);
 });

@@ -1,45 +1,57 @@
 import LoginRequest from "dto/LoginRequest";
-import authService from "../services/AuthService";
+import { AuthService } from "../services/AuthService";
 import HttpResponse from "../dto/HttpResponse";
 import { CustomValidationError } from "../errors/CustomValidationError";
-import RegistrationRequest from "dto/RegistrationRequest";
+import RegistrationRequest from "../dto/RegistrationRequest";
+import { AuthRepository } from "../repositories/AuthRepository";
 
-class AuthController {
+export class AuthController {
+  private static instance: AuthController;
+    private authService: AuthService;
+    private authRepository: AuthRepository;
+
+    private constructor() {
+        this.authService = AuthService.getInstance();
+        this.authRepository = AuthRepository.getInstance();
+    }
+
+    public static getInstance(): AuthController {
+        if (!AuthController.instance) {
+            AuthController.instance = new AuthController();
+        }
+        return AuthController.instance;
+    }
+    
   async registerUser(
     registrationRequest: RegistrationRequest
   ): Promise<HttpResponse> {
     try {
       await registrationRequest.validateRequest();
-      const registeredResponse = await authService.registerUser(
+      const registeredResponse = await this.authService.registerUser(
         registrationRequest
       );
       return new HttpResponse(200, registeredResponse);
     } catch (error) {
-      return this.handleErrors(error)
+      return this.handleErrors(error);
     }
   }
 
   async login(loginRequest: LoginRequest): Promise<HttpResponse> {
     try {
       await loginRequest.validateRequest();
-      const loginResponse = await authService.login(loginRequest);
+      const loginResponse = await this.authService.login(loginRequest);
       return new HttpResponse(200, loginResponse);
     } catch (error) {
       return this.handleErrors(error);
     }
   }
 
-  private handleErrors(error: any): HttpResponse
-  {
-      if (error instanceof CustomValidationError) {
-        return new HttpResponse(400, { error: error.validationErrors });
-      }
-      return new HttpResponse(500, {
-        error: error.message,
-      });
+  private handleErrors(error: any): HttpResponse {
+    if (error instanceof CustomValidationError) {
+      return new HttpResponse(400, { error: error.validationErrors });
+    }
+    return new HttpResponse(500, {
+      error: error.message,
+    });
   }
 }
-
-const authController = new AuthController();
-
-export default authController;
