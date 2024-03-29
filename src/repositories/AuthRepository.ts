@@ -1,7 +1,7 @@
 import User from "../domain/User";
 import UserModel from "../models/User";
 
-class UserRepository {
+class AuthRepository {
   async createUser(user: User): Promise<User> {
     const userEntity = new UserModel(
       {
@@ -28,5 +28,5 @@ class UserRepository {
   }
 }
 
-const userRepository = new UserRepository();
-export default userRepository;
+const authRepository = new AuthRepository();
+export default authRepository;
