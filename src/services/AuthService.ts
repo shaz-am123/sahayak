@@ -11,13 +11,13 @@ export class AuthService {
     private static instance: AuthService;
     private authRepository: AuthRepository;
 
-    private constructor() {
-        this.authRepository = AuthRepository.getInstance();
+    private constructor(authRepository: AuthRepository) {
+        this.authRepository = authRepository;
     }
 
-    public static getInstance(): AuthService {
+    public static getInstance(authRepository: AuthRepository = AuthRepository.getInstance()): AuthService {
         if (!AuthService.instance) {
-            AuthService.instance = new AuthService();
+            AuthService.instance = new AuthService(authRepository);
         }
         return AuthService.instance;
     }

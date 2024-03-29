@@ -1,4 +1,4 @@
-import LoginRequest from "dto/LoginRequest";
+import LoginRequest from "../dto/LoginRequest";
 import { AuthService } from "../services/AuthService";
 import HttpResponse from "../dto/HttpResponse";
 import { CustomValidationError } from "../errors/CustomValidationError";
@@ -8,13 +8,13 @@ export class AuthController {
   private static instance: AuthController;
     private authService: AuthService;
 
-    private constructor() {
-        this.authService = AuthService.getInstance();
+    private constructor(authService: AuthService) {
+        this.authService = authService
     }
 
-    public static getInstance(): AuthController {
+    public static getInstance(authService: AuthService = AuthService.getInstance()): AuthController {
         if (!AuthController.instance) {
-            AuthController.instance = new AuthController();
+            AuthController.instance = new AuthController(authService);
         }
         return AuthController.instance;
     }
