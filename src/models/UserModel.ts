@@ -9,15 +9,15 @@ const {
       required: true,
       maxlength: 50,
     },
+    emailAddress: {
+      type: String,
+      required: true,
+    },
     username: {
         type: String,
         required: true,
         maxlength: 50,
         unique: true
-    },
-    emailAddress: {
-      type: String,
-      required: true,
     },
     hashedPassword: {
         type: String,

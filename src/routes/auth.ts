@@ -11,6 +11,7 @@ router.post(
   async (req: express.Request, res: express.Response) => {
     const registrationRequest = new RegistrationRequest(
       req.body.name,
+      req.body.emailAddress,
       req.body.username,
       req.body.password
     );
