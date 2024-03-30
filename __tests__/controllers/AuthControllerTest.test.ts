@@ -34,10 +34,11 @@ describe("Auth Controller tests", () => {
   it("should handle registration of a user", async () => {
     const registrationRequest = new RegistrationRequest(
       "Ram",
+      "ram@gmail.com",
       "ram123",
       "myPassword123"
     );
-    const expectedResponse = new RegistrationResponse("A001", "Ram", "ram123");
+    const expectedResponse: RegistrationResponse = {...registrationRequest, id: "A001"};
 
     authServiceMock.registerUser.mockResolvedValue(expectedResponse);
 
@@ -50,6 +51,7 @@ describe("Auth Controller tests", () => {
   it("should handle validation errors during user registration", async () => {
     const mockRegisterUserRequest = new RegistrationRequest(
       "ram",
+      "ram@gmail.com",
       "",
       "myPass123"
     );
@@ -57,6 +59,7 @@ describe("Auth Controller tests", () => {
       {
         target: {
           name: "ram",
+          emailAddress: "ram@gmail.com",
           username: "",
           password: "myPass123",
         },
@@ -112,6 +115,7 @@ describe("Auth Controller tests", () => {
   it("should handle other errors during user registration", async () => {
     const mockRegisterUserRequest = new RegistrationRequest(
       "ram",
+      "ram@gmail.com",
       "ram123",
       "myPassword123"
     );

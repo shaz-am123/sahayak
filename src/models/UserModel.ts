@@ -15,6 +15,10 @@ const {
         maxlength: 50,
         unique: true
     },
+    emailAddress: {
+      type: String,
+      required: true,
+    },
     hashedPassword: {
         type: String,
         required: true,

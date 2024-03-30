@@ -1,7 +1,7 @@
 import { DatabaseConnection } from "./../../src/db";
 import { AuthRepository } from "../../src/repositories/AuthRepository";
 import User from "../../src/domain/User";
-import UserModel from "../../src/models/User";
+import UserModel from "../../src/models/UserModel";
 require("dotenv").config();
 
 describe("Authentication Repository tests", () => {
@@ -14,6 +14,7 @@ describe("Authentication Repository tests", () => {
     const userEntity = new UserModel({
       name: "Vikram",
       username: "vikram123",
+      emailAddress: "vikram@gmail.com",
       hashedPassword: "mockHashedPassword",
     });
     await userEntity.save();
@@ -24,7 +25,7 @@ describe("Authentication Repository tests", () => {
   });
 
   it("should be able to create a new user", async () => {
-    const user = new User(null, "Ram", "ram123", "mockHashedPassword");
+    const user = new User(null, "Ram", "ram@gmail.com", "ram123", "mockHashedPassword");
     const actualResponse = await authRepository.registerUser(user);
     expect({ ...user, id: "ignore" }).toEqual({
       ...actualResponse,
@@ -33,7 +34,7 @@ describe("Authentication Repository tests", () => {
   });
 
   it("should be able to handle errors while creating new user with existing user name", async () => {
-    const user = new User(null, "vikram", "vikram123", "mockHashedPassword");
+    const user = new User(null, "vikram", "vikram@gmail.com", "vikram123", "mockHashedPassword");
 
     try {
       await authRepository.registerUser(user);
@@ -47,7 +48,7 @@ describe("Authentication Repository tests", () => {
 
   it("should be able to handle errors while creating new user with existing user name", async () => {
     UserModel.save = jest.fn();
-    const user = new User(null, "Shyam", "shyam123", "mockHashedPassword");
+    const user = new User(null, "Shyam", "shyam@gmail.com", "shyam123", "mockHashedPassword");
     const databaseError = new Error('Database error');
     (UserModel.save as jest.Mock).mockRejectedValue(databaseError);
 
@@ -63,6 +64,7 @@ describe("Authentication Repository tests", () => {
     const expectedResponse = new User(
       "A001",
       "Vikram",
+      "vikram@gmail.com",
       "vikram123",
       "mockHashedPassword"
     );
