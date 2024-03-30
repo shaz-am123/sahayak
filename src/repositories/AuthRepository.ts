@@ -1,19 +1,22 @@
 import User from "../domain/User";
 import UserModel from "../models/User";
+import { DatabaseConnection } from "../db";
 
 export class AuthRepository {
   private static instance: AuthRepository;
 
-  private constructor() {}
+  private constructor(databaseConnection: DatabaseConnection) {
+    databaseConnection.connect();
+  }
 
-  public static getInstance(): AuthRepository {
+  public static getInstance(databaseConnection: DatabaseConnection = DatabaseConnection.getInstance()): AuthRepository {
     if (!AuthRepository.instance) {
-      AuthRepository.instance = new AuthRepository();
+      AuthRepository.instance = new AuthRepository(databaseConnection);
     }
     return AuthRepository.instance;
   }
 
-  async createUser(user: User): Promise<User> {
+  async registerUser(user: User): Promise<User> {
     const userEntity = new UserModel({
       name: user.name,
       username: user.username,

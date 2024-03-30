@@ -1,14 +1,38 @@
 import mongoose from "mongoose";
 require("dotenv").config()
 
-const connectDB = async () => {
-  try {
-    const conn = await mongoose.connect(process.env.DB_URL!!);
-    console.log("Connected to database sucessfully")
-  } catch (error: any) {
-    console.error(error.message);
-    process.exit(1);
-  }
-};
+export class DatabaseConnection {
+  private static instance: DatabaseConnection;
+  private databaseUrl: string;
 
-export default connectDB;
+  private constructor(databaseUrl: string) {
+    this.databaseUrl = databaseUrl;
+  }
+
+  public static getInstance(databaseUrl: string = process.env.DB_URL!): DatabaseConnection {
+    if (!DatabaseConnection.instance) {
+      DatabaseConnection.instance = new DatabaseConnection(databaseUrl);
+    }
+    return DatabaseConnection.instance;
+  }
+
+  async connect(): Promise<void> {
+    try {
+      await mongoose.connect(this.databaseUrl);
+      console.log("Connected to MongoDB");
+    } catch (error) {
+      console.error("Error connecting to MongoDB:", error);
+      throw error;
+    }
+  }
+
+  async disconnect(): Promise<void> {
+    try {
+      await mongoose.disconnect();
+      console.log("Disconnected from MongoDB");
+    } catch (error) {
+      console.error("Error disconnecting from MongoDB:", error);
+      throw error;
+    }
+  }
+}
