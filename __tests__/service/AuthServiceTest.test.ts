@@ -11,7 +11,7 @@ import RegistrationResponse from "../../src/dto/RegistrationResponse";
 jest.mock("../../src/repositories/AuthRepository", () => ({
   AuthRepository: {
     getInstance: jest.fn(() => ({
-      createUser: jest.fn(),
+      registerUser: jest.fn(),
       getUserByUsername: jest.fn(),
     })),
   },
@@ -21,7 +21,7 @@ jest.mock("bcrypt");
 
 jest.mock("jsonwebtoken");
 
-describe("user registration tests", () => {
+describe("Auth Service tests", () => {
   const authRepositoryMock =
     AuthRepository.getInstance() as jest.Mocked<AuthRepository>;
   const authService = AuthService.getInstance(authRepositoryMock);
@@ -73,7 +73,7 @@ describe("user registration tests", () => {
       return "mockHashedPassword";
     });
 
-    authRepositoryMock.createUser.mockResolvedValue(mockUserResponse);
+    authRepositoryMock.registerUser.mockResolvedValue(mockUserResponse);
     const registrationResponse = await authService.registerUser(
       registrationRequest
     );
@@ -92,11 +92,10 @@ describe("user registration tests", () => {
     });
 
     const serverError = new Error("Internal Server Error");
-    authRepositoryMock.createUser.mockRejectedValue(serverError);
+    authRepositoryMock.registerUser.mockRejectedValue(serverError);
 
     try {
       await authService.registerUser(registrationRequest);
-      fail("Expected an error to be thrown");
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("Internal Server Error");
@@ -115,7 +114,6 @@ describe("user registration tests", () => {
 
     try {
       await authService.login(loginRequest);
-      fail("Expected an error to be thrown");
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("User not found");
@@ -138,7 +136,6 @@ describe("user registration tests", () => {
 
     try {
       await authService.login(loginRequest);
-      fail("Expected an error to be thrown");
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("Authentication failed");

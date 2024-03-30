@@ -32,7 +32,7 @@ export class AuthService {
       registrationRequest.username,
       hashedPassword
     );
-    const registeredUser = await this.authRepository.createUser(user);
+    const registeredUser = await this.authRepository.registerUser(user);
     return new RegistrationResponse(
       registeredUser.id!,
       registeredUser.name,
