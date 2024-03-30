@@ -37,6 +37,7 @@ describe("Auth Service tests", () => {
     const userResponse = new User(
       "A001",
       "Ram",
+      "ram@gmail.com",
       "ram123",
       "mockHashedPassword"
     );
@@ -55,17 +56,15 @@ describe("Auth Service tests", () => {
     const registrationRequest = new RegistrationRequest(
       "Ram",
       "ram123",
+      "ram@gmail.com",
       "myPass123"
     );
-    const expectedRegistrationResponse = new RegistrationResponse(
-      "A001",
-      "Ram",
-      "ram123"
-    );
+    const expectedRegistrationResponse = new RegistrationResponse("A001", "Ram", "ram@gmail.com", "ram123")
 
     const mockUserResponse = new User(
       "A001",
       "Ram",
+      "ram@gmail.com",
       "ram123",
       "mockHashedPassword"
     );
@@ -84,6 +83,7 @@ describe("Auth Service tests", () => {
     const registrationRequest = new RegistrationRequest(
       "Ram",
       "ram123",
+      "ram@gmail.com",
       "myPass123"
     );
 
@@ -125,6 +125,7 @@ describe("Auth Service tests", () => {
     const userResponse = new User(
       "A001",
       "Ram",
+      "ram@gmail.com",
       "ram123",
       "mockHashedPassword"
     );

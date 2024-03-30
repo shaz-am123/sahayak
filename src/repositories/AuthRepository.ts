@@ -1,5 +1,5 @@
 import User from "../domain/User";
-import UserModel from "../models/User";
+import UserModel from "../models/UserModel";
 import { DatabaseConnection } from "../db";
 
 export class AuthRepository {
@@ -20,22 +20,24 @@ export class AuthRepository {
     const userEntity = new UserModel({
       name: user.name,
       username: user.username,
+      emailAddress: user.emailAddress,
       hashedPassword: user.hashedPassword,
     });
     await userEntity.save();
     return new User(
       userEntity._id,
       userEntity.name,
+      userEntity.emailAddress,
       userEntity.username,
       userEntity.hashedPassword
     );
   }
 
   async getUserByUsername(username: string): Promise<User> {
-    const user = await UserModel.findOne({ username });
-    if (!user) {
+    const userEntity = await UserModel.findOne({ username });
+    if (!userEntity) {
       throw new Error("User not found");
     }
-    return new User(user._id, user.name, user.username, user.hashedPassword);
+    return new User(userEntity._id, userEntity.name,  userEntity.emailAddress, userEntity.username, userEntity.hashedPassword);
   }
 }

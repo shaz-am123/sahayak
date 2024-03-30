@@ -29,6 +29,7 @@ export class AuthService {
     const user = new User(
       null,
       registrationRequest.name,
+      registrationRequest.emailAddress,
       registrationRequest.username,
       hashedPassword
     );
@@ -36,6 +37,7 @@ export class AuthService {
     return new RegistrationResponse(
       registeredUser.id!,
       registeredUser.name,
+      registeredUser.emailAddress,
       registeredUser.username
     );
   }
