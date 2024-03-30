@@ -1,6 +1,6 @@
 import User from "../domain/User";
-import UserModel from "../models/UserModel";
 import { DatabaseConnection } from "../db";
+import UserModel from "../models/UserModel";
 
 export class AuthRepository {
   private static instance: AuthRepository;
