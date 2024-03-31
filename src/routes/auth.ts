@@ -19,7 +19,7 @@ router.post(
     const registrationResponse = await authController.registerUser(
       registrationRequest
     );
-    res.status(registrationResponse.status).json(registrationResponse.body);
+    res.status(registrationResponse.statusCode).json(registrationResponse.body);
   }
 );
 
@@ -29,7 +29,7 @@ router.post("/login", async (req: express.Request, res: express.Response) => {
     password: req.body.password
   });
   const loginResponse = await authController.login(loginRequest);
-  res.status(loginResponse.status).json(loginResponse.body);
+  res.status(loginResponse.statusCode).json(loginResponse.body);
 });
 
 export default router;

@@ -35,7 +35,7 @@ describe("Auth Controller tests", () => {
     const httpResponse = await authController.login(loginRequest);
 
     expect(httpResponse.body).toEqual(expectedResponse);
-    expect(httpResponse.status).toBe(200);
+    expect(httpResponse.statusCode).toBe(200);
   });
 
   it("should handle registration of a user", async () => {
@@ -55,7 +55,7 @@ describe("Auth Controller tests", () => {
     const httpResponse = await authController.registerUser(registrationRequest);
 
     expect(httpResponse.body).toEqual(expectedResponse);
-    expect(httpResponse.status).toBe(200);
+    expect(httpResponse.statusCode).toBe(200);
   });
 
   it("should handle validation errors during user registration", async () => {
@@ -92,7 +92,7 @@ describe("Auth Controller tests", () => {
     expect(httpResponse.body).toEqual({
       error: validationError.validationErrors,
     });
-    expect(httpResponse.status).toBe(400);
+    expect(httpResponse.statusCode).toBe(400);
   });
 
   it("should handle validation errors during user login", async () => {
@@ -122,7 +122,7 @@ describe("Auth Controller tests", () => {
     expect(httpResponse.body).toEqual({
       error: validationError.validationErrors,
     });
-    expect(httpResponse.status).toBe(400);
+    expect(httpResponse.statusCode).toBe(400);
   });
 
   it("should handle other errors during user registration", async () => {
@@ -142,7 +142,7 @@ describe("Auth Controller tests", () => {
     );
 
     expect(httpResponse.body).toEqual({ error: errorMessage });
-    expect(httpResponse.status).toBe(500);
+    expect(httpResponse.statusCode).toBe(500);
   });
 
   it("should handle other errors during user login", async () => {
@@ -158,6 +158,6 @@ describe("Auth Controller tests", () => {
     const httpResponse = await authController.login(mockLoginRequest);
 
     expect(httpResponse.body).toEqual({ error: errorMessage });
-    expect(httpResponse.status).toBe(500);
+    expect(httpResponse.statusCode).toBe(500);
   });
 });

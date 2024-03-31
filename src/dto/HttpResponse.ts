@@ -1,10 +1,10 @@
 class HttpResponse {
-  status: number;
+  statusCode: number;
   body: object;
 
-  constructor(status: number, body: object) {
-    this.status = status;
-    this.body = body;
+  constructor(data: { statusCode: number; body: object }) {
+    this.statusCode = data.statusCode;
+    this.body = data.body;
   }
 }
 
