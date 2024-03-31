@@ -55,7 +55,7 @@ describe("Auth Controller tests", () => {
     const httpResponse = await authController.registerUser(registrationRequest);
 
     expect(httpResponse.body).toEqual(expectedResponse);
-    expect(httpResponse.statusCode).toBe(200);
+    expect(httpResponse.statusCode).toBe(201);
   });
 
   it("should handle validation errors during user registration", async () => {
