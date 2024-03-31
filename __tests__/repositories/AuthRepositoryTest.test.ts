@@ -5,14 +5,15 @@ import UserModel from "../../src/models/UserModel";
 require("dotenv").config();
 
 describe("Authentication Repository tests", () => {
-  const databaseConfiguration = DatabaseConfiguration.getInstance(
-    process.env.TESTING_DB_URL
-  );
+  let databaseConfiguration: DatabaseConfiguration;
   const authRepository = AuthRepository.getInstance();
 
   afterAll(async () => await databaseConfiguration.destructor());
 
   beforeEach(async () => {
+    databaseConfiguration = await DatabaseConfiguration.getInstance(
+      process.env.TESTING_DB_URL
+    );
     const userEntity = new UserModel({
       name: "Vikram",
       username: "vikram123",
