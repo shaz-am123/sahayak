@@ -1,11 +1,11 @@
 class HttpResponse {
-    status: number;
-    body: object;
+  statusCode: number;
+  body: object;
 
-    constructor(status: number, body: object) {
-        this.status = status;
-        this.body = body;
-    }
+  constructor(data: { statusCode: number; body: object }) {
+    this.statusCode = data.statusCode;
+    this.body = data.body;
+  }
 }
 
 export default HttpResponse;

@@ -33,19 +33,22 @@ describe("Auth Service tests", () => {
     (jwt.sign as jest.Mock).mockImplementation(() => {
       return "mockToken";
     });
-    const loginRequest = new LoginRequest("ram123", "myPass123");
-    const userResponse = new User(
-      "A001",
-      "Ram",
-      "ram@gmail.com",
-      "ram123",
-      "mockHashedPassword"
-    );
-    const expectedLoginResponse = new LoginResponse(
-      "A001",
-      "ram123",
-      "mockToken"
-    );
+    const loginRequest = new LoginRequest({
+      username: "ram123",
+      password: "myPass123",
+    });
+    const userResponse = new User({
+      id: "A001",
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      hashedPassword: "mockHashedPassword",
+    });
+    const expectedLoginResponse = new LoginResponse({
+      id: "A001",
+      username: "ram123",
+      token: "mockToken",
+    });
 
     authRepositoryMock.getUserByUsername.mockResolvedValue(userResponse);
     const loginResponse = await authService.login(loginRequest);
@@ -53,21 +56,27 @@ describe("Auth Service tests", () => {
   });
 
   it("should handle registration of a user", async () => {
-    const registrationRequest = new RegistrationRequest(
-      "Ram",
-      "ram123",
-      "ram@gmail.com",
-      "myPass123"
-    );
-    const expectedRegistrationResponse = new RegistrationResponse("A001", "Ram", "ram@gmail.com", "ram123")
+    const registrationRequest = new RegistrationRequest({
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      password: "myPass123",
+    });
+    const expectedRegistrationResponse = new RegistrationResponse({
+      id: "A001",
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+    });
 
-    const mockUserResponse = new User(
-      "A001",
-      "Ram",
-      "ram@gmail.com",
-      "ram123",
-      "mockHashedPassword"
-    );
+    const mockUserResponse = new User({
+      id: "A001",
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      hashedPassword: "mockHashedPassword",
+    });
+
     (bcrypt.hash as jest.Mock).mockImplementation(() => {
       return "mockHashedPassword";
     });
@@ -80,12 +89,12 @@ describe("Auth Service tests", () => {
   });
 
   it("should handle errors during user registration", async () => {
-    const registrationRequest = new RegistrationRequest(
-      "Ram",
-      "ram123",
-      "ram@gmail.com",
-      "myPass123"
-    );
+    const registrationRequest = new RegistrationRequest({
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      password: "myPass123",
+    });
 
     (bcrypt.hash as jest.Mock).mockImplementation(() => {
       return "mockHashedPassword";
@@ -107,7 +116,10 @@ describe("Auth Service tests", () => {
       return true;
     });
 
-    const loginRequest = new LoginRequest("ram123", "myPass123");
+    const loginRequest = new LoginRequest({
+      username: "ram123",
+      password: "myPass123",
+    });
 
     const userNotFoundError = new Error("User not found");
     authRepositoryMock.getUserByUsername.mockRejectedValue(userNotFoundError);
@@ -121,14 +133,17 @@ describe("Auth Service tests", () => {
   });
 
   it("should handle password mismatch error during user login", async () => {
-    const loginRequest = new LoginRequest("ram123", "myPass123");
-    const userResponse = new User(
-      "A001",
-      "Ram",
-      "ram@gmail.com",
-      "ram123",
-      "mockHashedPassword"
-    );
+    const loginRequest = new LoginRequest({
+      username: "ram123",
+      password: "myPass123",
+    });
+    const userResponse = new User({
+      id: "A001",
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      hashedPassword: "mockHashedPassword",
+    });
 
     authRepositoryMock.getUserByUsername.mockResolvedValue(userResponse);
     (bcrypt.compare as jest.Mock).mockImplementation(() => {

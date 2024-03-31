@@ -9,7 +9,9 @@ export class AuthRepository {
     databaseConnection.connect();
   }
 
-  public static getInstance(databaseConnection: DatabaseConnection = DatabaseConnection.getInstance()): AuthRepository {
+  public static getInstance(
+    databaseConnection: DatabaseConnection = DatabaseConnection.getInstance()
+  ): AuthRepository {
     if (!AuthRepository.instance) {
       AuthRepository.instance = new AuthRepository(databaseConnection);
     }
@@ -24,13 +26,13 @@ export class AuthRepository {
       hashedPassword: user.hashedPassword,
     });
     await userEntity.save();
-    return new User(
-      userEntity._id,
-      userEntity.name,
-      userEntity.emailAddress,
-      userEntity.username,
-      userEntity.hashedPassword
-    );
+    return new User({
+      id: userEntity._id,
+      name: userEntity.name,
+      emailAddress: userEntity.emailAddress,
+      username: userEntity.username,
+      hashedPassword: userEntity.hashedPassword,
+    });
   }
 
   async getUserByUsername(username: string): Promise<User> {
@@ -38,6 +40,12 @@ export class AuthRepository {
     if (!userEntity) {
       throw new Error("User not found");
     }
-    return new User(userEntity._id, userEntity.name,  userEntity.emailAddress, userEntity.username, userEntity.hashedPassword);
+    return new User({
+      id: userEntity._id,
+      name: userEntity.name,
+      emailAddress: userEntity.emailAddress,
+      username: userEntity.username,
+      hashedPassword: userEntity.hashedPassword,
+    });
   }
 }

@@ -16,45 +16,55 @@ jest.mock("../../src/services/AuthService", () => ({
 }));
 
 describe("Auth Controller tests", () => {
-  const authServiceMock = AuthService.getInstance() as jest.Mocked<AuthService>
+  const authServiceMock = AuthService.getInstance() as jest.Mocked<AuthService>;
   const authController = AuthController.getInstance(authServiceMock);
 
   it("should handle login of a user", async () => {
-    const loginRequest = new LoginRequest("ram123", "myPassword123");
-    const expectedResponse = new LoginResponse("A001", "ram123", "mockToken");
+    const loginRequest = new LoginRequest({
+      username: "ram123",
+      password: "myPassword123",
+    });
+    const expectedResponse = new LoginResponse({
+      id: "A001",
+      username: "ram123",
+      token: "mockToken",
+    });
 
     authServiceMock.login.mockResolvedValue(expectedResponse);
 
     const httpResponse = await authController.login(loginRequest);
 
     expect(httpResponse.body).toEqual(expectedResponse);
-    expect(httpResponse.status).toBe(200);
+    expect(httpResponse.statusCode).toBe(200);
   });
 
   it("should handle registration of a user", async () => {
-    const registrationRequest = new RegistrationRequest(
-      "Ram",
-      "ram@gmail.com",
-      "ram123",
-      "myPassword123"
-    );
-    const expectedResponse: RegistrationResponse = {...registrationRequest, id: "A001"};
+    const registrationRequest = new RegistrationRequest({
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      password: "myPassword123",
+    });
+    const expectedResponse: RegistrationResponse = {
+      ...registrationRequest,
+      id: "A001",
+    };
 
     authServiceMock.registerUser.mockResolvedValue(expectedResponse);
 
     const httpResponse = await authController.registerUser(registrationRequest);
 
     expect(httpResponse.body).toEqual(expectedResponse);
-    expect(httpResponse.status).toBe(200);
+    expect(httpResponse.statusCode).toBe(200);
   });
 
   it("should handle validation errors during user registration", async () => {
-    const mockRegisterUserRequest = new RegistrationRequest(
-      "ram",
-      "ram@gmail.com",
-      "",
-      "myPass123"
-    );
+    const mockRegisterUserRequest = new RegistrationRequest({
+      name: "ram",
+      emailAddress: "ram@gmail.com",
+      username: "",
+      password: "myPass123",
+    });
     const validationError = new CustomValidationError("Validation error", [
       {
         target: {
@@ -82,11 +92,14 @@ describe("Auth Controller tests", () => {
     expect(httpResponse.body).toEqual({
       error: validationError.validationErrors,
     });
-    expect(httpResponse.status).toBe(400);
+    expect(httpResponse.statusCode).toBe(400);
   });
 
   it("should handle validation errors during user login", async () => {
-    const mockLoginRequest = new LoginRequest("ram", "");
+    const mockLoginRequest = new LoginRequest({
+      username: "ram",
+      password: "",
+    });
     const validationError = new CustomValidationError("Validation error", [
       {
         target: {
@@ -109,16 +122,16 @@ describe("Auth Controller tests", () => {
     expect(httpResponse.body).toEqual({
       error: validationError.validationErrors,
     });
-    expect(httpResponse.status).toBe(400);
+    expect(httpResponse.statusCode).toBe(400);
   });
 
   it("should handle other errors during user registration", async () => {
-    const mockRegisterUserRequest = new RegistrationRequest(
-      "ram",
-      "ram@gmail.com",
-      "ram123",
-      "myPassword123"
-    );
+    const mockRegisterUserRequest = new RegistrationRequest({
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      password: "myPassword123",
+    });
     const errorMessage = "Internal Server Error";
     const error = new Error(errorMessage);
 
@@ -129,11 +142,14 @@ describe("Auth Controller tests", () => {
     );
 
     expect(httpResponse.body).toEqual({ error: errorMessage });
-    expect(httpResponse.status).toBe(500);
+    expect(httpResponse.statusCode).toBe(500);
   });
 
   it("should handle other errors during user login", async () => {
-    const mockLoginRequest = new LoginRequest("ram123", "myPassword123");
+    const mockLoginRequest = new LoginRequest({
+      username: "ram123",
+      password: "myPassword123",
+    });
     const errorMessage = "Internal Server Error";
     const error = new Error(errorMessage);
 
@@ -142,6 +158,6 @@ describe("Auth Controller tests", () => {
     const httpResponse = await authController.login(mockLoginRequest);
 
     expect(httpResponse.body).toEqual({ error: errorMessage });
-    expect(httpResponse.status).toBe(500);
+    expect(httpResponse.statusCode).toBe(500);
   });
 });

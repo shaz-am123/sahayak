@@ -6,19 +6,21 @@ import RegistrationRequest from "../dto/RegistrationRequest";
 
 export class AuthController {
   private static instance: AuthController;
-    private authService: AuthService;
+  private authService: AuthService;
 
-    private constructor(authService: AuthService) {
-        this.authService = authService
-    }
+  private constructor(authService: AuthService) {
+    this.authService = authService;
+  }
 
-    public static getInstance(authService: AuthService = AuthService.getInstance()): AuthController {
-        if (!AuthController.instance) {
-            AuthController.instance = new AuthController(authService);
-        }
-        return AuthController.instance;
+  public static getInstance(
+    authService: AuthService = AuthService.getInstance()
+  ): AuthController {
+    if (!AuthController.instance) {
+      AuthController.instance = new AuthController(authService);
     }
-    
+    return AuthController.instance;
+  }
+
   async registerUser(
     registrationRequest: RegistrationRequest
   ): Promise<HttpResponse> {
@@ -27,7 +29,7 @@ export class AuthController {
       const registeredResponse = await this.authService.registerUser(
         registrationRequest
       );
-      return new HttpResponse(200, registeredResponse);
+      return new HttpResponse({ statusCode: 200, body: registeredResponse });
     } catch (error) {
       return this.handleErrors(error);
     }
@@ -37,7 +39,7 @@ export class AuthController {
     try {
       await loginRequest.validateRequest();
       const loginResponse = await this.authService.login(loginRequest);
-      return new HttpResponse(200, loginResponse);
+      return new HttpResponse({ statusCode: 200, body: loginResponse });
     } catch (error) {
       return this.handleErrors(error);
     }
@@ -45,10 +47,16 @@ export class AuthController {
 
   private handleErrors(error: any): HttpResponse {
     if (error instanceof CustomValidationError) {
-      return new HttpResponse(400, { error: error.validationErrors });
+      return new HttpResponse({
+        statusCode: 400,
+        body: { error: error.validationErrors },
+      });
     }
-    return new HttpResponse(500, {
-      error: error.message,
+    return new HttpResponse({
+      statusCode: 500,
+      body: {
+        error: error.message,
+      },
     });
   }
 }

@@ -8,38 +8,40 @@ import RegistrationResponse from "../dto/RegistrationResponse";
 import User from "../domain/User";
 
 export class AuthService {
-    private static instance: AuthService;
-    private authRepository: AuthRepository;
+  private static instance: AuthService;
+  private authRepository: AuthRepository;
 
-    private constructor(authRepository: AuthRepository) {
-        this.authRepository = authRepository;
-    }
+  private constructor(authRepository: AuthRepository) {
+    this.authRepository = authRepository;
+  }
 
-    public static getInstance(authRepository: AuthRepository = AuthRepository.getInstance()): AuthService {
-        if (!AuthService.instance) {
-            AuthService.instance = new AuthService(authRepository);
-        }
-        return AuthService.instance;
+  public static getInstance(
+    authRepository: AuthRepository = AuthRepository.getInstance()
+  ): AuthService {
+    if (!AuthService.instance) {
+      AuthService.instance = new AuthService(authRepository);
     }
+    return AuthService.instance;
+  }
 
   async registerUser(
     registrationRequest: RegistrationRequest
   ): Promise<RegistrationResponse> {
     const hashedPassword = await bcrypt.hash(registrationRequest.password, 10);
-    const user = new User(
-      null,
-      registrationRequest.name,
-      registrationRequest.emailAddress,
-      registrationRequest.username,
-      hashedPassword
-    );
+    const user = new User({
+      id: null,
+      name: registrationRequest.name,
+      emailAddress: registrationRequest.emailAddress,
+      username: registrationRequest.username,
+      hashedPassword: hashedPassword,
+    });
     const registeredUser = await this.authRepository.registerUser(user);
-    return new RegistrationResponse(
-      registeredUser.id!,
-      registeredUser.name,
-      registeredUser.emailAddress,
-      registeredUser.username
-    );
+    return new RegistrationResponse({
+      id: registeredUser.id!,
+      name: registeredUser.name,
+      emailAddress: registeredUser.emailAddress,
+      username: registeredUser.username,
+    });
   }
 
   async login(loginRequest: LoginRequest): Promise<LoginResponse> {
@@ -55,6 +57,10 @@ export class AuthService {
       expiresIn: "1h",
     });
 
-    return new LoginResponse(user.id!, user.username, token);
+    return new LoginResponse({
+      id: user.id!,
+      username: user.username,
+      token: token,
+    });
   }
 }
