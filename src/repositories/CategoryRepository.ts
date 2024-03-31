@@ -4,9 +4,15 @@ import CategoryModel from "../models/CategoryModel";
 
 export class CategoryRepository {
   private static instance: CategoryRepository;
+  private databaseConnection: DatabaseConnection;
 
   private constructor(databaseConnection: DatabaseConnection) {
+    this.databaseConnection = databaseConnection;
     databaseConnection.connect();
+  }
+
+  public async destructor() {
+    await this.databaseConnection.disconnect();
   }
 
   public static getInstance(

@@ -1,8 +1,10 @@
-import { IsNotEmpty, validate } from "class-validator";
+import { IsNotEmpty, MaxLength, MinLength, validate } from "class-validator";
 import { CustomValidationError } from "../errors/CustomValidationError";
 
 class CreateCategoryRequest {
   @IsNotEmpty({message: "Category name is required"})
+  @MinLength(4, { message: "Category name must be at least 2 characters long" })
+  @MaxLength(30, { message: "Category name must be at most 20 characters long" })
   name: string;
 
   description: string;

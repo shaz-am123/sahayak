@@ -31,7 +31,7 @@ export class CategoryController {
         createCategoryRequest
       );
       return new HttpResponse({
-        statusCode: 200,
+        statusCode: 201,
         body: createCategoryResponse,
       });
     } catch (error) {
