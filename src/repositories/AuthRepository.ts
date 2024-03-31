@@ -1,31 +1,18 @@
 import User from "../domain/User";
-import { DatabaseConnection } from "../db";
 import UserModel from "../models/UserModel";
 
 export class AuthRepository {
   private static instance: AuthRepository;
-  private databaseConnection: DatabaseConnection;
 
-  private constructor(databaseConnection: DatabaseConnection) {
-    this.databaseConnection = databaseConnection;
-    this.databaseConnection.connect();
-  }
-
-  public async destructor() {
-    await this.databaseConnection.disconnect();
-  }
-
-  public static getInstance(
-    databaseConnection: DatabaseConnection = DatabaseConnection.getInstance()
-  ): AuthRepository {
+  public static getInstance(): AuthRepository {
     if (!AuthRepository.instance) {
-      AuthRepository.instance = new AuthRepository(databaseConnection);
+      AuthRepository.instance = new AuthRepository();
     }
     return AuthRepository.instance;
   }
 
   async registerUser(user: User): Promise<User> {
-    const userEntity = new UserModel({...user});
+    const userEntity = new UserModel({ ...user });
     await userEntity.save();
     return new User({
       id: userEntity._id.toString(),

@@ -1,15 +1,15 @@
-import { DatabaseConnection } from "../../src/db";
+import { DatabaseConfiguration } from "../../src/db";
 import Category from "../../src/domain/Category";
 import CategoryModel from "../../src/models/CategoryModel";
 import { CategoryRepository } from "../../src/repositories/CategoryRepository";
 
 describe("Category Repository Tests", () => {
-  const databaseConnection = DatabaseConnection.getInstance(
+  const databaseConfiguration = DatabaseConfiguration.getInstance(
     process.env.TESTING_DB_URL
   );
-  const categoryRepository = CategoryRepository.getInstance(databaseConnection);
+  const categoryRepository = CategoryRepository.getInstance();
 
-  afterAll(async () => await categoryRepository.destructor());
+  afterAll(async () => await databaseConfiguration.destructor());
 
   beforeEach(async () => {
     const categoryEntity = new CategoryModel({

@@ -1,16 +1,16 @@
-import { DatabaseConnection } from "./../../src/db";
+import { DatabaseConfiguration } from "./../../src/db";
 import { AuthRepository } from "../../src/repositories/AuthRepository";
 import User from "../../src/domain/User";
 import UserModel from "../../src/models/UserModel";
 require("dotenv").config();
 
 describe("Authentication Repository tests", () => {
-  const databaseConnection = DatabaseConnection.getInstance(
+  const databaseConfiguration = DatabaseConfiguration.getInstance(
     process.env.TESTING_DB_URL
   );
-  const authRepository = AuthRepository.getInstance(databaseConnection);
+  const authRepository = AuthRepository.getInstance();
 
-  afterAll(async () => await authRepository.destructor());
+  afterAll(async () => await databaseConfiguration.destructor());
 
   beforeEach(async () => {
     const userEntity = new UserModel({
@@ -69,9 +69,11 @@ describe("Authentication Repository tests", () => {
       hashedPassword: "mockHashedPassword",
     });
     const databaseError = new Error("Database error");
-    const saveUserMock = jest.spyOn(UserModel.prototype, 'save').mockImplementation(() => {
-      throw databaseError
-    });
+    const saveUserMock = jest
+      .spyOn(UserModel.prototype, "save")
+      .mockImplementation(() => {
+        throw databaseError;
+      });
 
     try {
       await authRepository.registerUser(user);
@@ -105,9 +107,11 @@ describe("Authentication Repository tests", () => {
 
   it("should be able to handle other errors while searching for a user using their username", async () => {
     const databaseError = new Error("Database Error");
-    const findUserMock = jest.spyOn(UserModel.prototype, 'save').mockImplementation(() => {
-      throw new Error("Failed to save user");
-    });
+    const findUserMock = jest
+      .spyOn(UserModel.prototype, "save")
+      .mockImplementation(() => {
+        throw new Error("Failed to save user");
+      });
     try {
       await authRepository.getUserByUsername("vikram123");
     } catch (error: any) {
@@ -115,6 +119,6 @@ describe("Authentication Repository tests", () => {
       expect(error.message).toBe(databaseError.message);
     }
 
-    findUserMock.mockRestore()
+    findUserMock.mockRestore();
   });
 });
