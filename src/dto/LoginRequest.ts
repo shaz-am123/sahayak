@@ -8,9 +8,9 @@ class LoginRequest {
     @IsNotEmpty({ message: "Password is required" })
     password: string;
 
-  constructor(username: string, password: string) {
-    this.username = username;
-    this.password = password;
+  constructor(data: {username: string, password: string}) {
+    this.username = data.username;
+    this.password = data.password;
   }
 
   async validateRequest() {

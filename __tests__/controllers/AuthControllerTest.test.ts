@@ -16,11 +16,14 @@ jest.mock("../../src/services/AuthService", () => ({
 }));
 
 describe("Auth Controller tests", () => {
-  const authServiceMock = AuthService.getInstance() as jest.Mocked<AuthService>
+  const authServiceMock = AuthService.getInstance() as jest.Mocked<AuthService>;
   const authController = AuthController.getInstance(authServiceMock);
 
   it("should handle login of a user", async () => {
-    const loginRequest = new LoginRequest("ram123", "myPassword123");
+    const loginRequest = new LoginRequest({
+      username: "ram123",
+      password: "myPassword123",
+    });
     const expectedResponse = new LoginResponse("A001", "ram123", "mockToken");
 
     authServiceMock.login.mockResolvedValue(expectedResponse);
@@ -38,7 +41,10 @@ describe("Auth Controller tests", () => {
       "ram123",
       "myPassword123"
     );
-    const expectedResponse: RegistrationResponse = {...registrationRequest, id: "A001"};
+    const expectedResponse: RegistrationResponse = {
+      ...registrationRequest,
+      id: "A001",
+    };
 
     authServiceMock.registerUser.mockResolvedValue(expectedResponse);
 
@@ -86,7 +92,10 @@ describe("Auth Controller tests", () => {
   });
 
   it("should handle validation errors during user login", async () => {
-    const mockLoginRequest = new LoginRequest("ram", "");
+    const mockLoginRequest = new LoginRequest({
+      username: "ram",
+      password: "",
+    });
     const validationError = new CustomValidationError("Validation error", [
       {
         target: {
@@ -133,7 +142,10 @@ describe("Auth Controller tests", () => {
   });
 
   it("should handle other errors during user login", async () => {
-    const mockLoginRequest = new LoginRequest("ram123", "myPassword123");
+    const mockLoginRequest = new LoginRequest({
+      username: "ram123",
+      password: "myPassword123",
+    });
     const errorMessage = "Internal Server Error";
     const error = new Error(errorMessage);
 

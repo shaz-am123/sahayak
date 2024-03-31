@@ -33,7 +33,10 @@ describe("Auth Service tests", () => {
     (jwt.sign as jest.Mock).mockImplementation(() => {
       return "mockToken";
     });
-    const loginRequest = new LoginRequest("ram123", "myPass123");
+    const loginRequest = new LoginRequest({
+      username: "ram123",
+      password: "myPass123",
+    });
     const userResponse = new User(
       "A001",
       "Ram",
@@ -59,7 +62,12 @@ describe("Auth Service tests", () => {
       "ram@gmail.com",
       "myPass123"
     );
-    const expectedRegistrationResponse = new RegistrationResponse("A001", "Ram", "ram@gmail.com", "ram123")
+    const expectedRegistrationResponse = new RegistrationResponse(
+      "A001",
+      "Ram",
+      "ram@gmail.com",
+      "ram123"
+    );
 
     const mockUserResponse = new User(
       "A001",
@@ -107,7 +115,10 @@ describe("Auth Service tests", () => {
       return true;
     });
 
-    const loginRequest = new LoginRequest("ram123", "myPass123");
+    const loginRequest = new LoginRequest({
+      username: "ram123",
+      password: "myPass123",
+    });
 
     const userNotFoundError = new Error("User not found");
     authRepositoryMock.getUserByUsername.mockRejectedValue(userNotFoundError);
@@ -121,7 +132,10 @@ describe("Auth Service tests", () => {
   });
 
   it("should handle password mismatch error during user login", async () => {
-    const loginRequest = new LoginRequest("ram123", "myPass123");
+    const loginRequest = new LoginRequest({
+      username: "ram123",
+      password: "myPass123",
+    });
     const userResponse = new User(
       "A001",
       "Ram",
