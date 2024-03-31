@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 require("dotenv").config();
 
-export class DatabaseConnection {
-  private static instance: DatabaseConnection;
+export class DatabaseConfiguration {
+  private static instance: DatabaseConfiguration;
   private databaseUrl: string;
 
   private constructor(databaseUrl: string) {
@@ -16,11 +16,11 @@ export class DatabaseConnection {
 
   public static getInstance(
     databaseUrl: string = process.env.DB_URL!
-  ): DatabaseConnection {
-    if (!DatabaseConnection.instance) {
-      DatabaseConnection.instance = new DatabaseConnection(databaseUrl);
+  ): DatabaseConfiguration {
+    if (!DatabaseConfiguration.instance) {
+      DatabaseConfiguration.instance = new DatabaseConfiguration(databaseUrl);
     }
-    return DatabaseConnection.instance;
+    return DatabaseConfiguration.instance;
   }
 
   private async connect() {

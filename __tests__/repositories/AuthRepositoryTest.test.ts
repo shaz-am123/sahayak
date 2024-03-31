@@ -1,16 +1,16 @@
-import { DatabaseConnection } from "./../../src/db";
+import { DatabaseConfiguration } from "./../../src/db";
 import { AuthRepository } from "../../src/repositories/AuthRepository";
 import User from "../../src/domain/User";
 import UserModel from "../../src/models/UserModel";
 require("dotenv").config();
 
 describe("Authentication Repository tests", () => {
-  const databaseConnection = DatabaseConnection.getInstance(
+  const databaseConfiguration = DatabaseConfiguration.getInstance(
     process.env.TESTING_DB_URL
   );
   const authRepository = AuthRepository.getInstance();
 
-  afterAll(async () => await databaseConnection.destructor());
+  afterAll(async () => await databaseConfiguration.destructor());
 
   beforeEach(async () => {
     const userEntity = new UserModel({

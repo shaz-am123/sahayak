@@ -1,5 +1,4 @@
 import User from "../domain/User";
-import { DatabaseConnection } from "../db";
 import UserModel from "../models/UserModel";
 
 export class AuthRepository {

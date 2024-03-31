@@ -1,4 +1,3 @@
-import { DatabaseConnection } from "../db";
 import Category from "../domain/Category";
 import CategoryModel from "../models/CategoryModel";
 
