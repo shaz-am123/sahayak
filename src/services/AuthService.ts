@@ -8,19 +8,21 @@ import RegistrationResponse from "../dto/RegistrationResponse";
 import User from "../domain/User";
 
 export class AuthService {
-    private static instance: AuthService;
-    private authRepository: AuthRepository;
+  private static instance: AuthService;
+  private authRepository: AuthRepository;
 
-    private constructor(authRepository: AuthRepository) {
-        this.authRepository = authRepository;
-    }
+  private constructor(authRepository: AuthRepository) {
+    this.authRepository = authRepository;
+  }
 
-    public static getInstance(authRepository: AuthRepository = AuthRepository.getInstance()): AuthService {
-        if (!AuthService.instance) {
-            AuthService.instance = new AuthService(authRepository);
-        }
-        return AuthService.instance;
+  public static getInstance(
+    authRepository: AuthRepository = AuthRepository.getInstance()
+  ): AuthService {
+    if (!AuthService.instance) {
+      AuthService.instance = new AuthService(authRepository);
     }
+    return AuthService.instance;
+  }
 
   async registerUser(
     registrationRequest: RegistrationRequest
@@ -55,6 +57,10 @@ export class AuthService {
       expiresIn: "1h",
     });
 
-    return new LoginResponse(user.id!, user.username, token);
+    return new LoginResponse({
+      id: user.id!,
+      username: user.username,
+      token: token,
+    });
   }
 }

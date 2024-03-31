@@ -24,7 +24,11 @@ describe("Auth Controller tests", () => {
       username: "ram123",
       password: "myPassword123",
     });
-    const expectedResponse = new LoginResponse("A001", "ram123", "mockToken");
+    const expectedResponse = new LoginResponse({
+      id: "A001",
+      username: "ram123",
+      token: "mockToken",
+    });
 
     authServiceMock.login.mockResolvedValue(expectedResponse);
 

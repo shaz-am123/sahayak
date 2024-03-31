@@ -44,11 +44,11 @@ describe("Auth Service tests", () => {
       "ram123",
       "mockHashedPassword"
     );
-    const expectedLoginResponse = new LoginResponse(
-      "A001",
-      "ram123",
-      "mockToken"
-    );
+    const expectedLoginResponse = new LoginResponse({
+      id: "A001",
+      username: "ram123",
+      token: "mockToken",
+    });
 
     authRepositoryMock.getUserByUsername.mockResolvedValue(userResponse);
     const loginResponse = await authService.login(loginRequest);
