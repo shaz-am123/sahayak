@@ -36,12 +36,12 @@ export class AuthService {
       hashedPassword: hashedPassword,
     });
     const registeredUser = await this.authRepository.registerUser(user);
-    return new RegistrationResponse(
-      registeredUser.id!,
-      registeredUser.name,
-      registeredUser.emailAddress,
-      registeredUser.username
-    );
+    return new RegistrationResponse({
+      id: registeredUser.id!,
+      name: registeredUser.name,
+      emailAddress: registeredUser.emailAddress,
+      username: registeredUser.username,
+    });
   }
 
   async login(loginRequest: LoginRequest): Promise<LoginResponse> {

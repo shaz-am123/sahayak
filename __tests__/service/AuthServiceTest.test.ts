@@ -61,13 +61,13 @@ describe("Auth Service tests", () => {
       emailAddress: "ram@gmail.com",
       username: "ram123",
       password: "myPass123",
-    })
-    const expectedRegistrationResponse = new RegistrationResponse(
-      "A001",
-      "Ram",
-      "ram@gmail.com",
-      "ram123"
-    );
+    });
+    const expectedRegistrationResponse = new RegistrationResponse({
+      id: "A001",
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+    });
 
     const mockUserResponse = new User({
       id: "A001",
