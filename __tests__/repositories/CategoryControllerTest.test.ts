@@ -7,9 +7,9 @@ describe("Category Repository Tests", () => {
   const databaseConnection = DatabaseConnection.getInstance(
     process.env.TESTING_DB_URL
   );
-  const categoryRepository = CategoryRepository.getInstance(databaseConnection);
+  const categoryRepository = CategoryRepository.getInstance();
 
-  afterAll(async () => await categoryRepository.destructor());
+  afterAll(async () => await databaseConnection.destructor());
 
   beforeEach(async () => {
     const categoryEntity = new CategoryModel({
