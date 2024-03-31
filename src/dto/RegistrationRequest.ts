@@ -12,11 +12,10 @@ class RegistrationRequest {
   @IsNotEmpty({ message: "Name is required" })
   name: string;
 
-  
   @IsNotEmpty({ message: "Email address is required" })
-  @IsEmail({}, { message: 'Invalid email address' })
+  @IsEmail({}, { message: "Invalid email address" })
   emailAddress: string;
-  
+
   @IsNotEmpty({ message: "Username is required" })
   @MinLength(4, { message: "Username must be at least 4 characters long" })
   @MaxLength(30, { message: "Username must be at most 30 characters long" })
@@ -30,7 +29,12 @@ class RegistrationRequest {
   })
   password: string;
 
-  constructor(name: string, emailAddress: string, username: string, password: string) {
+  constructor(
+    name: string,
+    emailAddress: string,
+    username: string,
+    password: string
+  ) {
     this.name = name;
     this.emailAddress = emailAddress;
     this.username = username;
@@ -40,7 +44,7 @@ class RegistrationRequest {
   async validateRequest() {
     const validationErrors = await validate(this);
     if (validationErrors.length > 0) {
-        throw new CustomValidationError("Validation error: ", validationErrors)
+      throw new CustomValidationError("Validation error: ", validationErrors);
     }
   }
 }
