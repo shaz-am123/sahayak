@@ -28,13 +28,13 @@ export class AuthService {
     registrationRequest: RegistrationRequest
   ): Promise<RegistrationResponse> {
     const hashedPassword = await bcrypt.hash(registrationRequest.password, 10);
-    const user = new User(
-      null,
-      registrationRequest.name,
-      registrationRequest.emailAddress,
-      registrationRequest.username,
-      hashedPassword
-    );
+    const user = new User({
+      id: null,
+      name: registrationRequest.name,
+      emailAddress: registrationRequest.emailAddress,
+      username: registrationRequest.username,
+      hashedPassword: hashedPassword,
+    });
     const registeredUser = await this.authRepository.registerUser(user);
     return new RegistrationResponse(
       registeredUser.id!,

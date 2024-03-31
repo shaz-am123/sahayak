@@ -37,13 +37,13 @@ describe("Auth Service tests", () => {
       username: "ram123",
       password: "myPass123",
     });
-    const userResponse = new User(
-      "A001",
-      "Ram",
-      "ram@gmail.com",
-      "ram123",
-      "mockHashedPassword"
-    );
+    const userResponse = new User({
+      id: "A001",
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      hashedPassword: "mockHashedPassword",
+    });
     const expectedLoginResponse = new LoginResponse({
       id: "A001",
       username: "ram123",
@@ -69,13 +69,14 @@ describe("Auth Service tests", () => {
       "ram123"
     );
 
-    const mockUserResponse = new User(
-      "A001",
-      "Ram",
-      "ram@gmail.com",
-      "ram123",
-      "mockHashedPassword"
-    );
+    const mockUserResponse = new User({
+      id: "A001",
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      hashedPassword: "mockHashedPassword",
+    });
+
     (bcrypt.hash as jest.Mock).mockImplementation(() => {
       return "mockHashedPassword";
     });
@@ -136,13 +137,13 @@ describe("Auth Service tests", () => {
       username: "ram123",
       password: "myPass123",
     });
-    const userResponse = new User(
-      "A001",
-      "Ram",
-      "ram@gmail.com",
-      "ram123",
-      "mockHashedPassword"
-    );
+    const userResponse = new User({
+      id: "A001",
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      hashedPassword: "mockHashedPassword",
+    });
 
     authRepositoryMock.getUserByUsername.mockResolvedValue(userResponse);
     (bcrypt.compare as jest.Mock).mockImplementation(() => {

@@ -25,7 +25,13 @@ describe("Authentication Repository tests", () => {
   });
 
   it("should be able to create a new user", async () => {
-    const user = new User(null, "Ram", "ram@gmail.com", "ram123", "mockHashedPassword");
+    const user = new User({
+      id: null,
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      hashedPassword: "mockHashedPassword",
+    });
     const actualResponse = await authRepository.registerUser(user);
     expect({ ...user, id: "ignore" }).toEqual({
       ...actualResponse,
@@ -34,7 +40,13 @@ describe("Authentication Repository tests", () => {
   });
 
   it("should be able to handle errors while creating new user with existing user name", async () => {
-    const user = new User(null, "vikram", "vikram@gmail.com", "vikram123", "mockHashedPassword");
+    const user = new User({
+      id: null,
+      name: "vikram",
+      emailAddress: "vikram@gmail.com",
+      username: "vikram123",
+      hashedPassword: "mockHashedPassword",
+    });
 
     try {
       await authRepository.registerUser(user);
@@ -48,26 +60,32 @@ describe("Authentication Repository tests", () => {
 
   it("should be able to handle errors while creating new user with existing user name", async () => {
     UserModel.save = jest.fn();
-    const user = new User(null, "Shyam", "shyam@gmail.com", "shyam123", "mockHashedPassword");
-    const databaseError = new Error('Database error');
+    const user = new User({
+      id: null,
+      name: "Shyam",
+      emailAddress: "shyam@gmail.com",
+      username: "shyam123",
+      hashedPassword: "mockHashedPassword",
+    });
+    const databaseError = new Error("Database error");
     (UserModel.save as jest.Mock).mockRejectedValue(databaseError);
 
     try {
       await authRepository.registerUser(user);
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe(databaseError.message)
+      expect(error.message).toBe(databaseError.message);
     }
   });
 
   it("should be able to search for a user using their username", async () => {
-    const expectedResponse = new User(
-      "A001",
-      "Vikram",
-      "vikram@gmail.com",
-      "vikram123",
-      "mockHashedPassword"
-    );
+    const expectedResponse = new User({
+      id: "A001",
+      name: "Vikram",
+      emailAddress: "vikram@gmail.com",
+      username: "vikram123",
+      hashedPassword: "mockHashedPassword",
+    });
     const actualResponse = await authRepository.getUserByUsername("vikram123");
     expect(expectedResponse).toEqual({ ...actualResponse, id: "A001" });
   });
@@ -86,10 +104,10 @@ describe("Authentication Repository tests", () => {
     const databaseError = new Error("Database Error");
     (UserModel.find as jest.Mock).mockRejectedValue(databaseError);
     try {
-        await authRepository.getUserByUsername("vikram123");
-      } catch (error: any) {
-        expect(error).toBeInstanceOf(Error);
-        expect(error.message).toBe(databaseError.message);
-      }
+      await authRepository.getUserByUsername("vikram123");
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(databaseError.message);
+    }
   });
 });
