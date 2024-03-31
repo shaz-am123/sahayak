@@ -4,9 +4,15 @@ import UserModel from "../models/UserModel";
 
 export class AuthRepository {
   private static instance: AuthRepository;
+  private databaseConnection: DatabaseConnection;
 
   private constructor(databaseConnection: DatabaseConnection) {
-    databaseConnection.connect();
+    this.databaseConnection = databaseConnection;
+    this.databaseConnection.connect();
+  }
+
+  public async destructor() {
+    await this.databaseConnection.disconnect();
   }
 
   public static getInstance(
@@ -27,7 +33,7 @@ export class AuthRepository {
     });
     await userEntity.save();
     return new User({
-      id: userEntity._id,
+      id: userEntity._id.toString(),
       name: userEntity.name,
       emailAddress: userEntity.emailAddress,
       username: userEntity.username,
@@ -41,7 +47,7 @@ export class AuthRepository {
       throw new Error("User not found");
     }
     return new User({
-      id: userEntity._id,
+      id: userEntity._id.toString(),
       name: userEntity.name,
       emailAddress: userEntity.emailAddress,
       username: userEntity.username,

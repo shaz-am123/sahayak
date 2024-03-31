@@ -10,6 +10,8 @@ describe("Authentication Repository tests", () => {
   );
   const authRepository = AuthRepository.getInstance(databaseConnection);
 
+  afterAll(async () => await authRepository.destructor());
+
   beforeEach(async () => {
     const userEntity = new UserModel({
       name: "Vikram",
@@ -59,7 +61,6 @@ describe("Authentication Repository tests", () => {
   });
 
   it("should be able to handle errors while creating new user with existing user name", async () => {
-    UserModel.save = jest.fn();
     const user = new User({
       id: null,
       name: "Shyam",
@@ -68,7 +69,9 @@ describe("Authentication Repository tests", () => {
       hashedPassword: "mockHashedPassword",
     });
     const databaseError = new Error("Database error");
-    (UserModel.save as jest.Mock).mockRejectedValue(databaseError);
+    const saveUserMock = jest.spyOn(UserModel.prototype, 'save').mockImplementation(() => {
+      throw databaseError
+    });
 
     try {
       await authRepository.registerUser(user);
@@ -76,6 +79,7 @@ describe("Authentication Repository tests", () => {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe(databaseError.message);
     }
+    saveUserMock.mockRestore();
   });
 
   it("should be able to search for a user using their username", async () => {
@@ -100,14 +104,17 @@ describe("Authentication Repository tests", () => {
   });
 
   it("should be able to handle other errors while searching for a user using their username", async () => {
-    UserModel.find = jest.fn();
     const databaseError = new Error("Database Error");
-    (UserModel.find as jest.Mock).mockRejectedValue(databaseError);
+    const findUserMock = jest.spyOn(UserModel.prototype, 'save').mockImplementation(() => {
+      throw new Error("Failed to save user");
+    });
     try {
       await authRepository.getUserByUsername("vikram123");
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe(databaseError.message);
     }
+
+    findUserMock.mockRestore()
   });
 });
