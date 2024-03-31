@@ -25,12 +25,7 @@ export class AuthRepository {
   }
 
   async registerUser(user: User): Promise<User> {
-    const userEntity = new UserModel({
-      name: user.name,
-      username: user.username,
-      emailAddress: user.emailAddress,
-      hashedPassword: user.hashedPassword,
-    });
+    const userEntity = new UserModel({...user});
     await userEntity.save();
     return new User({
       id: userEntity._id.toString(),
