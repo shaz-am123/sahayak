@@ -29,7 +29,7 @@ export class AuthController {
       const registeredResponse = await this.authService.registerUser(
         registrationRequest
       );
-      return new HttpResponse({ statusCode: 200, body: registeredResponse });
+      return new HttpResponse({ statusCode: 201, body: registeredResponse });
     } catch (error) {
       return this.handleErrors(error);
     }
