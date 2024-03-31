@@ -18,7 +18,7 @@ class RegistrationRequest {
 
   @IsNotEmpty({ message: "Username is required" })
   @MinLength(4, { message: "Username must be at least 4 characters long" })
-  @MaxLength(30, { message: "Username must be at most 30 characters long" })
+  @MaxLength(30, { message: "Username must be at most 20 characters long" })
   username: string;
 
   @IsNotEmpty({ message: "Password is required" })
