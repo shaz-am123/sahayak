@@ -39,12 +39,12 @@ describe("Auth Controller tests", () => {
   });
 
   it("should handle registration of a user", async () => {
-    const registrationRequest = new RegistrationRequest(
-      "Ram",
-      "ram@gmail.com",
-      "ram123",
-      "myPassword123"
-    );
+    const registrationRequest = new RegistrationRequest({
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      password: "myPassword123",
+    });
     const expectedResponse: RegistrationResponse = {
       ...registrationRequest,
       id: "A001",
@@ -59,12 +59,12 @@ describe("Auth Controller tests", () => {
   });
 
   it("should handle validation errors during user registration", async () => {
-    const mockRegisterUserRequest = new RegistrationRequest(
-      "ram",
-      "ram@gmail.com",
-      "",
-      "myPass123"
-    );
+    const mockRegisterUserRequest = new RegistrationRequest({
+      name: "ram",
+      emailAddress: "ram@gmail.com",
+      username: "",
+      password: "myPass123",
+    });
     const validationError = new CustomValidationError("Validation error", [
       {
         target: {
@@ -126,12 +126,12 @@ describe("Auth Controller tests", () => {
   });
 
   it("should handle other errors during user registration", async () => {
-    const mockRegisterUserRequest = new RegistrationRequest(
-      "ram",
-      "ram@gmail.com",
-      "ram123",
-      "myPassword123"
-    );
+    const mockRegisterUserRequest = new RegistrationRequest({
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      password: "myPassword123",
+    });
     const errorMessage = "Internal Server Error";
     const error = new Error(errorMessage);
 

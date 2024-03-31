@@ -56,12 +56,12 @@ describe("Auth Service tests", () => {
   });
 
   it("should handle registration of a user", async () => {
-    const registrationRequest = new RegistrationRequest(
-      "Ram",
-      "ram123",
-      "ram@gmail.com",
-      "myPass123"
-    );
+    const registrationRequest = new RegistrationRequest({
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      password: "myPass123",
+    })
     const expectedRegistrationResponse = new RegistrationResponse(
       "A001",
       "Ram",
@@ -89,12 +89,12 @@ describe("Auth Service tests", () => {
   });
 
   it("should handle errors during user registration", async () => {
-    const registrationRequest = new RegistrationRequest(
-      "Ram",
-      "ram123",
-      "ram@gmail.com",
-      "myPass123"
-    );
+    const registrationRequest = new RegistrationRequest({
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+      password: "myPass123",
+    });
 
     (bcrypt.hash as jest.Mock).mockImplementation(() => {
       return "mockHashedPassword";

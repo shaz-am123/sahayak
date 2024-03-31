@@ -29,16 +29,16 @@ class RegistrationRequest {
   })
   password: string;
 
-  constructor(
-    name: string,
-    emailAddress: string,
-    username: string,
-    password: string
-  ) {
-    this.name = name;
-    this.emailAddress = emailAddress;
-    this.username = username;
-    this.password = password;
+  constructor(data: {
+    name: string;
+    emailAddress: string;
+    username: string;
+    password: string;
+  }) {
+    this.name = data.name;
+    this.emailAddress = data.emailAddress;
+    this.username = data.username;
+    this.password = data.password;
   }
 
   async validateRequest() {

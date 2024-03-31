@@ -9,12 +9,12 @@ const authController = AuthController.getInstance();
 router.post(
   "/register",
   async (req: express.Request, res: express.Response) => {
-    const registrationRequest = new RegistrationRequest(
-      req.body.name,
-      req.body.emailAddress,
-      req.body.username,
-      req.body.password
-    );
+    const registrationRequest = new RegistrationRequest({
+      name: req.body.name,
+      emailAddress: req.body.emailAddress,
+      username: req.body.username,
+      password: req.body.password,
+    });
 
     const registrationResponse = await authController.registerUser(
       registrationRequest
@@ -26,7 +26,7 @@ router.post(
 router.post("/login", async (req: express.Request, res: express.Response) => {
   const loginRequest = new LoginRequest({
     username: req.body.username,
-    password: req.body.password
+    password: req.body.password,
   });
   const loginResponse = await authController.login(loginRequest);
   res.status(loginResponse.statusCode).json(loginResponse.body);
