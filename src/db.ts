@@ -4,30 +4,41 @@ require("dotenv").config();
 export class DatabaseConfiguration {
   private static instance: DatabaseConfiguration;
   private databaseUrl: string;
+  private isConnected: boolean = false;
 
   private constructor(databaseUrl: string) {
     this.databaseUrl = databaseUrl;
-    this.connect();
+  }
+
+  private async initialize() {
+    if (!this.isConnected) {
+      await this.connect();
+      this.isConnected = true;
+    }
   }
 
   public async destructor() {
-    this.disconnect();
+    if (this.isConnected) {
+      await this.disconnect();
+      this.isConnected = false;
+    }
   }
 
-  public static getInstance(
+  public static async getInstance(
     databaseUrl: string = process.env.DB_URL!
-  ): DatabaseConfiguration {
+  ): Promise<DatabaseConfiguration> {
     if (!DatabaseConfiguration.instance) {
-      DatabaseConfiguration.instance = new DatabaseConfiguration(databaseUrl);
+      const instance = new DatabaseConfiguration(databaseUrl);
+      await instance.initialize();
+      DatabaseConfiguration.instance = instance;
     }
     return DatabaseConfiguration.instance;
   }
 
   private async connect() {
     try {
-      mongoose.connect(this.databaseUrl).then(() => {
-        console.log("Connected to MongoDB");
-      });
+      mongoose.connect(this.databaseUrl)
+      console.log("Connected to MongoDB");
     } catch (error) {
       console.error("Error connecting to MongoDB:", error);
       throw error;
@@ -36,9 +47,8 @@ export class DatabaseConfiguration {
 
   private async disconnect() {
     try {
-      mongoose.disconnect().then(() => {
-        console.log("Disconnected from MongoDB");
-      });
+      mongoose.disconnect();
+      console.log("Disconnected from MongoDB");
     } catch (error) {
       console.error("Error disconnecting from MongoDB:", error);
       throw error;
