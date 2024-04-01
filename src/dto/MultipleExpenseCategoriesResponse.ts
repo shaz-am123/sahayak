@@ -1,16 +1,16 @@
 import ExpenseCategoryResponse from "./ExpenseCategoryResponse";
 
-class MultipleExpenseCategories {
-  expenseCategory: ExpenseCategoryResponse;
+class MultipleExpenseCategoriesResponse {
+  expenseCategories: ExpenseCategoryResponse[];
   totalRecords: number;
 
   constructor(data: {
-    expenseCategory: ExpenseCategoryResponse;
+    expenseCategories: ExpenseCategoryResponse[];
     totalRecords: number;
   }) {
-    this.expenseCategory = data.expenseCategory;
+    this.expenseCategories = data.expenseCategories;
     this.totalRecords = data.totalRecords;
   }
 }
 
-export default MultipleExpenseCategories;
+export default MultipleExpenseCategoriesResponse;

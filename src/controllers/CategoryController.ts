@@ -4,9 +4,6 @@ import { CustomValidationError } from "../errors/CustomValidationError";
 import { CategoryService } from "../services/CategoryService";
 
 export class CategoryController {
-  getCategories(userId: string) {
-    throw new Error("Method not implemented.");
-  }
   private static instance: CategoryController;
   private categoryService: CategoryService;
 
@@ -38,6 +35,19 @@ export class CategoryController {
         body: createCategoryResponse,
       });
     } catch (error) {
+      return this.handleErrors(error);
+    }
+  }
+
+  async getExpenseCategories(userId: string): Promise<HttpResponse> {
+    try{
+      const multipleExpenseCategoriesResponse = await this.categoryService.getExpenseCategories(userId)
+      return new HttpResponse({
+        statusCode: 200,
+        body: multipleExpenseCategoriesResponse
+      })
+    }
+    catch(error){
       return this.handleErrors(error);
     }
   }

@@ -21,4 +21,17 @@ export class CategoryRepository {
       userId: categoryEntity.userId,
     });
   }
+  async getExpenseCategories(userId: string): Promise<Category[]> {
+    const expenseCategoryEntities = await CategoryModel.find({
+      userId: userId,
+    });
+    return expenseCategoryEntities.map((expenseCategoryEntity) => {
+      return new Category({
+        id: expenseCategoryEntity._id.toString(),
+        userId: expenseCategoryEntity.userId,
+        name: expenseCategoryEntity.name,
+        description: expenseCategoryEntity.description,
+      });
+    });
+  }
 }

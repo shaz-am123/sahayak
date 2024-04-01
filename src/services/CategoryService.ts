@@ -1,6 +1,7 @@
 import Category from "../domain/Category";
 import ExpenseCategoryRequest from "../dto/ExpenseCategoryRequest";
 import ExpenseCategoryResponse from "../dto/ExpenseCategoryResponse";
+import MultipleExpenseCategoriesResponse from "../dto/MultipleExpenseCategoriesResponse";
 import { CategoryRepository } from "../repositories/CategoryRepository";
 
 export class CategoryService {
@@ -38,6 +39,24 @@ export class CategoryService {
       userId: createdCategory.userId,
       name: createCategoryRequest.name,
       description: createCategoryRequest.description,
+    });
+  }
+
+  async getExpenseCategories(
+    userId: string
+  ): Promise<MultipleExpenseCategoriesResponse> {
+    const categories = await this.categoryRepository.getExpenseCategories(
+      userId
+    );
+
+    return new MultipleExpenseCategoriesResponse({
+      expenseCategories: categories.map(category => new ExpenseCategoryResponse({
+        id: category.id!,
+        userId: category.userId,
+        name: category.name,
+        description: category.description
+      })),
+      totalRecords: categories.length,
     });
   }
 }
