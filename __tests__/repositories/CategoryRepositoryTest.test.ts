@@ -5,7 +5,7 @@ import ExpenseCategoryModel from "../../src/models/ExpenseCategoryModel";
 import { CategoryRepository } from "../../src/repositories/CategoryRepository";
 
 describe("Category Repository Tests", () => {
-  const userId = new mongoose.Types.ObjectId();
+  const userId = new mongoose.Types.ObjectId("660a9ca3cdaf2bd4e9f86c2c");
   let databaseConfiguration: DatabaseConfiguration;
   const categoryRepository = CategoryRepository.getInstance();
 
@@ -36,10 +36,9 @@ describe("Category Repository Tests", () => {
     });
 
     const actualResponse = await categoryRepository.createCategory(category);
-    expect({ ...category, id: "ignore", userId: "ignore" }).toEqual({
-      ...actualResponse,
+    expect({ ...actualResponse, id: "ignore" }).toEqual({
+      ...category,
       id: "ignore",
-      userId: "ignore",
     });
   });
 
@@ -82,5 +81,44 @@ describe("Category Repository Tests", () => {
       expect(error.message).toBe(databaseError.message);
     }
     saveCategoryMock.mockRestore();
+  });
+
+  it("should be able to get all the expense categories of an user", async () => {
+    const expectedResponse: ExpenseCategory[] = [
+      {
+        id: null,
+        userId: userId.toString(),
+        name: "Food",
+        description: "Zomato, Swiggy, Eatsure",
+      },
+    ];
+
+    const actualResponse = await categoryRepository.getExpenseCategories(
+      userId.toString()
+    );
+    expect(actualResponse.length).toEqual(expectedResponse.length);
+    actualResponse.forEach((category, index) => {
+      expect({ ...category, id: "ignore" }).toEqual({
+        ...expectedResponse[index],
+        id: "ignore",
+      });
+    });
+  });
+  it("should be handle any error that occurs while getting expense categories of an user", async () => {
+    const databaseError = new Error("Failed to find exepense category");
+    const findCategoryMock = jest
+      .spyOn(ExpenseCategoryModel, "findOne")
+      .mockImplementation(() => {
+        throw databaseError;
+      });
+
+    try {
+      await categoryRepository.getExpenseCategories(userId.toString());
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(databaseError.message);
+    }
+
+    findCategoryMock.mockRestore();
   });
 });

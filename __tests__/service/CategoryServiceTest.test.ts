@@ -1,6 +1,7 @@
 import ExpenseCategory from "../../src/domain/ExpenseCategory";
 import ExpenseCategoryRequest from "../../src/dto/ExpenseCategoryRequest";
 import ExpenseCategoryResponse from "../../src/dto/ExpenseCategoryResponse";
+import MultipleExpenseCategoriesResponse from "../../src/dto/MultipleExpenseCategoriesResponse";
 import { CategoryRepository } from "../../src/repositories/CategoryRepository";
 import { CategoryService } from "../../src/services/CategoryService";
 
@@ -8,6 +9,7 @@ jest.mock("../../src/repositories/CategoryRepository", () => ({
   CategoryRepository: {
     getInstance: jest.fn(() => ({
       createCategory: jest.fn(),
+      getExpenseCategories: jest.fn(),
     })),
   },
 }));
@@ -61,6 +63,34 @@ describe("Category Service tests", () => {
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("Internal Server Error");
+    }
+  });
+
+  it("should be able to get all the categories of an user", async () => {
+    const userId = "A001";
+    const repositoryMockResponse = [] as ExpenseCategory[];
+    const expectedResponse = new MultipleExpenseCategoriesResponse({
+      expenseCategories: [],
+      totalRecords: 0,
+    });
+
+    categoryRepositoryMock.getExpenseCategories.mockResolvedValue(
+      repositoryMockResponse
+    );
+    const actualResponse = await categoryService.getExpenseCategories(userId);
+    expect(actualResponse).toEqual(expectedResponse);
+  });
+
+  it("should be able to handle any error that occurs while getting categories of an user", async () => {
+    const userId = "A001";
+    const mockError = new Error("Internal Server Error");
+
+    categoryRepositoryMock.getExpenseCategories.mockRejectedValue(mockError);
+    try {
+      await categoryService.getExpenseCategories(userId);
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toEqual(mockError.message);
     }
   });
 });

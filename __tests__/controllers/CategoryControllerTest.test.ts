@@ -1,5 +1,6 @@
 import ExpenseCategoryRequest from "../../src/dto/ExpenseCategoryRequest";
 import ExpenseCategoryResponse from "../../src/dto/ExpenseCategoryResponse";
+import MultipleExpenseCategoriesResponse from "../../src/dto/MultipleExpenseCategoriesResponse";
 import { CustomValidationError } from "../../src/errors/CustomValidationError";
 import { CategoryController } from "./../../src/controllers/CategoryController";
 import { CategoryService } from "./../../src/services/CategoryService";
@@ -8,6 +9,7 @@ jest.mock("../../src/services/CategoryService", () => ({
   CategoryService: {
     getInstance: jest.fn(() => ({
       createCategory: jest.fn(),
+      getExpenseCategories: jest.fn(),
     })),
   },
 }));
@@ -41,7 +43,7 @@ describe("Category Controller tests", () => {
     expect(httpResponse.statusCode).toBe(201);
   });
 
-  it("should handle validation errors when a user tries to add a category", async () => {
+  it("should handle validation errors when an user tries to add a category", async () => {
     const userId = "A001";
     const mockCreateCategoryRequest = new ExpenseCategoryRequest({
       name: "",
@@ -93,6 +95,35 @@ describe("Category Controller tests", () => {
     );
 
     expect(httpResponse.body).toEqual({ error: errorMessage });
+    expect(httpResponse.statusCode).toBe(500);
+  });
+
+  it("should get all the expense categories of an user", async () => {
+    const userId = "A001";
+    const expectedResponse = new MultipleExpenseCategoriesResponse({
+      expenseCategories: [],
+      totalRecords: 0,
+    });
+
+    categoryServiceMock.getExpenseCategories.mockResolvedValue(
+      expectedResponse
+    );
+
+    const httpResponse = await categoryController.getExpenseCategories(userId);
+
+    expect(httpResponse.body).toEqual(expectedResponse);
+    expect(httpResponse.statusCode).toBe(200);
+  });
+
+  it("should hanlde any error that occurs while getting expense categories of an user", async () => {
+    const userId = "A001";
+    const mockError = new Error("Internal Server Error");
+
+    categoryServiceMock.getExpenseCategories.mockRejectedValue(mockError);
+
+    const httpResponse = await categoryController.getExpenseCategories(userId);
+
+    expect(httpResponse.body).toEqual({ error: mockError.message });
     expect(httpResponse.statusCode).toBe(500);
   });
 });
