@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { DatabaseConfiguration } from "../../src/db";
-import Category from "../../src/domain/Category";
-import CategoryModel from "../../src/models/CategoryModel";
+import ExpenseCategory from "../../src/domain/ExpenseCategory";
+import ExpenseCategoryModel from "../../src/models/ExpenseCategoryModel";
 import { CategoryRepository } from "../../src/repositories/CategoryRepository";
 
 describe("Category Repository Tests", () => {
@@ -15,7 +15,7 @@ describe("Category Repository Tests", () => {
     databaseConfiguration = await DatabaseConfiguration.getInstance(
       process.env.TESTING_DB_URL
     );
-    const categoryEntity = new CategoryModel({
+    const categoryEntity = new ExpenseCategoryModel({
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
       userId: userId,
@@ -24,11 +24,11 @@ describe("Category Repository Tests", () => {
   });
 
   afterEach(async () => {
-    await CategoryModel.deleteMany({});
+    await ExpenseCategoryModel.deleteMany({});
   });
 
   it("should be able to create a new category", async () => {
-    const category = new Category({
+    const category = new ExpenseCategory({
       id: null,
       name: "Entertainment",
       description: "Movies, Netflix, Amazon Prime",
@@ -44,7 +44,7 @@ describe("Category Repository Tests", () => {
   });
 
   it("should be able to handle error while creating a new category with existing name for the same user", async () => {
-    const category = new Category({
+    const category = new ExpenseCategory({
       id: null,
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
@@ -54,7 +54,7 @@ describe("Category Repository Tests", () => {
     try {
       await categoryRepository.createCategory(category);
     } catch (error: any) {
-      const errorMessage = `E11000 duplicate key error collection: testing_sahayak.categories index: userId_1_name_1 dup key: { userId: ObjectId('${userId.toString()}'), name: \"Food\" }`;
+      const errorMessage = `E11000 duplicate key error collection: testing_sahayak.expense-categories index: userId_1_name_1 dup key: { userId: ObjectId('${userId.toString()}'), name: \"Food\" }`;
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe(errorMessage);
     }
@@ -62,7 +62,7 @@ describe("Category Repository Tests", () => {
 
   it("should be able to handle other errors while creating a new category", async () => {
     const userId = new mongoose.Types.ObjectId();
-    const category = new Category({
+    const category = new ExpenseCategory({
       id: null,
       name: "Entertainment",
       description: "Movies, Netflix, Amazon Prime",
@@ -70,7 +70,7 @@ describe("Category Repository Tests", () => {
     });
     const databaseError = new Error("Database error");
     const saveCategoryMock = jest
-      .spyOn(CategoryModel.prototype, "save")
+      .spyOn(ExpenseCategoryModel.prototype, "save")
       .mockImplementation(() => {
         throw databaseError;
       });

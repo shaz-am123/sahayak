@@ -1,4 +1,4 @@
-import Category from "../domain/Category";
+import ExpenseCategory from "../domain/ExpenseCategory";
 import ExpenseCategoryRequest from "../dto/ExpenseCategoryRequest";
 import ExpenseCategoryResponse from "../dto/ExpenseCategoryResponse";
 import MultipleExpenseCategoriesResponse from "../dto/MultipleExpenseCategoriesResponse";
@@ -25,7 +25,7 @@ export class CategoryService {
     userId: string,
     createCategoryRequest: ExpenseCategoryRequest
   ): Promise<ExpenseCategoryResponse> {
-    const category = new Category({
+    const category = new ExpenseCategory({
       id: null,
       userId: userId,
       name: createCategoryRequest.name,

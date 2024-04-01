@@ -1,4 +1,4 @@
-class Category {
+class ExpenseCategory {
     id: string | null;
     userId: string
     name: string;
@@ -17,5 +17,5 @@ class Category {
     }
   }
   
-  export default Category;
+  export default ExpenseCategory;
   

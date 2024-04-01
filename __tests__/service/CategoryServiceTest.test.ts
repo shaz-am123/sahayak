@@ -1,4 +1,4 @@
-import Category from "../../src/domain/Category";
+import ExpenseCategory from "../../src/domain/ExpenseCategory";
 import ExpenseCategoryRequest from "../../src/dto/ExpenseCategoryRequest";
 import ExpenseCategoryResponse from "../../src/dto/ExpenseCategoryResponse";
 import { CategoryRepository } from "../../src/repositories/CategoryRepository";
@@ -29,7 +29,7 @@ describe("Category Service tests", () => {
       userId: userId,
     });
 
-    const mockCategoryResponse = new Category({
+    const mockCategoryResponse = new ExpenseCategory({
       id: "1",
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
