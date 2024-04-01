@@ -2,7 +2,7 @@ import express from "express";
 const router = express.Router();
 import { CategoryController } from "../controllers/CategoryController";
 import verifyToken from "../middleware/authMiddleware";
-import CreateCategoryRequest from "../dto/CreateCategoryRequest";
+import ExpenseCategoryRequest from "../dto/ExpenseCategoryRequest";
 
 const categoryController = CategoryController.getInstance();
 router.post(
@@ -10,7 +10,7 @@ router.post(
   verifyToken,
   async (req: express.Request, res: express.Response) => {
     const userId = req.userId!;
-    const createCategoryRequest = new CreateCategoryRequest({
+    const createCategoryRequest = new ExpenseCategoryRequest({
       name: req.body.name,
       description: req.body.description,
     });

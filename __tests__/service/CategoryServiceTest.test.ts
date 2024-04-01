@@ -1,6 +1,6 @@
 import Category from "../../src/domain/Category";
-import CreateCategoryRequest from "../../src/dto/CreateCategoryRequest";
-import CreateCategoryResponse from "../../src/dto/CreateCategoryResponse";
+import ExpenseCategoryRequest from "../../src/dto/ExpenseCategoryRequest";
+import ExpenseCategoryResponse from "../../src/dto/ExpenseCategoryResponse";
 import { CategoryRepository } from "../../src/repositories/CategoryRepository";
 import { CategoryService } from "../../src/services/CategoryService";
 
@@ -19,11 +19,11 @@ describe("Category Service tests", () => {
 
   it("should be able to create a category", async () => {
     const userId = "A001";
-    const createCategoryRequest = new CreateCategoryRequest({
+    const createCategoryRequest = new ExpenseCategoryRequest({
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
     });
-    const expectedCreateCategoryResponse = new CreateCategoryResponse({
+    const expectedCreateCategoryResponse = new ExpenseCategoryResponse({
       ...createCategoryRequest,
       id: "1",
       userId: userId,
@@ -48,19 +48,19 @@ describe("Category Service tests", () => {
 
   it("should handle errors during category creation", async () => {
     const userId = "A001";
-    const categoryCreationRequest = new CreateCategoryRequest({
-        name: "Food",
-        description: "Zomato, Swiggy, Eatsure"
-      });
+    const categoryCreationRequest = new ExpenseCategoryRequest({
+      name: "Food",
+      description: "Zomato, Swiggy, Eatsure",
+    });
 
-      const serverError = new Error("Internal Server Error");
-      categoryRepositoryMock.createCategory.mockRejectedValue(serverError);
-  
-      try {
-        await categoryService.createCategory(userId, categoryCreationRequest);
-      } catch (error: any) {
-        expect(error).toBeInstanceOf(Error);
-        expect(error.message).toBe("Internal Server Error");
-      }
+    const serverError = new Error("Internal Server Error");
+    categoryRepositoryMock.createCategory.mockRejectedValue(serverError);
+
+    try {
+      await categoryService.createCategory(userId, categoryCreationRequest);
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("Internal Server Error");
+    }
   });
 });

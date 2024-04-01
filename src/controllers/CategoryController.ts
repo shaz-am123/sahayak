@@ -1,9 +1,12 @@
-import CreateCategoryRequest from "../dto/CreateCategoryRequest";
+import ExpenseCategoryRequest from "../dto/ExpenseCategoryRequest";
 import HttpResponse from "../dto/HttpResponse";
 import { CustomValidationError } from "../errors/CustomValidationError";
 import { CategoryService } from "../services/CategoryService";
 
 export class CategoryController {
+  getCategories(userId: string) {
+    throw new Error("Method not implemented.");
+  }
   private static instance: CategoryController;
   private categoryService: CategoryService;
 
@@ -22,7 +25,7 @@ export class CategoryController {
 
   async createCategory(
     userId: string,
-    createCategoryRequest: CreateCategoryRequest
+    createCategoryRequest: ExpenseCategoryRequest
   ): Promise<HttpResponse> {
     try {
       await createCategoryRequest.validateRequest();

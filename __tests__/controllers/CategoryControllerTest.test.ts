@@ -1,5 +1,5 @@
-import CreateCategoryRequest from "../../src/dto/CreateCategoryRequest";
-import CreateCategoryResponse from "../../src/dto/CreateCategoryResponse";
+import ExpenseCategoryRequest from "../../src/dto/ExpenseCategoryRequest";
+import ExpenseCategoryResponse from "../../src/dto/ExpenseCategoryResponse";
 import { CustomValidationError } from "../../src/errors/CustomValidationError";
 import { CategoryController } from "./../../src/controllers/CategoryController";
 import { CategoryService } from "./../../src/services/CategoryService";
@@ -20,11 +20,11 @@ describe("Category Controller tests", () => {
 
   it("should allow users to add a category", async () => {
     const userId = "A001";
-    const createCategoryRequest = new CreateCategoryRequest({
+    const createCategoryRequest = new ExpenseCategoryRequest({
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
     });
-    const expectedResponse: CreateCategoryResponse = {
+    const expectedResponse: ExpenseCategoryResponse = {
       ...createCategoryRequest,
       id: "1",
       userId: userId,
@@ -43,7 +43,7 @@ describe("Category Controller tests", () => {
 
   it("should handle validation errors when a user tries to add a category", async () => {
     const userId = "A001";
-    const mockCreateCategoryRequest = new CreateCategoryRequest({
+    const mockCreateCategoryRequest = new ExpenseCategoryRequest({
       name: "",
       description: "Zomato, Swiggy, Eatsure",
     });
@@ -57,8 +57,8 @@ describe("Category Controller tests", () => {
         property: "name",
         children: [],
         constraints: {
-          minLength: "Category name must be at least 2 characters long",
-          isNotEmpty: "Category name is required",
+          minLength: "Expense-category name must be at least 2 characters long",
+          isNotEmpty: "Expense-category name is required",
         },
       },
     ]);
@@ -78,7 +78,7 @@ describe("Category Controller tests", () => {
 
   it("should handle other errors when an user tries to add a category", async () => {
     const userId = "A001";
-    const mockCreateCategoryRequest = new CreateCategoryRequest({
+    const mockCreateCategoryRequest = new ExpenseCategoryRequest({
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
     });

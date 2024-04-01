@@ -1,6 +1,6 @@
 import Category from "../domain/Category";
-import CreateCategoryRequest from "../dto/CreateCategoryRequest";
-import CreateCategoryResponse from "../dto/CreateCategoryResponse";
+import ExpenseCategoryRequest from "../dto/ExpenseCategoryRequest";
+import ExpenseCategoryResponse from "../dto/ExpenseCategoryResponse";
 import { CategoryRepository } from "../repositories/CategoryRepository";
 
 export class CategoryService {
@@ -22,8 +22,8 @@ export class CategoryService {
 
   async createCategory(
     userId: string,
-    createCategoryRequest: CreateCategoryRequest
-  ): Promise<CreateCategoryResponse> {
+    createCategoryRequest: ExpenseCategoryRequest
+  ): Promise<ExpenseCategoryResponse> {
     const category = new Category({
       id: null,
       userId: userId,
@@ -33,7 +33,7 @@ export class CategoryService {
     const createdCategory = await this.categoryRepository.createCategory(
       category
     );
-    return new CreateCategoryResponse({
+    return new ExpenseCategoryResponse({
       id: createdCategory.id!,
       userId: createdCategory.userId,
       name: createCategoryRequest.name,

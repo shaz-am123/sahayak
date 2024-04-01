@@ -1,4 +1,4 @@
-class CreateCategoryResponse {
+class ExpenseCategoryResponse {
   id: string;
   userId: string;
   name: string;
@@ -12,4 +12,4 @@ class CreateCategoryResponse {
   }
 }
 
-export default CreateCategoryResponse;
+export default ExpenseCategoryResponse;
