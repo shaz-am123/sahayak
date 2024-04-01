@@ -63,4 +63,8 @@ export class AuthService {
       token: token,
     });
   }
+
+  async validateUserId(userId: string) {
+    await this.authRepository.getUserById(userId);
+  }
 }

@@ -37,7 +37,7 @@ export class DatabaseConfiguration {
 
   private async connect() {
     try {
-      mongoose.connect(this.databaseUrl)
+      mongoose.connect(this.databaseUrl);
       console.log("Connected to MongoDB");
     } catch (error) {
       console.error("Error connecting to MongoDB:", error);
