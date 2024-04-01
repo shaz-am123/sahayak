@@ -102,7 +102,16 @@ describe("Authentication Repository tests", () => {
       await authRepository.getUserByUsername("shyam123");
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe("User not found");
+      expect(error.message).toBe("User not found, invalid username");
+    }
+  });
+
+  it("should be able to handle UserNotFound error while searching for a user using their userId", async () => {
+    try {
+      await authRepository.getUserById("650b31881c5859dde1eda378");
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("User not found, invalid userId");
     }
   });
 

@@ -18,7 +18,6 @@ const CategorySchema: Schema = new Schema({
   },
 });
 
-
 CategorySchema.index({ userId: 1, name: 1 }, { unique: true });
 
 const counterSchema = new Schema({

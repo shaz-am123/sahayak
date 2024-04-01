@@ -8,7 +8,7 @@ app.use(express.json());
 
 DatabaseConfiguration.getInstance();
 
-app.use("/auth", authRoutes)
+app.use("/auth", authRoutes);
 app.use("/categories", userRoutes);
 
 const PORT = process.env.PORT || 3000;

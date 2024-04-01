@@ -13,6 +13,7 @@ jest.mock("../../src/repositories/AuthRepository", () => ({
     getInstance: jest.fn(() => ({
       registerUser: jest.fn(),
       getUserByUsername: jest.fn(),
+      getUserById: jest.fn(),
     })),
   },
 }));
@@ -121,14 +122,14 @@ describe("Auth Service tests", () => {
       password: "myPass123",
     });
 
-    const userNotFoundError = new Error("User not found");
+    const userNotFoundError = new Error("User not found, invalid username");
     authRepositoryMock.getUserByUsername.mockRejectedValue(userNotFoundError);
 
     try {
       await authService.login(loginRequest);
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe("User not found");
+      expect(error.message).toBe("User not found, invalid username");
     }
   });
 
@@ -155,6 +156,17 @@ describe("Auth Service tests", () => {
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("Authentication failed");
+    }
+  });
+
+  it("should throw an error if the userId is invalid or does not exist", async () => {
+    const userNotFoundError = new Error("User not found, invalid userId");
+    authRepositoryMock.getUserById.mockRejectedValue(userNotFoundError);
+    try {
+      await authService.validateUserId("A000");
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("User not found, invalid userId");
     }
   });
 });
