@@ -1,13 +1,13 @@
-import mongoose, { Schema, Document, CallbackError } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
-interface ICategory extends Document {
+interface IExpenseCategory extends Document {
   id: number;
   name: string;
   description: string;
   userId: string;
 }
 
-const CategorySchema: Schema = new Schema({
+const ExpenseCategorySchema: Schema = new Schema({
   id: { type: Number, unique: true },
   name: { type: String, required: true },
   description: { type: String },
@@ -18,7 +18,7 @@ const CategorySchema: Schema = new Schema({
   },
 });
 
-CategorySchema.index({ userId: 1, name: 1 }, { unique: true });
+ExpenseCategorySchema.index({ userId: 1, name: 1 }, { unique: true });
 
 const counterSchema = new Schema({
   _id: { type: String, required: true },
@@ -27,7 +27,7 @@ const counterSchema = new Schema({
 
 const Counter = mongoose.model("Counter", counterSchema);
 
-CategorySchema.pre<ICategory>("save", async function (next) {
+ExpenseCategorySchema.pre<IExpenseCategory>("save", async function (next) {
   try {
     const counter = await Counter.findOneAndUpdate(
       { _id: "id" },
@@ -42,5 +42,8 @@ CategorySchema.pre<ICategory>("save", async function (next) {
   }
 });
 
-const CategoryModel = mongoose.model<ICategory>("category", CategorySchema);
-export default CategoryModel;
+const ExpenseCategoryModel = mongoose.model<IExpenseCategory>(
+  "expense-category",
+  ExpenseCategorySchema
+);
+export default ExpenseCategoryModel;

@@ -2,7 +2,9 @@ import express from "express";
 const router = express.Router();
 import { CategoryController } from "../controllers/CategoryController";
 import verifyToken from "../middleware/authMiddleware";
-import CreateCategoryRequest from "../dto/CreateCategoryRequest";
+import ExpenseCategoryRequest from "../dto/ExpenseCategoryRequest";
+import MultipleExpenseCategoriesResponse from "../dto/MultipleExpenseCategoriesResponse";
+import HttpResponse from "../dto/HttpResponse";
 
 const categoryController = CategoryController.getInstance();
 router.post(
@@ -10,7 +12,7 @@ router.post(
   verifyToken,
   async (req: express.Request, res: express.Response) => {
     const userId = req.userId!;
-    const createCategoryRequest = new CreateCategoryRequest({
+    const createCategoryRequest = new ExpenseCategoryRequest({
       name: req.body.name,
       description: req.body.description,
     });
@@ -21,6 +23,20 @@ router.post(
     res
       .status(createCategoryResponse.statusCode)
       .json(createCategoryResponse.body);
+  }
+);
+
+router.get(
+  "/",
+  verifyToken,
+  async (req: express.Request, res: express.Response) => {
+    const userId = req.userId!;
+
+    const multipleExpenseCategories =
+      await categoryController.getExpenseCategories(userId);
+    res
+      .status(multipleExpenseCategories.statusCode)
+      .json(multipleExpenseCategories.body);
   }
 );
 

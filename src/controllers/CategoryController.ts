@@ -1,4 +1,4 @@
-import CreateCategoryRequest from "../dto/CreateCategoryRequest";
+import ExpenseCategoryRequest from "../dto/ExpenseCategoryRequest";
 import HttpResponse from "../dto/HttpResponse";
 import { CustomValidationError } from "../errors/CustomValidationError";
 import { CategoryService } from "../services/CategoryService";
@@ -22,7 +22,7 @@ export class CategoryController {
 
   async createCategory(
     userId: string,
-    createCategoryRequest: CreateCategoryRequest
+    createCategoryRequest: ExpenseCategoryRequest
   ): Promise<HttpResponse> {
     try {
       await createCategoryRequest.validateRequest();
@@ -35,6 +35,19 @@ export class CategoryController {
         body: createCategoryResponse,
       });
     } catch (error) {
+      return this.handleErrors(error);
+    }
+  }
+
+  async getExpenseCategories(userId: string): Promise<HttpResponse> {
+    try{
+      const multipleExpenseCategoriesResponse = await this.categoryService.getExpenseCategories(userId)
+      return new HttpResponse({
+        statusCode: 200,
+        body: multipleExpenseCategoriesResponse
+      })
+    }
+    catch(error){
       return this.handleErrors(error);
     }
   }

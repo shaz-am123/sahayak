@@ -108,7 +108,8 @@ describe("Authentication Repository tests", () => {
 
   it("should be able to handle UserNotFound error while searching for a user using their userId", async () => {
     try {
-      await authRepository.getUserById("650b31881c5859dde1eda378");
+      const mockUserId = "650b31881c5859dde1eda378";
+      await authRepository.getUserById(mockUserId);
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("User not found, invalid userId");
@@ -116,12 +117,13 @@ describe("Authentication Repository tests", () => {
   });
 
   it("should be able to handle other errors while searching for a user using their username", async () => {
-    const databaseError = new Error("Database Error");
+    const databaseError = new Error("Failed to find user");
     const findUserMock = jest
-      .spyOn(UserModel.prototype, "save")
+      .spyOn(UserModel, "findOne")
       .mockImplementation(() => {
-        throw new Error("Failed to save user");
+        throw databaseError;
       });
+      
     try {
       await authRepository.getUserByUsername("vikram123");
     } catch (error: any) {

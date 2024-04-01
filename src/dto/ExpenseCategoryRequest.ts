@@ -1,10 +1,10 @@
 import { IsNotEmpty, MaxLength, MinLength, validate } from "class-validator";
 import { CustomValidationError } from "../errors/CustomValidationError";
 
-class CreateCategoryRequest {
-  @IsNotEmpty({message: "Category name is required"})
-  @MinLength(4, { message: "Category name must be at least 2 characters long" })
-  @MaxLength(30, { message: "Category name must be at most 20 characters long" })
+class ExpenseCategoryRequest {
+  @IsNotEmpty({message: "Expense-category name is required"})
+  @MinLength(4, { message: "Expense-category name must be at least 2 characters long" })
+  @MaxLength(30, { message: "Expense-category name must be at most 20 characters long" })
   name: string;
 
   description: string;
@@ -22,4 +22,4 @@ class CreateCategoryRequest {
   }
 }
 
-export default CreateCategoryRequest;
+export default ExpenseCategoryRequest;

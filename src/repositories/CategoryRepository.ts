@@ -1,5 +1,5 @@
-import Category from "../domain/Category";
-import CategoryModel from "../models/CategoryModel";
+import ExpenseCategory from "../domain/ExpenseCategory";
+import ExpenseCategoryModel from "../models/ExpenseCategoryModel";
 
 export class CategoryRepository {
   private static instance: CategoryRepository;
@@ -11,14 +11,27 @@ export class CategoryRepository {
     return CategoryRepository.instance;
   }
 
-  async createCategory(category: Category): Promise<Category> {
-    const categoryEntity = new CategoryModel({ ...category });
+  async createCategory(category: ExpenseCategory): Promise<ExpenseCategory> {
+    const categoryEntity = new ExpenseCategoryModel({ ...category });
     await categoryEntity.save();
-    return new Category({
+    return new ExpenseCategory({
       id: categoryEntity._id.toString(),
       name: categoryEntity.name,
       description: categoryEntity.description,
-      userId: categoryEntity.userId,
+      userId: categoryEntity.userId.toString(),
+    });
+  }
+  async getExpenseCategories(userId: string): Promise<ExpenseCategory[]> {
+    const expenseCategoryEntities = await ExpenseCategoryModel.find({
+      userId: userId,
+    });
+    return expenseCategoryEntities.map((expenseCategoryEntity) => {
+      return new ExpenseCategory({
+        id: expenseCategoryEntity._id.toString(),
+        userId: expenseCategoryEntity.userId.toString(),
+        name: expenseCategoryEntity.name,
+        description: expenseCategoryEntity.description,
+      });
     });
   }
 }

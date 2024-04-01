@@ -1,6 +1,7 @@
-import Category from "../../src/domain/Category";
-import CreateCategoryRequest from "../../src/dto/CreateCategoryRequest";
-import CreateCategoryResponse from "../../src/dto/CreateCategoryResponse";
+import ExpenseCategory from "../../src/domain/ExpenseCategory";
+import ExpenseCategoryRequest from "../../src/dto/ExpenseCategoryRequest";
+import ExpenseCategoryResponse from "../../src/dto/ExpenseCategoryResponse";
+import MultipleExpenseCategoriesResponse from "../../src/dto/MultipleExpenseCategoriesResponse";
 import { CategoryRepository } from "../../src/repositories/CategoryRepository";
 import { CategoryService } from "../../src/services/CategoryService";
 
@@ -8,6 +9,7 @@ jest.mock("../../src/repositories/CategoryRepository", () => ({
   CategoryRepository: {
     getInstance: jest.fn(() => ({
       createCategory: jest.fn(),
+      getExpenseCategories: jest.fn(),
     })),
   },
 }));
@@ -19,17 +21,17 @@ describe("Category Service tests", () => {
 
   it("should be able to create a category", async () => {
     const userId = "A001";
-    const createCategoryRequest = new CreateCategoryRequest({
+    const createCategoryRequest = new ExpenseCategoryRequest({
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
     });
-    const expectedCreateCategoryResponse = new CreateCategoryResponse({
+    const expectedCreateCategoryResponse = new ExpenseCategoryResponse({
       ...createCategoryRequest,
       id: "1",
       userId: userId,
     });
 
-    const mockCategoryResponse = new Category({
+    const mockCategoryResponse = new ExpenseCategory({
       id: "1",
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
@@ -48,19 +50,47 @@ describe("Category Service tests", () => {
 
   it("should handle errors during category creation", async () => {
     const userId = "A001";
-    const categoryCreationRequest = new CreateCategoryRequest({
-        name: "Food",
-        description: "Zomato, Swiggy, Eatsure"
-      });
+    const categoryCreationRequest = new ExpenseCategoryRequest({
+      name: "Food",
+      description: "Zomato, Swiggy, Eatsure",
+    });
 
-      const serverError = new Error("Internal Server Error");
-      categoryRepositoryMock.createCategory.mockRejectedValue(serverError);
-  
-      try {
-        await categoryService.createCategory(userId, categoryCreationRequest);
-      } catch (error: any) {
-        expect(error).toBeInstanceOf(Error);
-        expect(error.message).toBe("Internal Server Error");
-      }
+    const serverError = new Error("Internal Server Error");
+    categoryRepositoryMock.createCategory.mockRejectedValue(serverError);
+
+    try {
+      await categoryService.createCategory(userId, categoryCreationRequest);
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("Internal Server Error");
+    }
+  });
+
+  it("should be able to get all the categories of an user", async () => {
+    const userId = "A001";
+    const repositoryMockResponse = [] as ExpenseCategory[];
+    const expectedResponse = new MultipleExpenseCategoriesResponse({
+      expenseCategories: [],
+      totalRecords: 0,
+    });
+
+    categoryRepositoryMock.getExpenseCategories.mockResolvedValue(
+      repositoryMockResponse
+    );
+    const actualResponse = await categoryService.getExpenseCategories(userId);
+    expect(actualResponse).toEqual(expectedResponse);
+  });
+
+  it("should be able to handle any error that occurs while getting categories of an user", async () => {
+    const userId = "A001";
+    const mockError = new Error("Internal Server Error");
+
+    categoryRepositoryMock.getExpenseCategories.mockRejectedValue(mockError);
+    try {
+      await categoryService.getExpenseCategories(userId);
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toEqual(mockError.message);
+    }
   });
 });
