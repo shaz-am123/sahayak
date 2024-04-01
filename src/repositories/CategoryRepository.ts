@@ -18,7 +18,7 @@ export class CategoryRepository {
       id: categoryEntity._id.toString(),
       name: categoryEntity.name,
       description: categoryEntity.description,
-      userId: categoryEntity.userId,
+      userId: categoryEntity.userId.toString(),
     });
   }
   async getExpenseCategories(userId: string): Promise<ExpenseCategory[]> {
@@ -28,7 +28,7 @@ export class CategoryRepository {
     return expenseCategoryEntities.map((expenseCategoryEntity) => {
       return new ExpenseCategory({
         id: expenseCategoryEntity._id.toString(),
-        userId: expenseCategoryEntity.userId,
+        userId: expenseCategoryEntity.userId.toString(),
         name: expenseCategoryEntity.name,
         description: expenseCategoryEntity.description,
       });
