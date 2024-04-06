@@ -32,11 +32,28 @@ router.get(
   async (req: express.Request, res: express.Response) => {
     const userId = req.userId!;
 
-    const multipleExpenseCategories =
+    const multipleExpenseCategoriesResponse =
       await categoryController.getExpenseCategories(userId);
     res
-      .status(multipleExpenseCategories.statusCode)
-      .json(multipleExpenseCategories.body);
+      .status(multipleExpenseCategoriesResponse.statusCode)
+      .json(multipleExpenseCategoriesResponse.body);
+  }
+);
+
+router.get(
+  "/:expenseCategoryId",
+  verifyToken,
+  async (req: express.Request, res: express.Response) => {
+    const userId = req.userId!;
+    const expenseCategoryId = req.params.expenseCategoryId;
+    const expenseCategoryResponse =
+      await categoryController.getExpenseCategoriesById(
+        userId,
+        expenseCategoryId
+      );
+    res
+      .status(expenseCategoryResponse.statusCode)
+      .json(expenseCategoryResponse.body);
   }
 );
 

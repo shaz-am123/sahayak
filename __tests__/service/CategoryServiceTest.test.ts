@@ -10,6 +10,7 @@ jest.mock("../../src/repositories/CategoryRepository", () => ({
     getInstance: jest.fn(() => ({
       createCategory: jest.fn(),
       getExpenseCategories: jest.fn(),
+      getExpenseCategoryById: jest.fn(),
     })),
   },
 }));
@@ -88,6 +89,44 @@ describe("Category Service tests", () => {
     categoryRepositoryMock.getExpenseCategories.mockRejectedValue(mockError);
     try {
       await categoryService.getExpenseCategories(userId);
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toEqual(mockError.message);
+    }
+  });
+
+  it("should be able to get an expense category of an user using id", async () => {
+    const userId = "A001";
+    const expenseCategoryId = "1";
+    const repositoryMockResponse = new ExpenseCategory({
+      id: expenseCategoryId,
+      userId: userId,
+      name: "Food",
+      description: "Zomato, Swiggy, Eatsure",
+    });
+    const expectedResponse = new ExpenseCategoryResponse({
+      ...repositoryMockResponse,
+      id: expenseCategoryId,
+    });
+
+    categoryRepositoryMock.getExpenseCategoryById.mockResolvedValue(
+      repositoryMockResponse
+    );
+    const actualResponse = await categoryService.getExpenseCategoryById(
+      userId,
+      expenseCategoryId
+    );
+    expect(actualResponse).toEqual(expectedResponse);
+  });
+
+  it("should be able to handle any error that occurs while getting an expense category of an user", async () => {
+    const userId = "A001";
+    const expenseCategoryId = "1";
+    const mockError = new Error("Internal Server Error");
+
+    categoryRepositoryMock.getExpenseCategoryById.mockRejectedValue(mockError);
+    try {
+      await categoryService.getExpenseCategoryById(userId, expenseCategoryId);
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toEqual(mockError.message);

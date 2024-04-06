@@ -8,8 +8,12 @@ describe("Category Repository Tests", () => {
   const userId = new mongoose.Types.ObjectId("660a9ca3cdaf2bd4e9f86c2c");
   let databaseConfiguration: DatabaseConfiguration;
   const categoryRepository = CategoryRepository.getInstance();
+  var expenseCategoryId: string;
 
-  afterAll(async () => await databaseConfiguration.destructor());
+  afterAll(async () => {
+    await databaseConfiguration.destructor()
+    mongoose.connection.db.dropDatabase()
+  });
 
   beforeEach(async () => {
     databaseConfiguration = await DatabaseConfiguration.getInstance(
@@ -21,6 +25,8 @@ describe("Category Repository Tests", () => {
       userId: userId,
     });
     await categoryEntity.save();
+
+    expenseCategoryId = categoryEntity.id;
   });
 
   afterEach(async () => {
@@ -104,7 +110,7 @@ describe("Category Repository Tests", () => {
       });
     });
   });
-  it("should be handle any error that occurs while getting expense categories of an user", async () => {
+  it("should handle any error that occurs while getting expense categories of an user", async () => {
     const databaseError = new Error("Failed to find exepense category");
     const findCategoryMock = jest
       .spyOn(ExpenseCategoryModel, "findOne")
@@ -114,6 +120,42 @@ describe("Category Repository Tests", () => {
 
     try {
       await categoryRepository.getExpenseCategories(userId.toString());
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(databaseError.message);
+    }
+
+    findCategoryMock.mockRestore();
+  });
+
+  it("should be able to get all the expense categories of an user", async () => {
+    const expectedResponse = new ExpenseCategory({
+      id: expenseCategoryId,
+      userId: userId.toString(),
+      name: "Food",
+      description: "Zomato, Swiggy, Eatsure",
+    });
+
+    const actualResponse = await categoryRepository.getExpenseCategoryById(
+      userId.toString(),
+      expenseCategoryId
+    );
+
+    expect(actualResponse).toEqual(expectedResponse);
+  });
+  it("should handle any error that occurs while getting an expense category of an user", async () => {
+    const databaseError = new Error("Failed to find exepense category");
+    const findCategoryMock = jest
+      .spyOn(ExpenseCategoryModel, "findOne")
+      .mockImplementation(() => {
+        throw databaseError;
+      });
+
+    try {
+      await categoryRepository.getExpenseCategoryById(
+        userId.toString(),
+        expenseCategoryId
+      );
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe(databaseError.message);

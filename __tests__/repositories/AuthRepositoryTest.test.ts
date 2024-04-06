@@ -2,13 +2,17 @@ import { DatabaseConfiguration } from "./../../src/db";
 import { AuthRepository } from "../../src/repositories/AuthRepository";
 import User from "../../src/domain/User";
 import UserModel from "../../src/models/UserModel";
+import mongoose from "mongoose";
 require("dotenv").config();
 
 describe("Authentication Repository tests", () => {
   let databaseConfiguration: DatabaseConfiguration;
   const authRepository = AuthRepository.getInstance();
 
-  afterAll(async () => await databaseConfiguration.destructor());
+  afterAll(async () => {
+    await databaseConfiguration.destructor();
+    mongoose.connection.db.dropDatabase();
+  });
 
   beforeEach(async () => {
     databaseConfiguration = await DatabaseConfiguration.getInstance(
@@ -123,7 +127,7 @@ describe("Authentication Repository tests", () => {
       .mockImplementation(() => {
         throw databaseError;
       });
-      
+
     try {
       await authRepository.getUserByUsername("vikram123");
     } catch (error: any) {

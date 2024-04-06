@@ -1,14 +1,14 @@
 import mongoose, { Schema, Document } from "mongoose";
 
 interface IExpenseCategory extends Document {
-  id: number;
+  id: string;
   name: string;
   description: string;
   userId: string;
 }
 
 const ExpenseCategorySchema: Schema = new Schema({
-  id: { type: Number, unique: true },
+  id: { type: String, unique: true },
   name: { type: String, required: true },
   description: { type: String },
   userId: {
@@ -35,7 +35,7 @@ ExpenseCategorySchema.pre<IExpenseCategory>("save", async function (next) {
       { new: true, upsert: true }
     );
 
-    this["id"] = counter.seq;
+    this["id"] = counter.seq.toString();
     next();
   } catch (error: any) {
     next(error);

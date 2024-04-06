@@ -50,13 +50,28 @@ export class CategoryService {
     );
 
     return new MultipleExpenseCategoriesResponse({
-      expenseCategories: categories.map(category => new ExpenseCategoryResponse({
-        id: category.id!,
-        userId: category.userId,
-        name: category.name,
-        description: category.description
-      })),
+      expenseCategories: categories.map(
+        (category) =>
+          new ExpenseCategoryResponse({
+            id: category.id!,
+            userId: category.userId,
+            name: category.name,
+            description: category.description,
+          })
+      ),
       totalRecords: categories.length,
+    });
+  }
+
+  async getExpenseCategoryById(
+    userId: string,
+    expenseCategoryId: string
+  ): Promise<ExpenseCategoryResponse> {
+    const expenseCategory =
+      await this.categoryRepository.getExpenseCategoryById(userId, expenseCategoryId);
+    return new ExpenseCategoryResponse({
+      ...expenseCategory,
+      id: expenseCategory.id!,
     });
   }
 }
