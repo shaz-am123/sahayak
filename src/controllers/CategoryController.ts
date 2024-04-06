@@ -1,5 +1,6 @@
 import ExpenseCategoryRequest from "../dto/ExpenseCategoryRequest";
 import HttpResponse from "../dto/HttpResponse";
+import validateRequest from "../dto/ValidateRequestDto";
 import { CustomValidationError } from "../errors/CustomValidationError";
 import { CategoryService } from "../services/CategoryService";
 
@@ -25,7 +26,7 @@ export class CategoryController {
     createCategoryRequest: ExpenseCategoryRequest
   ): Promise<HttpResponse> {
     try {
-      await createCategoryRequest.validateRequest();
+      await validateRequest(createCategoryRequest);
       const createCategoryResponse = await this.categoryService.createCategory(
         userId,
         createCategoryRequest

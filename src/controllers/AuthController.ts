@@ -3,6 +3,7 @@ import { AuthService } from "../services/AuthService";
 import HttpResponse from "../dto/HttpResponse";
 import { CustomValidationError } from "../errors/CustomValidationError";
 import RegistrationRequest from "../dto/RegistrationRequest";
+import validateRequest from "../dto/ValidateRequestDto";
 
 export class AuthController {
   private static instance: AuthController;
@@ -25,7 +26,7 @@ export class AuthController {
     registrationRequest: RegistrationRequest
   ): Promise<HttpResponse> {
     try {
-      await registrationRequest.validateRequest();
+      await validateRequest(registrationRequest);
       const registeredResponse = await this.authService.registerUser(
         registrationRequest
       );
@@ -37,7 +38,7 @@ export class AuthController {
 
   async login(loginRequest: LoginRequest): Promise<HttpResponse> {
     try {
-      await loginRequest.validateRequest();
+      await validateRequest(loginRequest);
       const loginResponse = await this.authService.login(loginRequest);
       return new HttpResponse({ statusCode: 200, body: loginResponse });
     } catch (error) {
