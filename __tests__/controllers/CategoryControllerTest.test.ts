@@ -10,6 +10,7 @@ jest.mock("../../src/services/CategoryService", () => ({
     getInstance: jest.fn(() => ({
       createCategory: jest.fn(),
       getExpenseCategories: jest.fn(),
+      getExpenseCategoryById: jest.fn(),
     })),
   },
 }));
@@ -115,13 +116,52 @@ describe("Category Controller tests", () => {
     expect(httpResponse.statusCode).toBe(200);
   });
 
-  it("should hanlde any error that occurs while getting expense categories of an user", async () => {
+  it("should handle any error that occurs while getting expense categories of an user", async () => {
     const userId = "A001";
     const mockError = new Error("Internal Server Error");
 
     categoryServiceMock.getExpenseCategories.mockRejectedValue(mockError);
 
     const httpResponse = await categoryController.getExpenseCategories(userId);
+
+    expect(httpResponse.body).toEqual({ error: mockError.message });
+    expect(httpResponse.statusCode).toBe(500);
+  });
+
+  it("should be able to find an expense category of an user using id", async () => {
+    const userId = "A001";
+    const expenseCategoryId = "1";
+    const expectedResponse = new ExpenseCategoryResponse({
+      id: expenseCategoryId,
+      userId: userId,
+      name: "Food",
+      description: "Zomato, Swiggy, Eatsure",
+    });
+
+    categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
+      expectedResponse
+    );
+
+    const httpResponse = await categoryController.getExpenseCategoriesById(
+      userId,
+      expenseCategoryId
+    );
+
+    expect(httpResponse.body).toEqual(expectedResponse);
+    expect(httpResponse.statusCode).toBe(200);
+  });
+
+  it("should handle any error that occurs while getting an expense category of an user using id", async () => {
+    const userId = "A001";
+    const expenseCategoryId = "1";
+    const mockError = new Error("Internal Server Error");
+
+    categoryServiceMock.getExpenseCategoryById.mockRejectedValue(mockError);
+
+    const httpResponse = await categoryController.getExpenseCategoriesById(
+      userId,
+      expenseCategoryId
+    );
 
     expect(httpResponse.body).toEqual({ error: mockError.message });
     expect(httpResponse.statusCode).toBe(500);

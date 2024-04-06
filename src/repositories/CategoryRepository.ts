@@ -15,23 +15,44 @@ export class CategoryRepository {
     const categoryEntity = new ExpenseCategoryModel({ ...category });
     await categoryEntity.save();
     return new ExpenseCategory({
-      id: categoryEntity._id.toString(),
+      id: categoryEntity.id.toString(),
       name: categoryEntity.name,
       description: categoryEntity.description,
       userId: categoryEntity.userId.toString(),
     });
   }
+
   async getExpenseCategories(userId: string): Promise<ExpenseCategory[]> {
     const expenseCategoryEntities = await ExpenseCategoryModel.find({
       userId: userId,
     });
     return expenseCategoryEntities.map((expenseCategoryEntity) => {
       return new ExpenseCategory({
-        id: expenseCategoryEntity._id.toString(),
+        id: expenseCategoryEntity.id,
         userId: expenseCategoryEntity.userId.toString(),
         name: expenseCategoryEntity.name,
         description: expenseCategoryEntity.description,
       });
+    });
+  }
+
+  async getExpenseCategoryById(
+    userId: string,
+    expenseCategoryId: string
+  ): Promise<ExpenseCategory> {
+    const expenseCategory = await ExpenseCategoryModel.findOne({
+      id: expenseCategoryId,
+      userId: userId
+    });
+
+    if (!expenseCategory)
+      throw new Error("ExpenseCategory not found for given user");
+
+    return new ExpenseCategory({
+      id: expenseCategory.id,
+      userId: expenseCategory.userId.toString(),
+      name: expenseCategory.name,
+      description: expenseCategory.description,
     });
   }
 }

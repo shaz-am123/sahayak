@@ -40,14 +40,30 @@ export class CategoryController {
   }
 
   async getExpenseCategories(userId: string): Promise<HttpResponse> {
-    try{
-      const multipleExpenseCategoriesResponse = await this.categoryService.getExpenseCategories(userId)
+    try {
+      const multipleExpenseCategoriesResponse =
+        await this.categoryService.getExpenseCategories(userId);
       return new HttpResponse({
         statusCode: 200,
-        body: multipleExpenseCategoriesResponse
-      })
+        body: multipleExpenseCategoriesResponse,
+      });
+    } catch (error) {
+      return this.handleErrors(error);
     }
-    catch(error){
+  }
+
+  async getExpenseCategoriesById(
+    userId: string,
+    exepenseCategoryId: string
+  ): Promise<HttpResponse> {
+    try {
+      const expenseCategoryResponse =
+        await this.categoryService.getExpenseCategoryById(userId, exepenseCategoryId);
+      return new HttpResponse({
+        statusCode: 200,
+        body: expenseCategoryResponse,
+      });
+    } catch (error) {
       return this.handleErrors(error);
     }
   }
