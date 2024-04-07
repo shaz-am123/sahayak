@@ -25,7 +25,7 @@ const counterSchema = new Schema({
   seq: { type: Number, default: 0 },
 });
 
-const Counter = mongoose.model("Counter", counterSchema);
+const Counter = mongoose.model("Category-Counter", counterSchema);
 
 ExpenseCategorySchema.pre<IExpenseCategory>("save", async function (next) {
   try {

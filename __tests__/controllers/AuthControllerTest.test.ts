@@ -83,8 +83,6 @@ describe("Auth Controller tests", () => {
       },
     ]);
 
-    authServiceMock.registerUser.mockRejectedValue(validationError);
-
     const httpResponse = await authController.registerUser(
       mockRegisterUserRequest
     );
@@ -114,8 +112,6 @@ describe("Auth Controller tests", () => {
         },
       },
     ]);
-
-    authServiceMock.login.mockRejectedValue(validationError);
 
     const httpResponse = await authController.login(mockLoginRequest);
 

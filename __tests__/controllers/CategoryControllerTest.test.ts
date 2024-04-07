@@ -66,8 +66,6 @@ describe("Category Controller tests", () => {
       },
     ]);
 
-    categoryServiceMock.createCategory.mockRejectedValue(validationError);
-
     const httpResponse = await categoryController.createCategory(
       userId,
       mockCreateCategoryRequest
