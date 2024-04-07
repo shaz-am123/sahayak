@@ -1,4 +1,6 @@
 import Expense from "../domain/Expense";
+import ExpenseCategory from "../domain/ExpenseCategory";
+import ExpenseCategoryResponse from "../dto/ExpenseCategoryResponse";
 import ExpenseRequest from "../dto/ExpenseRequest";
 import ExpenseResponse from "../dto/ExpenseResponse";
 import MultipleExpensesResponse from "../dto/MultipleExpensesResponse";
@@ -64,17 +66,28 @@ export class ExpenseService {
 
   async getExpenses(userId: string): Promise<MultipleExpensesResponse> {
     const expenses = await this.expenseRepository.getExpenses(userId);
+    const idToExpenseCategoryMap = new Map<string, ExpenseCategory>();
+
+    const { expenseCategories } =
+      await this.categoryService.getExpenseCategories(userId);
+
+    expenseCategories.forEach((category) => {
+      idToExpenseCategoryMap.set(category.id, category);
+    });
+
     const expenseResponses = expenses.map(async (expense) => {
-      const expenseCategory = await this.categoryService.getExpenseCategoryById(
-        userId,
+      const expenseCategoryResponse = idToExpenseCategoryMap.get(
         expense.expenseCategoryId,
-      );
+      )!;
       return new ExpenseResponse({
         id: expense.id!,
         userId: expense.userId,
         amount: expense.amount,
         currency: expense.currency,
-        expenseCategory: expenseCategory,
+        expenseCategory: new ExpenseCategoryResponse({
+          ...expenseCategoryResponse,
+          id: expenseCategoryResponse.id!,
+        }),
         description: expense.description,
         date: expense.date,
       });
