@@ -1,4 +1,4 @@
-import ExpenseCategory from "../../src/domain/ExpenseCategory";
+import ExpenseCategoryResponse from "../../src/dto/ExpenseCategoryResponse";
 import ExpenseRequest from "../../src/dto/ExpenseRequest";
 import ExpenseResponse from "../../src/dto/ExpenseResponse";
 import MultipleExpensesResponse from "../../src/dto/MultipleExpensesResponse";
@@ -36,7 +36,7 @@ describe("Expense Controller tests", () => {
       userId: userId,
       amount: 100,
       currency: Currency["INR" as keyof typeof Currency],
-      expenseCategory: new ExpenseCategory({
+      expenseCategory: new ExpenseCategoryResponse({
         id: expenseCategoryId,
         userId: userId,
         name: "Food",
