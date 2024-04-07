@@ -2,6 +2,7 @@ import Expense from "../../src/domain/Expense";
 import ExpenseCategoryResponse from "../../src/dto/ExpenseCategoryResponse";
 import ExpenseRequest from "../../src/dto/ExpenseRequest";
 import ExpenseResponse from "../../src/dto/ExpenseResponse";
+import MultipleExpenseCategoriesResponse from "../../src/dto/MultipleExpenseCategoriesResponse";
 import MultipleExpensesResponse from "../../src/dto/MultipleExpensesResponse";
 import Currency from "../../src/enums/Currency";
 import { ExpenseRepository } from "../../src/repositories/ExpenseRepository";
@@ -21,6 +22,7 @@ jest.mock("../../src/services/CategoryService", () => ({
   CategoryService: {
     getInstance: jest.fn(() => ({
       getExpenseCategoryById: jest.fn(),
+      getExpenseCategories: jest.fn(),
     })),
   },
 }));
@@ -212,13 +214,11 @@ describe("Expense Service tests", () => {
       totalRecords: 2,
     });
 
-    categoryServiceMock.getExpenseCategoryById.mockImplementation(
-      (userId: string, expenseCategoryId: string) => {
-        if (expenseCategoryId === "1") {
-          return Promise.resolve(mockCategories[0]);
-        }
-        return Promise.resolve(mockCategories[1]);
-      },
+    categoryServiceMock.getExpenseCategories.mockResolvedValueOnce(
+      new MultipleExpenseCategoriesResponse({
+        expenseCategories: mockCategories,
+        totalRecords: 2,
+      }),
     );
 
     expenseRepositoryMock.getExpenses.mockResolvedValueOnce(
