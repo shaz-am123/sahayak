@@ -37,6 +37,10 @@ describe("Expense Service tests", () => {
     categoryServiceMock
   );
 
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("should be able to create an expense", async () => {
     const userId = "A001";
     const expenseCategoryId = "1";
@@ -75,10 +79,12 @@ describe("Expense Service tests", () => {
       date: new Date("2024-02-25"),
     });
 
-    categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
+    categoryServiceMock.getExpenseCategoryById.mockResolvedValueOnce(
       mockCategoryResponse
     );
-    expenseRepositoryMock.createExpense.mockResolvedValue(mockExpenseResponse);
+    expenseRepositoryMock.createExpense.mockResolvedValueOnce(
+      mockExpenseResponse
+    );
     const createExpenseResponse = await expenseService.createExpense(
       userId,
       createExpenseRequest
@@ -86,7 +92,7 @@ describe("Expense Service tests", () => {
     expect(createExpenseResponse).toEqual(expectedCreateExpenseResponse);
   });
 
-  it("should handle errors during expense creation", async () => {
+  it("should handle incorrect expense category in expense creation request", async () => {
     const userId = "A001";
     const expenseCategoryId = "1";
     const createExpenseRequest = new ExpenseRequest({
@@ -97,6 +103,42 @@ describe("Expense Service tests", () => {
       date: new Date("2024-02-25"),
     });
 
+    const expenseCategoryNotFoundError = new Error(
+      "The expense category was not found for the user"
+    );
+    categoryServiceMock.getExpenseCategoryById.mockRejectedValue(
+      expenseCategoryNotFoundError
+    );
+
+    try {
+      await expenseService.createExpense(userId, createExpenseRequest);
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(expenseCategoryNotFoundError.message);
+    }
+  });
+
+  it("should handle other errors during expense creation", async () => {
+    const userId = "A001";
+    const expenseCategoryId = "1";
+    const mockExpenseCategory = new ExpenseCategoryResponse({
+      id: expenseCategoryId,
+      userId: userId,
+      name: "Food",
+      description: "",
+    });
+
+    const createExpenseRequest = new ExpenseRequest({
+      amount: 100,
+      currency: Currency["INR" as keyof typeof Currency],
+      expenseCategoryId: expenseCategoryId,
+      description: "",
+      date: new Date("2024-02-25"),
+    });
+
+    categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
+      mockExpenseCategory
+    );
     const serverError = new Error("Internal Server Error");
     expenseRepositoryMock.createExpense.mockRejectedValue(serverError);
 
@@ -179,7 +221,9 @@ describe("Expense Service tests", () => {
       }
     );
 
-    expenseRepositoryMock.getExpenses.mockResolvedValue(repositoryMockResponse);
+    expenseRepositoryMock.getExpenses.mockResolvedValueOnce(
+      repositoryMockResponse
+    );
     const actualResponse = await expenseService.getExpenses(userId);
     expect(actualResponse).toEqual(expectedResponse);
   });
