@@ -26,7 +26,7 @@ export class ExpenseRepository {
     });
   }
 
-  async getExpenseCategories(userId: string): Promise<Expense[]> {
+  async getExpenses(userId: string): Promise<Expense[]> {
     const expenseEntities = await ExpenseModel.find({
       userId: userId,
     });
