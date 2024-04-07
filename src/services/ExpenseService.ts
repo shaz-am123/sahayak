@@ -3,9 +3,11 @@ import ExpenseRequest from "../dto/ExpenseRequest";
 import ExpenseResponse from "../dto/ExpenseResponse";
 import MultipleExpensesResponse from "../dto/MultipleExpensesResponse";
 import { ExpenseRepository } from "../repositories/ExpenseRepository";
+import { CategoryService } from "./CategoryService";
 
 export class ExpenseService {
   private static instance: ExpenseService;
+  private categoryService = CategoryService.getInstance();
   private expenseRepository: ExpenseRepository;
 
   private constructor(expenseRepository: ExpenseRepository) {
@@ -25,6 +27,11 @@ export class ExpenseService {
     userId: string,
     createExpenseRequest: ExpenseRequest
   ): Promise<ExpenseResponse> {
+    const expenseCategory = await this.categoryService.getExpenseCategoryById(
+      userId,
+      createExpenseRequest.expenseCategoryId
+    );
+
     const expense = new Expense({
       id: null,
       userId: userId,
@@ -35,37 +42,39 @@ export class ExpenseService {
       date: createExpenseRequest.date,
     });
     const createdExpense = await this.expenseRepository.createExpense(expense);
-    
+
     return new ExpenseResponse({
       id: createdExpense.id!,
       userId: createdExpense.userId,
       amount: createdExpense.amount,
       currency: createdExpense.currency,
-      expenseCategoryId: createdExpense.expenseCategoryId,
+      expenseCategory: expenseCategory,
       description: createdExpense.description,
       date: createdExpense.date,
     });
   }
 
   async getExpenses(userId: string): Promise<MultipleExpensesResponse> {
-    const categories = await this.expenseRepository.getExpenseCategories(
-      userId
-    );
+    const expenses = await this.expenseRepository.getExpenseCategories(userId);
+    const expenseResponses = expenses.map(async (expense) => {
+      const expenseCategory = await this.categoryService.getExpenseCategoryById(
+        userId,
+        expense.expenseCategoryId
+      );
+      return new ExpenseResponse({
+        id: expense.id!,
+        userId: expense.userId,
+        amount: expense.amount,
+        currency: expense.currency,
+        expenseCategory: expenseCategory,
+        description: expense.description,
+        date: expense.date,
+      });
+    });
 
     return new MultipleExpensesResponse({
-      expenseCategories: categories.map(
-        (expense) =>
-          new ExpenseResponse({
-            id: expense.id!,
-            userId: expense.userId,
-            amount: expense.amount,
-            currency: expense.currency,
-            expenseCategoryId: expense.expenseCategoryId,
-            description: expense.description,
-            date: expense.date,
-          })
-      ),
-      totalRecords: categories.length,
+      expenses: await Promise.all(expenseResponses),
+      totalRecords: expenses.length,
     });
   }
 }
