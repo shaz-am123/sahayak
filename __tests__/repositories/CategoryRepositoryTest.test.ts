@@ -11,13 +11,13 @@ describe("Category Repository Tests", () => {
   var expenseCategoryId: string;
 
   afterAll(async () => {
-    await databaseConfiguration.destructor()
-    mongoose.connection.db.dropDatabase()
+    await databaseConfiguration.destructor();
+    mongoose.connection.db.dropDatabase();
   });
 
   beforeEach(async () => {
     databaseConfiguration = await DatabaseConfiguration.getInstance(
-      process.env.TESTING_DB_URL
+      process.env.TESTING_DB_URL,
     );
     const categoryEntity = new ExpenseCategoryModel({
       name: "Food",
@@ -100,7 +100,7 @@ describe("Category Repository Tests", () => {
     ];
 
     const actualResponse = await categoryRepository.getExpenseCategories(
-      userId.toString()
+      userId.toString(),
     );
     expect(actualResponse.length).toEqual(expectedResponse.length);
     actualResponse.forEach((category, index) => {
@@ -138,7 +138,7 @@ describe("Category Repository Tests", () => {
 
     const actualResponse = await categoryRepository.getExpenseCategoryById(
       userId.toString(),
-      expenseCategoryId
+      expenseCategoryId,
     );
 
     expect(actualResponse).toEqual(expectedResponse);
@@ -154,7 +154,7 @@ describe("Category Repository Tests", () => {
     try {
       await categoryRepository.getExpenseCategoryById(
         userId.toString(),
-        expenseCategoryId
+        expenseCategoryId,
       );
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);

@@ -16,11 +16,10 @@ router.post(
       password: req.body.password,
     });
 
-    const registrationResponse = await authController.registerUser(
-      registrationRequest
-    );
+    const registrationResponse =
+      await authController.registerUser(registrationRequest);
     res.status(registrationResponse.statusCode).json(registrationResponse.body);
-  }
+  },
 );
 
 router.post("/login", async (req: express.Request, res: express.Response) => {

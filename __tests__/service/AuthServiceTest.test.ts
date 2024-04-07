@@ -83,9 +83,8 @@ describe("Auth Service tests", () => {
     });
 
     authRepositoryMock.registerUser.mockResolvedValue(mockUserResponse);
-    const registrationResponse = await authService.registerUser(
-      registrationRequest
-    );
+    const registrationResponse =
+      await authService.registerUser(registrationRequest);
     expect(registrationResponse).toEqual(expectedRegistrationResponse);
   });
 

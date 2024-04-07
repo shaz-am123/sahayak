@@ -18,12 +18,12 @@ router.post(
     });
     const createCategoryResponse = await categoryController.createCategory(
       userId,
-      createCategoryRequest
+      createCategoryRequest,
     );
     res
       .status(createCategoryResponse.statusCode)
       .json(createCategoryResponse.body);
-  }
+  },
 );
 
 router.get(
@@ -37,7 +37,7 @@ router.get(
     res
       .status(multipleExpenseCategoriesResponse.statusCode)
       .json(multipleExpenseCategoriesResponse.body);
-  }
+  },
 );
 
 router.get(
@@ -49,12 +49,12 @@ router.get(
     const expenseCategoryResponse =
       await categoryController.getExpenseCategoriesById(
         userId,
-        expenseCategoryId
+        expenseCategoryId,
       );
     res
       .status(expenseCategoryResponse.statusCode)
       .json(expenseCategoryResponse.body);
-  }
+  },
 );
 
 export default router;

@@ -17,9 +17,8 @@ const ExpenseSchema: Schema = new Schema({
   currency: { type: String, required: true },
   expenseCategoryId: { type: String, required: true },
   description: { type: String, required: false },
-  date: { type: Date, required: true }
+  date: { type: Date, required: true },
 });
-
 
 const counterSchema = new Schema({
   _id: { type: String, required: true },
@@ -33,7 +32,7 @@ ExpenseSchema.pre<IExpense>("save", async function (next) {
     const counter = await Counter.findOneAndUpdate(
       { _id: "id" },
       { $inc: { seq: 1 } },
-      { new: true, upsert: true }
+      { new: true, upsert: true },
     );
 
     this["id"] = counter.seq.toString();
@@ -43,8 +42,5 @@ ExpenseSchema.pre<IExpense>("save", async function (next) {
   }
 });
 
-const ExpenseModel = mongoose.model<IExpense>(
-  "expense",
-  ExpenseSchema
-);
+const ExpenseModel = mongoose.model<IExpense>("expense", ExpenseSchema);
 export default ExpenseModel;

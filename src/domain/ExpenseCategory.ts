@@ -1,21 +1,20 @@
 class ExpenseCategory {
+  id: string | null;
+  userId: string;
+  name: string;
+  description: string;
+
+  constructor(data: {
     id: string | null;
-    userId: string
+    userId: string;
     name: string;
-    description: string
-  
-    constructor(data: {
-      id: string | null;
-      userId: string;
-      name: string;
-      description: string;
-    }) {
-      this.id = data.id;
-      this.userId = data.userId
-      this.name = data.name;
-      this.description = data.description;
-    }
+    description: string;
+  }) {
+    this.id = data.id;
+    this.userId = data.userId;
+    this.name = data.name;
+    this.description = data.description;
   }
-  
-  export default ExpenseCategory;
-  
+}
+
+export default ExpenseCategory;

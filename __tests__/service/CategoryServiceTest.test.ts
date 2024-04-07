@@ -40,11 +40,11 @@ describe("Category Service tests", () => {
     });
 
     categoryRepositoryMock.createCategory.mockResolvedValue(
-      mockCategoryResponse
+      mockCategoryResponse,
     );
     const createCategoryResponse = await categoryService.createCategory(
       userId,
-      createCategoryRequest
+      createCategoryRequest,
     );
     expect(createCategoryResponse).toEqual(expectedCreateCategoryResponse);
   });
@@ -76,7 +76,7 @@ describe("Category Service tests", () => {
     });
 
     categoryRepositoryMock.getExpenseCategories.mockResolvedValue(
-      repositoryMockResponse
+      repositoryMockResponse,
     );
     const actualResponse = await categoryService.getExpenseCategories(userId);
     expect(actualResponse).toEqual(expectedResponse);
@@ -110,11 +110,11 @@ describe("Category Service tests", () => {
     });
 
     categoryRepositoryMock.getExpenseCategoryById.mockResolvedValue(
-      repositoryMockResponse
+      repositoryMockResponse,
     );
     const actualResponse = await categoryService.getExpenseCategoryById(
       userId,
-      expenseCategoryId
+      expenseCategoryId,
     );
     expect(actualResponse).toEqual(expectedResponse);
   });

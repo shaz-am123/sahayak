@@ -38,11 +38,11 @@ export class CategoryRepository {
 
   async getExpenseCategoryById(
     userId: string,
-    expenseCategoryId: string
+    expenseCategoryId: string,
   ): Promise<ExpenseCategory> {
     const expenseCategory = await ExpenseCategoryModel.findOne({
       id: expenseCategoryId,
-      userId: userId
+      userId: userId,
     });
 
     if (!expenseCategory)

@@ -14,7 +14,7 @@ export class AuthController {
   }
 
   public static getInstance(
-    authService: AuthService = AuthService.getInstance()
+    authService: AuthService = AuthService.getInstance(),
   ): AuthController {
     if (!AuthController.instance) {
       AuthController.instance = new AuthController(authService);
@@ -23,13 +23,12 @@ export class AuthController {
   }
 
   async registerUser(
-    registrationRequest: RegistrationRequest
+    registrationRequest: RegistrationRequest,
   ): Promise<HttpResponse> {
     try {
       await validateRequest(registrationRequest);
-      const registeredResponse = await this.authService.registerUser(
-        registrationRequest
-      );
+      const registeredResponse =
+        await this.authService.registerUser(registrationRequest);
       return new HttpResponse({ statusCode: 201, body: registeredResponse });
     } catch (error) {
       return this.handleErrors(error);

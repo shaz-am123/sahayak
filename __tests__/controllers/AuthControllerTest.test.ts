@@ -84,7 +84,7 @@ describe("Auth Controller tests", () => {
     ]);
 
     const httpResponse = await authController.registerUser(
-      mockRegisterUserRequest
+      mockRegisterUserRequest,
     );
 
     expect(httpResponse.body).toEqual({
@@ -134,7 +134,7 @@ describe("Auth Controller tests", () => {
     authServiceMock.registerUser.mockRejectedValue(error);
 
     const httpResponse = await authController.registerUser(
-      mockRegisterUserRequest
+      mockRegisterUserRequest,
     );
 
     expect(httpResponse.body).toEqual({ error: errorMessage });
