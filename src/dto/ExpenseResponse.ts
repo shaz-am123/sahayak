@@ -1,11 +1,12 @@
+import ExpenseCategory from "../domain/ExpenseCategory";
 import Currency from "../enums/Currency";
 
-class ExpenseRequest {
+class ExpenseResponse {
   id: string;
   userId: string;
   amount: number;
   currency: Currency;
-  expenseCategoryId: string;
+  expenseCategory: ExpenseCategory;
   description: string;
   date: Date;
 
@@ -13,7 +14,7 @@ class ExpenseRequest {
     id: string;
     userId: string;
     amount: number;
-    expenseCategoryId: string;
+    expenseCategory: ExpenseCategory;
     description: string;
     date: Date;
     currency: Currency;
@@ -22,10 +23,10 @@ class ExpenseRequest {
     this.userId = data.userId;
     this.amount = data.amount;
     this.currency = data.currency;
-    this.expenseCategoryId = data.expenseCategoryId;
+    this.expenseCategory = data.expenseCategory;
     this.description = data.description;
     this.date = data.date;
   }
 }
 
-export default ExpenseRequest;
+export default ExpenseResponse;
