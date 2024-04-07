@@ -1,9 +1,10 @@
-import { IsNumber, IsString, IsDate, IsEnum, IsNotEmpty } from 'class-validator';
+import { IsNumber, IsString, IsDate, IsEnum, IsNotEmpty, IsPositive } from 'class-validator';
 import Currency from '../enums/Currency';
 
 class ExpenseRequest {
   @IsNotEmpty({ message: 'Amount must not be empty' })
   @IsNumber({}, { message: 'Amount must be a number' })
+  @IsPositive({ message: 'Amount must be a positive number'})
   amount: number;
 
   @IsNotEmpty({ message: 'Currency must not be empty' })
