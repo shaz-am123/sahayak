@@ -17,7 +17,7 @@ jest.mock("../../src/repositories/ExpenseRepository", () => ({
   },
 }));
 
-jest.mock("../../src/services/categoryService", () => ({
+jest.mock("../../src/services/CategoryService", () => ({
   CategoryService: {
     getInstance: jest.fn(() => ({
       getExpenseCategoryById: jest.fn(),
