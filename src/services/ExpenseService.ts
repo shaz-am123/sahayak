@@ -7,18 +7,26 @@ import { CategoryService } from "./CategoryService";
 
 export class ExpenseService {
   private static instance: ExpenseService;
-  private categoryService = CategoryService.getInstance();
+  private categoryService: CategoryService;
   private expenseRepository: ExpenseRepository;
 
-  private constructor(expenseRepository: ExpenseRepository) {
+  private constructor(
+    expenseRepository: ExpenseRepository,
+    categoryService: CategoryService
+  ) {
     this.expenseRepository = expenseRepository;
+    this.categoryService = categoryService;
   }
 
   public static getInstance(
-    expenseRepository: ExpenseRepository = ExpenseRepository.getInstance()
+    expenseRepository: ExpenseRepository = ExpenseRepository.getInstance(),
+    categoryService: CategoryService = CategoryService.getInstance()
   ): ExpenseService {
     if (!ExpenseService.instance) {
-      ExpenseService.instance = new ExpenseService(expenseRepository);
+      ExpenseService.instance = new ExpenseService(
+        expenseRepository,
+        categoryService
+      );
     }
     return ExpenseService.instance;
   }
@@ -55,7 +63,7 @@ export class ExpenseService {
   }
 
   async getExpenses(userId: string): Promise<MultipleExpensesResponse> {
-    const expenses = await this.expenseRepository.getExpenseCategories(userId);
+    const expenses = await this.expenseRepository.getExpenses(userId);
     const expenseResponses = expenses.map(async (expense) => {
       const expenseCategory = await this.categoryService.getExpenseCategoryById(
         userId,
