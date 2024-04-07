@@ -57,7 +57,7 @@ describe("Expense Controller tests", () => {
     expect(httpResponse.statusCode).toBe(201);
   });
 
-  it("should handle validation errors when an user tries to add a expense", async () => {
+  it("should handle validation errors when an user tries to add an expense", async () => {
     const userId = "A001";
     const expenseCategoryId = "1";
     const mockCreateExpenseRequest = new ExpenseRequest({

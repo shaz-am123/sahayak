@@ -128,7 +128,7 @@ describe("Category Repository Tests", () => {
     findCategoryMock.mockRestore();
   });
 
-  it("should be able to get all the expense categories of an user", async () => {
+  it("should be able to get an expenseCategory of an user using id", async () => {
     const expectedResponse = new ExpenseCategory({
       id: expenseCategoryId,
       userId: userId.toString(),
