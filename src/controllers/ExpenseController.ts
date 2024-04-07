@@ -1,5 +1,4 @@
 import ExpenseRequest from "../dto/ExpenseRequest";
-import ExpenseResponse from "../dto/ExpenseResponse";
 import HttpResponse from "../dto/HttpResponse";
 import validateRequest from "../dto/ValidateRequestDto";
 import { CustomValidationError } from "../errors/CustomValidationError";
