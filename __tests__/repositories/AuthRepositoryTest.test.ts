@@ -16,7 +16,7 @@ describe("Authentication Repository tests", () => {
 
   beforeEach(async () => {
     databaseConfiguration = await DatabaseConfiguration.getInstance(
-      process.env.TESTING_DB_URL
+      process.env.TESTING_DB_URL,
     );
     const userEntity = new UserModel({
       name: "Vikram",
@@ -60,7 +60,7 @@ describe("Authentication Repository tests", () => {
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe(
-        'E11000 duplicate key error collection: testing_sahayak.users index: username_1 dup key: { username: "vikram123" }'
+        'E11000 duplicate key error collection: testing_sahayak.users index: username_1 dup key: { username: "vikram123" }',
       );
     }
   });

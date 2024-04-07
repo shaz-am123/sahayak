@@ -34,7 +34,7 @@ describe("Expense Service tests", () => {
 
   const expenseService = ExpenseService.getInstance(
     expenseRepositoryMock,
-    categoryServiceMock
+    categoryServiceMock,
   );
 
   beforeEach(() => {
@@ -80,14 +80,14 @@ describe("Expense Service tests", () => {
     });
 
     categoryServiceMock.getExpenseCategoryById.mockResolvedValueOnce(
-      mockCategoryResponse
+      mockCategoryResponse,
     );
     expenseRepositoryMock.createExpense.mockResolvedValueOnce(
-      mockExpenseResponse
+      mockExpenseResponse,
     );
     const createExpenseResponse = await expenseService.createExpense(
       userId,
-      createExpenseRequest
+      createExpenseRequest,
     );
     expect(createExpenseResponse).toEqual(expectedCreateExpenseResponse);
   });
@@ -104,10 +104,10 @@ describe("Expense Service tests", () => {
     });
 
     const expenseCategoryNotFoundError = new Error(
-      "The expense category was not found for the user"
+      "The expense category was not found for the user",
     );
     categoryServiceMock.getExpenseCategoryById.mockRejectedValue(
-      expenseCategoryNotFoundError
+      expenseCategoryNotFoundError,
     );
 
     try {
@@ -137,7 +137,7 @@ describe("Expense Service tests", () => {
     });
 
     categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
-      mockExpenseCategory
+      mockExpenseCategory,
     );
     const serverError = new Error("Internal Server Error");
     expenseRepositoryMock.createExpense.mockRejectedValue(serverError);
@@ -218,11 +218,11 @@ describe("Expense Service tests", () => {
           return Promise.resolve(mockCategories[0]);
         }
         return Promise.resolve(mockCategories[1]);
-      }
+      },
     );
 
     expenseRepositoryMock.getExpenses.mockResolvedValueOnce(
-      repositoryMockResponse
+      repositoryMockResponse,
     );
     const actualResponse = await expenseService.getExpenses(userId);
     expect(actualResponse).toEqual(expectedResponse);

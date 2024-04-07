@@ -37,7 +37,7 @@ describe("Category Controller tests", () => {
 
     const httpResponse = await categoryController.createCategory(
       userId,
-      createCategoryRequest
+      createCategoryRequest,
     );
 
     expect(httpResponse.body).toEqual(expectedResponse);
@@ -68,7 +68,7 @@ describe("Category Controller tests", () => {
 
     const httpResponse = await categoryController.createCategory(
       userId,
-      mockCreateCategoryRequest
+      mockCreateCategoryRequest,
     );
 
     expect(httpResponse.body).toEqual({
@@ -90,7 +90,7 @@ describe("Category Controller tests", () => {
 
     const httpResponse = await categoryController.createCategory(
       userId,
-      mockCreateCategoryRequest
+      mockCreateCategoryRequest,
     );
 
     expect(httpResponse.body).toEqual({ error: errorMessage });
@@ -105,7 +105,7 @@ describe("Category Controller tests", () => {
     });
 
     categoryServiceMock.getExpenseCategories.mockResolvedValue(
-      expectedResponse
+      expectedResponse,
     );
 
     const httpResponse = await categoryController.getExpenseCategories(userId);
@@ -137,12 +137,12 @@ describe("Category Controller tests", () => {
     });
 
     categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
-      expectedResponse
+      expectedResponse,
     );
 
     const httpResponse = await categoryController.getExpenseCategoriesById(
       userId,
-      expenseCategoryId
+      expenseCategoryId,
     );
 
     expect(httpResponse.body).toEqual(expectedResponse);
@@ -158,7 +158,7 @@ describe("Category Controller tests", () => {
 
     const httpResponse = await categoryController.getExpenseCategoriesById(
       userId,
-      expenseCategoryId
+      expenseCategoryId,
     );
 
     expect(httpResponse.body).toEqual({ error: mockError.message });

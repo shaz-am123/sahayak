@@ -13,7 +13,7 @@ export class ExpenseController {
   }
 
   public static getInstance(
-    expenseService: ExpenseService = ExpenseService.getInstance()
+    expenseService: ExpenseService = ExpenseService.getInstance(),
   ): ExpenseController {
     if (!ExpenseController.instance) {
       ExpenseController.instance = new ExpenseController(expenseService);
@@ -23,13 +23,13 @@ export class ExpenseController {
 
   async createExpense(
     userId: string,
-    createExpenseRequest: ExpenseRequest
+    createExpenseRequest: ExpenseRequest,
   ): Promise<HttpResponse> {
     try {
       await validateRequest(createExpenseRequest);
       const createExpenseResponse = await this.expenseService.createExpense(
         userId,
-        createExpenseRequest
+        createExpenseRequest,
       );
       return new HttpResponse({
         statusCode: 201,
@@ -42,9 +42,8 @@ export class ExpenseController {
 
   async getExpenses(userId: string): Promise<HttpResponse> {
     try {
-      const multipleExpensesResponse = await this.expenseService.getExpenses(
-        userId
-      );
+      const multipleExpensesResponse =
+        await this.expenseService.getExpenses(userId);
       return new HttpResponse({
         statusCode: 200,
         body: multipleExpensesResponse,

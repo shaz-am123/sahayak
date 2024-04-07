@@ -19,7 +19,7 @@ describe("Expense Repository Tests", () => {
 
   beforeEach(async () => {
     databaseConfiguration = await DatabaseConfiguration.getInstance(
-      process.env.TESTING_DB_URL
+      process.env.TESTING_DB_URL,
     );
     const expenseEntity = new ExpenseModel({
       userId: userId,
@@ -40,14 +40,14 @@ describe("Expense Repository Tests", () => {
 
   it("should be able to create a new expense", async () => {
     const expense = new Expense({
-        id: null,
-        userId: userId.toString(),
-        amount: 500,
-        currency: Currency["INR" as keyof typeof Currency],
-        expenseCategoryId: expenseCategoryId,
-        description: "",
-        date: new Date("2024-02-25"),
-      });
+      id: null,
+      userId: userId.toString(),
+      amount: 500,
+      currency: Currency["INR" as keyof typeof Currency],
+      expenseCategoryId: expenseCategoryId,
+      description: "",
+      date: new Date("2024-02-25"),
+    });
 
     const actualResponse = await expenseRepository.createExpense(expense);
     expect({ ...actualResponse, id: "ignore" }).toEqual({
@@ -59,14 +59,14 @@ describe("Expense Repository Tests", () => {
   it("should be able to handle errors while creating a new expense", async () => {
     const userId = new mongoose.Types.ObjectId();
     const expense = new Expense({
-        id: null,
-        userId: userId.toString(),
-        amount: 500,
-        currency: Currency["INR" as keyof typeof Currency],
-        expenseCategoryId: expenseCategoryId,
-        description: "",
-        date: new Date("2024-02-25"),
-      });
+      id: null,
+      userId: userId.toString(),
+      amount: 500,
+      currency: Currency["INR" as keyof typeof Currency],
+      expenseCategoryId: expenseCategoryId,
+      description: "",
+      date: new Date("2024-02-25"),
+    });
 
     const databaseError = new Error("Database error");
     const saveExpenseMock = jest
@@ -98,7 +98,7 @@ describe("Expense Repository Tests", () => {
     ];
 
     const actualResponse = await expenseRepository.getExpenses(
-      userId.toString()
+      userId.toString(),
     );
     expect(actualResponse.length).toEqual(expectedResponse.length);
     actualResponse.forEach((expense, index) => {

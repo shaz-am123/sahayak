@@ -13,7 +13,7 @@ export class CategoryController {
   }
 
   public static getInstance(
-    categoryService: CategoryService = CategoryService.getInstance()
+    categoryService: CategoryService = CategoryService.getInstance(),
   ): CategoryController {
     if (!CategoryController.instance) {
       CategoryController.instance = new CategoryController(categoryService);
@@ -23,13 +23,13 @@ export class CategoryController {
 
   async createCategory(
     userId: string,
-    createCategoryRequest: ExpenseCategoryRequest
+    createCategoryRequest: ExpenseCategoryRequest,
   ): Promise<HttpResponse> {
     try {
       await validateRequest(createCategoryRequest);
       const createCategoryResponse = await this.categoryService.createCategory(
         userId,
-        createCategoryRequest
+        createCategoryRequest,
       );
       return new HttpResponse({
         statusCode: 201,
@@ -55,11 +55,14 @@ export class CategoryController {
 
   async getExpenseCategoriesById(
     userId: string,
-    exepenseCategoryId: string
+    exepenseCategoryId: string,
   ): Promise<HttpResponse> {
     try {
       const expenseCategoryResponse =
-        await this.categoryService.getExpenseCategoryById(userId, exepenseCategoryId);
+        await this.categoryService.getExpenseCategoryById(
+          userId,
+          exepenseCategoryId,
+        );
       return new HttpResponse({
         statusCode: 200,
         body: expenseCategoryResponse,

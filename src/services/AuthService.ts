@@ -16,7 +16,7 @@ export class AuthService {
   }
 
   public static getInstance(
-    authRepository: AuthRepository = AuthRepository.getInstance()
+    authRepository: AuthRepository = AuthRepository.getInstance(),
   ): AuthService {
     if (!AuthService.instance) {
       AuthService.instance = new AuthService(authRepository);
@@ -25,7 +25,7 @@ export class AuthService {
   }
 
   async registerUser(
-    registrationRequest: RegistrationRequest
+    registrationRequest: RegistrationRequest,
   ): Promise<RegistrationResponse> {
     const hashedPassword = await bcrypt.hash(registrationRequest.password, 10);
     const user = new User({

@@ -50,7 +50,7 @@ describe("Expense Controller tests", () => {
 
     const httpResponse = await expenseController.createExpense(
       userId,
-      createExpenseRequest
+      createExpenseRequest,
     );
 
     expect(httpResponse.body).toEqual(expectedResponse);
@@ -87,7 +87,7 @@ describe("Expense Controller tests", () => {
 
     const httpResponse = await expenseController.createExpense(
       userId,
-      mockCreateExpenseRequest
+      mockCreateExpenseRequest,
     );
 
     expect(httpResponse.body).toEqual({
@@ -113,7 +113,7 @@ describe("Expense Controller tests", () => {
 
     const httpResponse = await expenseController.createExpense(
       userId,
-      mockCreateExpenseRequest
+      mockCreateExpenseRequest,
     );
 
     expect(httpResponse.body).toEqual({ error: errorMessage });

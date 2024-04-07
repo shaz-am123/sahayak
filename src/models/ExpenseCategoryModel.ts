@@ -32,7 +32,7 @@ ExpenseCategorySchema.pre<IExpenseCategory>("save", async function (next) {
     const counter = await Counter.findOneAndUpdate(
       { _id: "id" },
       { $inc: { seq: 1 } },
-      { new: true, upsert: true }
+      { new: true, upsert: true },
     );
 
     this["id"] = counter.seq.toString();
@@ -44,6 +44,6 @@ ExpenseCategorySchema.pre<IExpenseCategory>("save", async function (next) {
 
 const ExpenseCategoryModel = mongoose.model<IExpenseCategory>(
   "expense-category",
-  ExpenseCategorySchema
+  ExpenseCategorySchema,
 );
 export default ExpenseCategoryModel;

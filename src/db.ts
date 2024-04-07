@@ -25,7 +25,7 @@ export class DatabaseConfiguration {
   }
 
   public static async getInstance(
-    databaseUrl: string = process.env.DB_URL!
+    databaseUrl: string = process.env.DB_URL!,
   ): Promise<DatabaseConfiguration> {
     if (!DatabaseConfiguration.instance) {
       const instance = new DatabaseConfiguration(databaseUrl);
