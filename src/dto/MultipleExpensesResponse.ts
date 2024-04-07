@@ -1,14 +1,14 @@
 import ExpenseResponse from "./ExpenseResponse";
 
 class MultipleExpensesResponse {
-  expenseCategories: ExpenseResponse[];
+  expenses: ExpenseResponse[];
   totalRecords: number;
 
   constructor(data: {
-    expenseCategories: ExpenseResponse[];
+    expenses: ExpenseResponse[];
     totalRecords: number;
   }) {
-    this.expenseCategories = data.expenseCategories;
+    this.expenses = data.expenses;
     this.totalRecords = data.totalRecords;
   }
 }
