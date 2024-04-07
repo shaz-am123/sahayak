@@ -1,12 +1,12 @@
-import ExpenseCategory from "../domain/ExpenseCategory";
 import Currency from "../enums/Currency";
+import ExpenseCategoryResponse from "./ExpenseCategoryResponse";
 
 class ExpenseResponse {
   id: string;
   userId: string;
   amount: number;
   currency: Currency;
-  expenseCategory: ExpenseCategory;
+  expenseCategory: ExpenseCategoryResponse;
   description: string;
   date: Date;
 
@@ -14,7 +14,7 @@ class ExpenseResponse {
     id: string;
     userId: string;
     amount: number;
-    expenseCategory: ExpenseCategory;
+    expenseCategory: ExpenseCategoryResponse;
     description: string;
     date: Date;
     currency: Currency;
