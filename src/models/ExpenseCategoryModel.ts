@@ -5,6 +5,7 @@ interface IExpenseCategory extends Document {
   name: string;
   description: string;
   userId: string;
+  expenseCount: number;
 }
 
 const ExpenseCategorySchema: Schema = new Schema({
@@ -16,6 +17,7 @@ const ExpenseCategorySchema: Schema = new Schema({
     ref: "user",
     required: true,
   },
+  expenseCount: { type: Number, required: true}
 });
 
 ExpenseCategorySchema.index({ userId: 1, name: 1 }, { unique: true });
