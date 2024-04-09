@@ -146,7 +146,7 @@ describe("Expense Repository Tests", () => {
     expect(actualResponse).toEqual(expectedResponse);
   });
 
-  it("should handle any error that occurs while getting an expense category of an user", async () => {
+  it("should handle any error that occurs while getting an expense of an user", async () => {
     try {
       await expenseRepository.getExpenseById(userId.toString(), "-1");
     } catch (error: any) {
@@ -155,7 +155,7 @@ describe("Expense Repository Tests", () => {
     }
   });
 
-  it("should be able to get an expense of an user using expense-id", async () => {
+  it("should be able to delete expense of an user using expense-id", async () => {
     const expectedResponse = new Expense({
       id: expenseId,
       userId: userId.toString(),
@@ -180,7 +180,7 @@ describe("Expense Repository Tests", () => {
     }
   });
 
-  it("should handle any error that occurs while getting an expense category of an user", async () => {
+  it("should handle any error that occurs while deleting an expense of an user", async () => {
     try {
       await expenseRepository.deleteExpense(userId.toString(), "-1");
     } catch (error: any) {
