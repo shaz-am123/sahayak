@@ -31,6 +31,7 @@ describe("Category Controller tests", () => {
       ...createCategoryRequest,
       id: "1",
       userId: userId,
+      expenseCount: 0,
     };
 
     categoryServiceMock.createCategory.mockResolvedValue(expectedResponse);
@@ -134,6 +135,7 @@ describe("Category Controller tests", () => {
       userId: userId,
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
+      expenseCount: 0,
     });
 
     categoryServiceMock.getExpenseCategoryById.mockResolvedValue(

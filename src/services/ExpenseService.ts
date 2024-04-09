@@ -51,7 +51,20 @@ export class ExpenseService {
       description: createExpenseRequest.description,
       date: createExpenseRequest.date,
     });
-    const createdExpense = await this.expenseRepository.createExpense(expense);
+
+    const createdExpense = await this.expenseRepository
+      .createExpense(expense)
+      .then(async (expense) => {
+        await this.categoryService.updateExpenseCategory(
+          userId,
+          expenseCategory.id,
+          {
+            expenseCount: expenseCategory.expenseCount + 1,
+          },
+        );
+
+        return expense;
+      });
 
     return new ExpenseResponse({
       id: createdExpense.id!,
