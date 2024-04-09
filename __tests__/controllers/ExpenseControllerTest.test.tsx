@@ -9,7 +9,7 @@ import { ExpenseService } from "./../../src/services/ExpenseService";
 
 jest.mock("../../src/services/ExpenseService", () => ({
   ExpenseService: {
-    getInstance: jest.fn(() => ({ 
+    getInstance: jest.fn(() => ({
       createExpense: jest.fn(),
       getExpenses: jest.fn(),
       getExpenseById: jest.fn(),
@@ -24,7 +24,7 @@ describe("Expense Controller tests", () => {
 
   it("should allow users to add an expense", async () => {
     const userId = "A001";
-    const expenseId = "1"
+    const expenseId = "1";
     const expenseCategoryId = "1";
     const createExpenseRequest = new ExpenseRequest({
       amount: 100,
@@ -168,9 +168,7 @@ describe("Expense Controller tests", () => {
       date: new Date("2024-02-25"),
     });
 
-    expenseServiceMock.getExpenseById.mockResolvedValue(
-      expectedResponse,
-    );
+    expenseServiceMock.getExpenseById.mockResolvedValue(expectedResponse);
 
     const httpResponse = await expenseController.getExpenseById(
       userId,

@@ -145,10 +145,7 @@ describe("Category Repository Tests", () => {
   });
   it("should handle any error that occurs while getting an expense category of an user", async () => {
     try {
-      await categoryRepository.getExpenseCategoryById(
-        userId.toString(),
-        "-1",
-      );
+      await categoryRepository.getExpenseCategoryById(userId.toString(), "-1");
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("Expense category not found for given user");

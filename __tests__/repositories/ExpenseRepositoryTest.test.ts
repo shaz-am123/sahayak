@@ -19,7 +19,7 @@ describe("Expense Repository Tests", () => {
 
   beforeEach(async () => {
     databaseConfiguration = await DatabaseConfiguration.getInstance(
-      process.env.TESTING_DB_URL
+      process.env.TESTING_DB_URL,
     );
     const expenseEntity = new ExpenseModel({
       userId: userId,
@@ -98,7 +98,7 @@ describe("Expense Repository Tests", () => {
     ];
 
     const actualResponse = await expenseRepository.getExpenses(
-      userId.toString()
+      userId.toString(),
     );
     expect(actualResponse.length).toEqual(expectedResponse.length);
     actualResponse.forEach((expense, index) => {
@@ -140,7 +140,7 @@ describe("Expense Repository Tests", () => {
 
     const actualResponse = await expenseRepository.getExpenseById(
       userId.toString(),
-      expenseId
+      expenseId,
     );
 
     expect(actualResponse).toEqual(expectedResponse);
@@ -148,10 +148,7 @@ describe("Expense Repository Tests", () => {
 
   it("should handle any error that occurs while getting an expense category of an user", async () => {
     try {
-      await expenseRepository.getExpenseById(
-        userId.toString(),
-        "-1"
-      );
+      await expenseRepository.getExpenseById(userId.toString(), "-1");
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("Expense not found for given user");

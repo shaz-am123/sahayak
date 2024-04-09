@@ -14,7 +14,7 @@ export class ExpenseService {
 
   private constructor(
     expenseRepository: ExpenseRepository,
-    categoryService: CategoryService
+    categoryService: CategoryService,
   ) {
     this.expenseRepository = expenseRepository;
     this.categoryService = categoryService;
@@ -22,12 +22,12 @@ export class ExpenseService {
 
   public static getInstance(
     expenseRepository: ExpenseRepository = ExpenseRepository.getInstance(),
-    categoryService: CategoryService = CategoryService.getInstance()
+    categoryService: CategoryService = CategoryService.getInstance(),
   ): ExpenseService {
     if (!ExpenseService.instance) {
       ExpenseService.instance = new ExpenseService(
         expenseRepository,
-        categoryService
+        categoryService,
       );
     }
     return ExpenseService.instance;
@@ -35,11 +35,11 @@ export class ExpenseService {
 
   async createExpense(
     userId: string,
-    createExpenseRequest: ExpenseRequest
+    createExpenseRequest: ExpenseRequest,
   ): Promise<ExpenseResponse> {
     const expenseCategory = await this.categoryService.getExpenseCategoryById(
       userId,
-      createExpenseRequest.expenseCategoryId
+      createExpenseRequest.expenseCategoryId,
     );
 
     const expense = new Expense({
@@ -77,7 +77,7 @@ export class ExpenseService {
 
     const expenseResponses = expenses.map((expense) => {
       const expenseCategoryResponse = idToExpenseCategoryMap.get(
-        expense.expenseCategoryId
+        expense.expenseCategoryId,
       )!;
       return new ExpenseResponse({
         id: expense.id!,
@@ -101,17 +101,17 @@ export class ExpenseService {
 
   async getExpenseById(
     userId: string,
-    expenseId: string
+    expenseId: string,
   ): Promise<ExpenseResponse> {
     const expense = await this.expenseRepository.getExpenseById(
       userId,
-      expenseId
+      expenseId,
     );
 
     const expenseCategoryResponse =
       await this.categoryService.getExpenseCategoryById(
         userId,
-        expense.expenseCategoryId
+        expense.expenseCategoryId,
       );
 
     return new ExpenseResponse({

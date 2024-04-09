@@ -58,11 +58,10 @@ export class ExpenseController {
     expenseId: string,
   ): Promise<HttpResponse> {
     try {
-      const expenseCategoryResponse =
-        await this.expenseService.getExpenseById(
-          userId,
-          expenseId,
-        );
+      const expenseCategoryResponse = await this.expenseService.getExpenseById(
+        userId,
+        expenseId,
+      );
       return new HttpResponse({
         statusCode: 200,
         body: expenseCategoryResponse,

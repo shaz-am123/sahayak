@@ -37,7 +37,7 @@ describe("Expense Service tests", () => {
 
   const expenseService = ExpenseService.getInstance(
     expenseRepositoryMock,
-    categoryServiceMock
+    categoryServiceMock,
   );
 
   beforeEach(() => {
@@ -83,14 +83,14 @@ describe("Expense Service tests", () => {
     });
 
     categoryServiceMock.getExpenseCategoryById.mockResolvedValueOnce(
-      mockCategoryResponse
+      mockCategoryResponse,
     );
     expenseRepositoryMock.createExpense.mockResolvedValueOnce(
-      mockExpenseResponse
+      mockExpenseResponse,
     );
     const createExpenseResponse = await expenseService.createExpense(
       userId,
-      createExpenseRequest
+      createExpenseRequest,
     );
     expect(createExpenseResponse).toEqual(expectedCreateExpenseResponse);
   });
@@ -107,10 +107,10 @@ describe("Expense Service tests", () => {
     });
 
     const expenseCategoryNotFoundError = new Error(
-      "The expense category was not found for the user"
+      "The expense category was not found for the user",
     );
     categoryServiceMock.getExpenseCategoryById.mockRejectedValue(
-      expenseCategoryNotFoundError
+      expenseCategoryNotFoundError,
     );
 
     try {
@@ -140,7 +140,7 @@ describe("Expense Service tests", () => {
     });
 
     categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
-      mockExpenseCategory
+      mockExpenseCategory,
     );
     const serverError = new Error("Internal Server Error");
     expenseRepositoryMock.createExpense.mockRejectedValue(serverError);
@@ -219,11 +219,11 @@ describe("Expense Service tests", () => {
       new MultipleExpenseCategoriesResponse({
         expenseCategories: mockCategories,
         totalRecords: 2,
-      })
+      }),
     );
 
     expenseRepositoryMock.getExpenses.mockResolvedValueOnce(
-      repositoryMockResponse
+      repositoryMockResponse,
     );
     const actualResponse = await expenseService.getExpenses(userId);
     expect(actualResponse).toEqual(expectedResponse);
@@ -274,13 +274,15 @@ describe("Expense Service tests", () => {
       date: new Date("2024-02-25"),
     });
 
-    categoryServiceMock.getExpenseCategoryById.mockResolvedValue(mockExpenseCategory)
+    categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
+      mockExpenseCategory,
+    );
     expenseRepositoryMock.getExpenseById.mockResolvedValue(
-      repositoryMockResponse
+      repositoryMockResponse,
     );
     const actualResponse = await expenseService.getExpenseById(
       userId,
-      expenseCategoryId
+      expenseCategoryId,
     );
     expect(actualResponse).toEqual(expectedResponse);
   });
@@ -290,11 +292,9 @@ describe("Expense Service tests", () => {
     const expenseId = "1";
     const expenseCategoryId = "1";
 
-    const expenseCategoryServiceError = new Error(
-      "Cateogory Service Error"
-    );
+    const expenseCategoryServiceError = new Error("Cateogory Service Error");
     categoryServiceMock.getExpenseCategoryById.mockRejectedValue(
-      expenseCategoryServiceError
+      expenseCategoryServiceError,
     );
 
     try {
