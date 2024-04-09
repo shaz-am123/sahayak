@@ -14,7 +14,7 @@ export class ExpenseService {
 
   private constructor(
     expenseRepository: ExpenseRepository,
-    categoryService: CategoryService,
+    categoryService: CategoryService
   ) {
     this.expenseRepository = expenseRepository;
     this.categoryService = categoryService;
@@ -22,12 +22,12 @@ export class ExpenseService {
 
   public static getInstance(
     expenseRepository: ExpenseRepository = ExpenseRepository.getInstance(),
-    categoryService: CategoryService = CategoryService.getInstance(),
+    categoryService: CategoryService = CategoryService.getInstance()
   ): ExpenseService {
     if (!ExpenseService.instance) {
       ExpenseService.instance = new ExpenseService(
         expenseRepository,
-        categoryService,
+        categoryService
       );
     }
     return ExpenseService.instance;
@@ -35,11 +35,11 @@ export class ExpenseService {
 
   async createExpense(
     userId: string,
-    createExpenseRequest: ExpenseRequest,
+    createExpenseRequest: ExpenseRequest
   ): Promise<ExpenseResponse> {
     const expenseCategory = await this.categoryService.getExpenseCategoryById(
       userId,
-      createExpenseRequest.expenseCategoryId,
+      createExpenseRequest.expenseCategoryId
     );
 
     const expense = new Expense({
@@ -75,9 +75,9 @@ export class ExpenseService {
       idToExpenseCategoryMap.set(category.id, category);
     });
 
-    const expenseResponses = expenses.map(async (expense) => {
+    const expenseResponses = expenses.map((expense) => {
       const expenseCategoryResponse = idToExpenseCategoryMap.get(
-        expense.expenseCategoryId,
+        expense.expenseCategoryId
       )!;
       return new ExpenseResponse({
         id: expense.id!,
@@ -94,8 +94,37 @@ export class ExpenseService {
     });
 
     return new MultipleExpensesResponse({
-      expenses: await Promise.all(expenseResponses),
+      expenses: expenseResponses,
       totalRecords: expenses.length,
+    });
+  }
+
+  async getExpenseById(
+    userId: string,
+    expenseId: string
+  ): Promise<ExpenseResponse> {
+    const expense = await this.expenseRepository.getExpenseById(
+      userId,
+      expenseId
+    );
+
+    const expenseCategoryResponse =
+      await this.categoryService.getExpenseCategoryById(
+        userId,
+        expense.expenseCategoryId
+      );
+
+    return new ExpenseResponse({
+      id: expense.id!,
+      userId: expense.userId,
+      amount: expense.amount,
+      currency: expense.currency,
+      expenseCategory: new ExpenseCategoryResponse({
+        ...expenseCategoryResponse,
+        id: expenseCategoryResponse.id!,
+      }),
+      description: expense.description,
+      date: expense.date,
     });
   }
 }

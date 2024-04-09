@@ -42,4 +42,23 @@ export class ExpenseRepository {
       });
     });
   }
+
+  async getExpenseById(userId: string, expenseId: string): Promise<Expense> {
+    const expense = await ExpenseModel.findOne({
+      id: expenseId,
+      userId: userId,
+    });
+
+    if (!expense) throw new Error("Expense not found for given user");
+
+    return new Expense({
+      id: expense.id,
+      userId: expense.userId.toString(),
+      amount: expense.amount,
+      currency: Currency[expense.currency as keyof typeof Currency],
+      expenseCategoryId: expense.expenseCategoryId,
+      description: expense.description,
+      date: expense.date,
+    });
+  }
 }

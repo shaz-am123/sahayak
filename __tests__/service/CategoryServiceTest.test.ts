@@ -82,7 +82,7 @@ describe("Category Service tests", () => {
     expect(actualResponse).toEqual(expectedResponse);
   });
 
-  it("should be able to handle any error that occurs while getting categories of an user", async () => {
+  it("should be able to handle any error that occurs while getting expense categories of an user", async () => {
     const userId = "A001";
     const mockError = new Error("Internal Server Error");
 
