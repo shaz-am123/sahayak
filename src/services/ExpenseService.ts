@@ -156,14 +156,18 @@ export class ExpenseService {
         expense.expenseCategoryId,
       );
 
+      const newExpenseCategoryResponse = await this.categoryService.updateExpenseCategory(userId, expense.expenseCategoryId, {
+        expenseCount: expenseCategoryResponse.expenseCount - 1
+      }) 
+
     return new ExpenseResponse({
       id: expense.id!,
       userId: expense.userId,
       amount: expense.amount,
       currency: expense.currency,
       expenseCategory: new ExpenseCategoryResponse({
-        ...expenseCategoryResponse,
-        id: expenseCategoryResponse.id!,
+        ...newExpenseCategoryResponse,
+        id: newExpenseCategoryResponse.id!,
       }),
       description: expense.description,
       date: expense.date,
