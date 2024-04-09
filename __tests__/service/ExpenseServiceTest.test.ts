@@ -25,6 +25,7 @@ jest.mock("../../src/services/CategoryService", () => ({
     getInstance: jest.fn(() => ({
       getExpenseCategoryById: jest.fn(),
       getExpenseCategories: jest.fn(),
+      updateExpenseCategory: jest.fn(),
     })),
   },
 }));
@@ -38,7 +39,7 @@ describe("Expense Service tests", () => {
 
   const expenseService = ExpenseService.getInstance(
     expenseRepositoryMock,
-    categoryServiceMock,
+    categoryServiceMock
   );
 
   beforeEach(() => {
@@ -62,6 +63,15 @@ describe("Expense Service tests", () => {
       userId: userId,
       name: "Food",
       description: "",
+      expenseCount: 0,
+    });
+
+    const mockUpdateCategoryResponse = new ExpenseCategoryResponse({
+      id: expenseCategoryId,
+      userId: userId,
+      name: "Food",
+      description: "",
+      expenseCount: 1,
     });
 
     const expectedCreateExpenseResponse = new ExpenseResponse({
@@ -85,16 +95,34 @@ describe("Expense Service tests", () => {
     });
 
     categoryServiceMock.getExpenseCategoryById.mockResolvedValueOnce(
-      mockCategoryResponse,
+      mockCategoryResponse
     );
+
+    categoryServiceMock.updateExpenseCategory.mockResolvedValueOnce(
+      mockUpdateCategoryResponse
+    );
+
     expenseRepositoryMock.createExpense.mockResolvedValueOnce(
-      mockExpenseResponse,
+      mockExpenseResponse
     );
     const createExpenseResponse = await expenseService.createExpense(
       userId,
-      createExpenseRequest,
+      createExpenseRequest
     );
     expect(createExpenseResponse).toEqual(expectedCreateExpenseResponse);
+    expect(categoryServiceMock.getExpenseCategoryById).toHaveBeenCalledWith(
+      userId,
+      expenseCategoryId
+    );
+    expect(categoryServiceMock.updateExpenseCategory).toHaveBeenCalledWith(
+      userId,
+      expenseCategoryId,
+      { expenseCount: 1 }
+    );
+    expect(expenseRepositoryMock.createExpense).toHaveBeenCalledWith({
+      ...mockExpenseResponse,
+      id: null,
+    });
   });
 
   it("should handle incorrect expense category in expense creation request", async () => {
@@ -109,10 +137,10 @@ describe("Expense Service tests", () => {
     });
 
     const expenseCategoryNotFoundError = new Error(
-      "The expense category was not found for the user",
+      "The expense category was not found for the user"
     );
     categoryServiceMock.getExpenseCategoryById.mockRejectedValue(
-      expenseCategoryNotFoundError,
+      expenseCategoryNotFoundError
     );
 
     try {
@@ -131,6 +159,7 @@ describe("Expense Service tests", () => {
       userId: userId,
       name: "Food",
       description: "",
+      expenseCount: 0,
     });
 
     const createExpenseRequest = new ExpenseRequest({
@@ -142,7 +171,7 @@ describe("Expense Service tests", () => {
     });
 
     categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
-      mockExpenseCategory,
+      mockExpenseCategory
     );
     const serverError = new Error("Internal Server Error");
     expenseRepositoryMock.createExpense.mockRejectedValue(serverError);
@@ -163,12 +192,14 @@ describe("Expense Service tests", () => {
         userId: userId,
         name: "Food",
         description: "",
+        expenseCount: 1,
       }),
       new ExpenseCategoryResponse({
         id: "2",
         userId: userId,
         name: "Travel",
         description: "",
+        expenseCount: 1,
       }),
     ];
 
@@ -221,11 +252,11 @@ describe("Expense Service tests", () => {
       new MultipleExpenseCategoriesResponse({
         expenseCategories: mockCategories,
         totalRecords: 2,
-      }),
+      })
     );
 
     expenseRepositoryMock.getExpenses.mockResolvedValueOnce(
-      repositoryMockResponse,
+      repositoryMockResponse
     );
     const actualResponse = await expenseService.getExpenses(userId);
     expect(actualResponse).toEqual(expectedResponse);
@@ -254,6 +285,7 @@ describe("Expense Service tests", () => {
       userId: userId,
       name: "Food",
       description: "",
+      expenseCount: 1,
     });
 
     const repositoryMockResponse = new Expense({
@@ -277,14 +309,14 @@ describe("Expense Service tests", () => {
     });
 
     categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
-      mockExpenseCategory,
+      mockExpenseCategory
     );
     expenseRepositoryMock.getExpenseById.mockResolvedValue(
-      repositoryMockResponse,
+      repositoryMockResponse
     );
     const actualResponse = await expenseService.getExpenseById(
       userId,
-      expenseCategoryId,
+      expenseCategoryId
     );
     expect(actualResponse).toEqual(expectedResponse);
   });
@@ -295,7 +327,7 @@ describe("Expense Service tests", () => {
 
     const expenseCategoryServiceError = new Error("Cateogory Service Error");
     categoryServiceMock.getExpenseCategoryById.mockRejectedValue(
-      expenseCategoryServiceError,
+      expenseCategoryServiceError
     );
 
     try {
@@ -330,6 +362,7 @@ describe("Expense Service tests", () => {
       userId: userId,
       name: "Food",
       description: "",
+      expenseCount: 1,
     });
 
     const repositoryMockResponse = new Expense({
@@ -353,14 +386,14 @@ describe("Expense Service tests", () => {
     });
 
     categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
-      mockExpenseCategory,
+      mockExpenseCategory
     );
     expenseRepositoryMock.deleteExpense.mockResolvedValue(
-      repositoryMockResponse,
+      repositoryMockResponse
     );
     const actualResponse = await expenseService.deleteExpense(
       userId,
-      expenseId,
+      expenseId
     );
     expect(actualResponse).toEqual(expectedResponse);
   });

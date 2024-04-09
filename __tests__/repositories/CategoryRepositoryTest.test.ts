@@ -23,6 +23,7 @@ describe("Category Repository Tests", () => {
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
       userId: userId,
+      expenseCount: 0,
     });
     await categoryEntity.save();
 
@@ -39,6 +40,7 @@ describe("Category Repository Tests", () => {
       name: "Entertainment",
       description: "Movies, Netflix, Amazon Prime",
       userId: userId.toString(),
+      expenseCount: 0,
     });
 
     const actualResponse = await categoryRepository.createCategory(category);
@@ -54,6 +56,7 @@ describe("Category Repository Tests", () => {
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
       userId: userId.toString(),
+      expenseCount: 0,
     });
 
     try {
@@ -72,6 +75,7 @@ describe("Category Repository Tests", () => {
       name: "Entertainment",
       description: "Movies, Netflix, Amazon Prime",
       userId: userId.toString(),
+      expenseCount: 0,
     });
     const databaseError = new Error("Database error");
     const saveCategoryMock = jest
@@ -96,6 +100,7 @@ describe("Category Repository Tests", () => {
         userId: userId.toString(),
         name: "Food",
         description: "Zomato, Swiggy, Eatsure",
+        expenseCount: 0,
       },
     ];
 
@@ -134,6 +139,7 @@ describe("Category Repository Tests", () => {
       userId: userId.toString(),
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
+      expenseCount: 0,
     });
 
     const actualResponse = await categoryRepository.getExpenseCategoryById(
@@ -146,6 +152,36 @@ describe("Category Repository Tests", () => {
   it("should handle any error that occurs while getting an expense category of an user", async () => {
     try {
       await categoryRepository.getExpenseCategoryById(userId.toString(), "-1");
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("Expense category not found for given user");
+    }
+  });
+
+  it("should be able to update an expenseCategory of an user using id", async () => {
+    const expectedResponse = new ExpenseCategory({
+      id: expenseCategoryId,
+      userId: userId.toString(),
+      name: "Food Orders",
+      description: "Zomato, Swiggy, Eatsure",
+      expenseCount: 2,
+    });
+
+    const actualResponse = await categoryRepository.updateExpenseCategory(
+      userId.toString(),
+      expenseCategoryId,
+      {
+        name: "Food Orders",
+        expenseCount: 2
+      }
+    );
+
+    expect(actualResponse).toEqual(expectedResponse);
+  });
+  
+  it("should handle any error that occurs while updating an expense category of an user", async () => {
+    try {
+      await categoryRepository.updateExpenseCategory(userId.toString(), "-1", {expenseCount: 1});
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("Expense category not found for given user");
