@@ -71,6 +71,24 @@ export class ExpenseController {
     }
   }
 
+  async deleteExpense(
+    userId: string,
+    expenseId: string,
+  ): Promise<HttpResponse> {
+    try {
+      const deleteExpenseResponse = await this.expenseService.deleteExpense(
+        userId,
+        expenseId,
+      );
+      return new HttpResponse({
+        statusCode: 200,
+        body: deleteExpenseResponse,
+      });
+    } catch (error) {
+      return this.handleErrors(error);
+    }
+  }
+
   private handleErrors(error: any): HttpResponse {
     if (error instanceof CustomValidationError) {
       return new HttpResponse({
