@@ -205,7 +205,10 @@ describe("Category Repository Tests", () => {
     );
 
     try {
-      await categoryRepository.deleteExpenseCategory(userId.toString(), expenseCategoryId);
+      await categoryRepository.deleteExpenseCategory(
+        userId.toString(),
+        expenseCategoryId,
+      );
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("Expense-category not found for given user");

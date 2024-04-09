@@ -62,10 +62,7 @@ router.delete(
     const userId = req.userId!;
     const expenseCategoryId = req.params.expenseCategoryId;
     const expenseCategoryResponse =
-      await categoryController.deleteExpenseCategory(
-        userId,
-        expenseCategoryId,
-      );
+      await categoryController.deleteExpenseCategory(userId, expenseCategoryId);
     res
       .status(expenseCategoryResponse.statusCode)
       .json(expenseCategoryResponse.body);

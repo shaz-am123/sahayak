@@ -180,7 +180,9 @@ describe("Category Controller tests", () => {
       expenseCount: 0,
     });
 
-    categoryServiceMock.deleteExpenseCategory.mockResolvedValue(expectedResponse);
+    categoryServiceMock.deleteExpenseCategory.mockResolvedValue(
+      expectedResponse,
+    );
 
     const httpResponse = await categoryController.deleteExpenseCategory(
       userId,
@@ -189,7 +191,10 @@ describe("Category Controller tests", () => {
 
     expect(httpResponse.body).toEqual(expectedResponse);
     expect(httpResponse.statusCode).toBe(200);
-    expect(categoryServiceMock.deleteExpenseCategory).toHaveBeenCalledWith(userId, expenseCategoryId)
+    expect(categoryServiceMock.deleteExpenseCategory).toHaveBeenCalledWith(
+      userId,
+      expenseCategoryId,
+    );
   });
 
   it("should handle any error that occurs while deleting expense of an user using expense-id", async () => {
@@ -204,7 +209,10 @@ describe("Category Controller tests", () => {
       expenseCategoryId,
     );
 
-    expect(categoryServiceMock.deleteExpenseCategory).toHaveBeenCalledWith(userId, expenseCategoryId)
+    expect(categoryServiceMock.deleteExpenseCategory).toHaveBeenCalledWith(
+      userId,
+      expenseCategoryId,
+    );
     expect(httpResponse.body).toEqual({ error: mockError.message });
     expect(httpResponse.statusCode).toBe(500);
   });
