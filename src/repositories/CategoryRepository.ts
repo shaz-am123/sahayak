@@ -46,7 +46,7 @@ export class CategoryRepository {
     });
 
     if (!expenseCategory)
-      throw new Error("ExpenseCategory not found for given user");
+      throw new Error("Expense category not found for given user");
 
     return new ExpenseCategory({
       id: expenseCategory.id,

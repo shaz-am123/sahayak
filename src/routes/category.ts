@@ -47,7 +47,7 @@ router.get(
     const userId = req.userId!;
     const expenseCategoryId = req.params.expenseCategoryId;
     const expenseCategoryResponse =
-      await categoryController.getExpenseCategoriesById(
+      await categoryController.getExpenseCategoryById(
         userId,
         expenseCategoryId,
       );

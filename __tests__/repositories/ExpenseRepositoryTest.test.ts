@@ -112,7 +112,7 @@ describe("Expense Repository Tests", () => {
   it("should handle any error that occurs while getting expenses of an user", async () => {
     const databaseError = new Error("Failed to find exepense expense");
     const findExpenseMock = jest
-      .spyOn(ExpenseModel, "findOne")
+      .spyOn(ExpenseModel, "find")
       .mockImplementation(() => {
         throw databaseError;
       });
@@ -125,5 +125,33 @@ describe("Expense Repository Tests", () => {
     }
 
     findExpenseMock.mockRestore();
+  });
+
+  it("should be able to get an expense of an user using expense-id", async () => {
+    const expectedResponse = new Expense({
+      id: expenseId,
+      userId: userId.toString(),
+      amount: 100,
+      currency: Currency["INR" as keyof typeof Currency],
+      expenseCategoryId: expenseCategoryId,
+      description: "",
+      date: new Date("2024-02-25"),
+    });
+
+    const actualResponse = await expenseRepository.getExpenseById(
+      userId.toString(),
+      expenseId,
+    );
+
+    expect(actualResponse).toEqual(expectedResponse);
+  });
+
+  it("should handle any error that occurs while getting an expense category of an user", async () => {
+    try {
+      await expenseRepository.getExpenseById(userId.toString(), "-1");
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("Expense not found for given user");
+    }
   });
 });

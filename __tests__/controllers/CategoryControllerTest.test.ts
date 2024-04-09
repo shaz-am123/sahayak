@@ -140,7 +140,7 @@ describe("Category Controller tests", () => {
       expectedResponse,
     );
 
-    const httpResponse = await categoryController.getExpenseCategoriesById(
+    const httpResponse = await categoryController.getExpenseCategoryById(
       userId,
       expenseCategoryId,
     );
@@ -156,7 +156,7 @@ describe("Category Controller tests", () => {
 
     categoryServiceMock.getExpenseCategoryById.mockRejectedValue(mockError);
 
-    const httpResponse = await categoryController.getExpenseCategoriesById(
+    const httpResponse = await categoryController.getExpenseCategoryById(
       userId,
       expenseCategoryId,
     );

@@ -111,9 +111,9 @@ describe("Category Repository Tests", () => {
     });
   });
   it("should handle any error that occurs while getting expense categories of an user", async () => {
-    const databaseError = new Error("Failed to find exepense category");
+    const databaseError = new Error("Failed to find expense category");
     const findCategoryMock = jest
-      .spyOn(ExpenseCategoryModel, "findOne")
+      .spyOn(ExpenseCategoryModel, "find")
       .mockImplementation(() => {
         throw databaseError;
       });
@@ -144,23 +144,11 @@ describe("Category Repository Tests", () => {
     expect(actualResponse).toEqual(expectedResponse);
   });
   it("should handle any error that occurs while getting an expense category of an user", async () => {
-    const databaseError = new Error("Failed to find exepense category");
-    const findCategoryMock = jest
-      .spyOn(ExpenseCategoryModel, "findOne")
-      .mockImplementation(() => {
-        throw databaseError;
-      });
-
     try {
-      await categoryRepository.getExpenseCategoryById(
-        userId.toString(),
-        expenseCategoryId,
-      );
+      await categoryRepository.getExpenseCategoryById(userId.toString(), "-1");
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
-      expect(error.message).toBe(databaseError.message);
+      expect(error.message).toBe("Expense category not found for given user");
     }
-
-    findCategoryMock.mockRestore();
   });
 });

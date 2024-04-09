@@ -53,7 +53,7 @@ export class CategoryController {
     }
   }
 
-  async getExpenseCategoriesById(
+  async getExpenseCategoryById(
     userId: string,
     exepenseCategoryId: string,
   ): Promise<HttpResponse> {
