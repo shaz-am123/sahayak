@@ -101,4 +101,30 @@ export class CategoryService {
       id: expenseCategory.id!,
     });
   }
+
+  async deleteExpenseCategory(
+    userId: string,
+    expenseCategoryId: string,
+  ): Promise<ExpenseCategoryResponse> {
+    const expenseCategory = await this.getExpenseCategoryById(
+      userId,
+      expenseCategoryId,
+    );
+
+    if (expenseCategory.expenseCount == 0) {
+      await this.categoryRepository.deleteExpenseCategory(
+        userId,
+        expenseCategoryId,
+      );
+    } else {
+      throw new Error(
+        "Expense category cannot be deleted. Associated expenses exist",
+      );
+    }
+
+    return new ExpenseCategoryResponse({
+      ...expenseCategory,
+      id: expenseCategory.id!,
+    });
+  }
 }

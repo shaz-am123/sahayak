@@ -362,7 +362,7 @@ describe("Expense Service tests", () => {
       userId: userId,
       name: "Food",
       description: "",
-      expenseCount: 1,
+      expenseCount: 0,
     });
 
     const repositoryMockResponse = new Expense({
@@ -385,12 +385,19 @@ describe("Expense Service tests", () => {
       date: new Date("2024-02-25"),
     });
 
-    categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
+    categoryServiceMock.getExpenseCategoryById.mockResolvedValue({
+      ...mockExpenseCategory,
+      expenseCount: 1,
+    });
+
+    categoryServiceMock.updateExpenseCategory.mockResolvedValue(
       mockExpenseCategory,
     );
+
     expenseRepositoryMock.deleteExpense.mockResolvedValue(
       repositoryMockResponse,
     );
+
     const actualResponse = await expenseService.deleteExpense(
       userId,
       expenseId,

@@ -85,4 +85,18 @@ export class CategoryRepository {
       expenseCount: updatedExpenseCategory.expenseCount,
     });
   }
+
+  async deleteExpenseCategory(
+    userId: string,
+    expenseCategoryId: string,
+  ): Promise<void> {
+    const expenseCategory = await ExpenseCategoryModel.findOneAndDelete({
+      id: expenseCategoryId,
+      userId: userId,
+    });
+
+    if (!expenseCategory) {
+      throw new Error("Expense-category not found for given user");
+    }
+  }
 }

@@ -3,8 +3,6 @@ const router = express.Router();
 import { CategoryController } from "../controllers/CategoryController";
 import verifyToken from "../middleware/authMiddleware";
 import ExpenseCategoryRequest from "../dto/ExpenseCategoryRequest";
-import MultipleExpenseCategoriesResponse from "../dto/MultipleExpenseCategoriesResponse";
-import HttpResponse from "../dto/HttpResponse";
 
 const categoryController = CategoryController.getInstance();
 router.post(
@@ -51,6 +49,20 @@ router.get(
         userId,
         expenseCategoryId,
       );
+    res
+      .status(expenseCategoryResponse.statusCode)
+      .json(expenseCategoryResponse.body);
+  },
+);
+
+router.delete(
+  "/:expenseCategoryId",
+  verifyToken,
+  async (req: express.Request, res: express.Response) => {
+    const userId = req.userId!;
+    const expenseCategoryId = req.params.expenseCategoryId;
+    const expenseCategoryResponse =
+      await categoryController.deleteExpenseCategory(userId, expenseCategoryId);
     res
       .status(expenseCategoryResponse.statusCode)
       .json(expenseCategoryResponse.body);

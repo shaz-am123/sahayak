@@ -11,6 +11,7 @@ jest.mock("../../src/services/CategoryService", () => ({
       createCategory: jest.fn(),
       getExpenseCategories: jest.fn(),
       getExpenseCategoryById: jest.fn(),
+      deleteExpenseCategory: jest.fn(),
     })),
   },
 }));
@@ -163,6 +164,55 @@ describe("Category Controller tests", () => {
       expenseCategoryId,
     );
 
+    expect(httpResponse.body).toEqual({ error: mockError.message });
+    expect(httpResponse.statusCode).toBe(500);
+  });
+
+  it("should be able to delete expense of an user using expense-id", async () => {
+    const userId = "A001";
+    const expenseCategoryId = "1";
+
+    const expectedResponse = new ExpenseCategoryResponse({
+      id: expenseCategoryId,
+      userId: userId,
+      name: "Food",
+      description: "Zomato, Swiggy, Eatsure",
+      expenseCount: 0,
+    });
+
+    categoryServiceMock.deleteExpenseCategory.mockResolvedValue(
+      expectedResponse,
+    );
+
+    const httpResponse = await categoryController.deleteExpenseCategory(
+      userId,
+      expenseCategoryId,
+    );
+
+    expect(httpResponse.body).toEqual(expectedResponse);
+    expect(httpResponse.statusCode).toBe(200);
+    expect(categoryServiceMock.deleteExpenseCategory).toHaveBeenCalledWith(
+      userId,
+      expenseCategoryId,
+    );
+  });
+
+  it("should handle any error that occurs while deleting expense of an user using expense-id", async () => {
+    const userId = "A001";
+    const expenseCategoryId = "1";
+    const mockError = new Error("Internal Server Error");
+
+    categoryServiceMock.deleteExpenseCategory.mockRejectedValue(mockError);
+
+    const httpResponse = await categoryController.deleteExpenseCategory(
+      userId,
+      expenseCategoryId,
+    );
+
+    expect(categoryServiceMock.deleteExpenseCategory).toHaveBeenCalledWith(
+      userId,
+      expenseCategoryId,
+    );
     expect(httpResponse.body).toEqual({ error: mockError.message });
     expect(httpResponse.statusCode).toBe(500);
   });

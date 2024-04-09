@@ -72,6 +72,25 @@ export class CategoryController {
     }
   }
 
+  async deleteExpenseCategory(
+    userId: string,
+    exepenseCategoryId: string,
+  ): Promise<HttpResponse> {
+    try {
+      const expenseCategoryResponse =
+        await this.categoryService.deleteExpenseCategory(
+          userId,
+          exepenseCategoryId,
+        );
+      return new HttpResponse({
+        statusCode: 200,
+        body: expenseCategoryResponse,
+      });
+    } catch (error) {
+      return this.handleErrors(error);
+    }
+  }
+
   private handleErrors(error: any): HttpResponse {
     if (error instanceof CustomValidationError) {
       return new HttpResponse({
