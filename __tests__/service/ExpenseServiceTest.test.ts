@@ -25,7 +25,6 @@ jest.mock("../../src/services/CategoryService", () => ({
     getInstance: jest.fn(() => ({
       getExpenseCategoryById: jest.fn(),
       getExpenseCategories: jest.fn(),
-      updateExpenseCategory: jest.fn(),
     })),
   },
 }));
@@ -63,15 +62,6 @@ describe("Expense Service tests", () => {
       userId: userId,
       name: "Food",
       description: "",
-      expenseCount: 0,
-    });
-
-    const mockUpdateCategoryResponse = new ExpenseCategoryResponse({
-      id: expenseCategoryId,
-      userId: userId,
-      name: "Food",
-      description: "",
-      expenseCount: 1,
     });
 
     const expectedCreateExpenseResponse = new ExpenseResponse({
@@ -97,11 +87,6 @@ describe("Expense Service tests", () => {
     categoryServiceMock.getExpenseCategoryById.mockResolvedValueOnce(
       mockCategoryResponse,
     );
-
-    categoryServiceMock.updateExpenseCategory.mockResolvedValueOnce(
-      mockUpdateCategoryResponse,
-    );
-
     expenseRepositoryMock.createExpense.mockResolvedValueOnce(
       mockExpenseResponse,
     );
@@ -110,19 +95,6 @@ describe("Expense Service tests", () => {
       createExpenseRequest,
     );
     expect(createExpenseResponse).toEqual(expectedCreateExpenseResponse);
-    expect(categoryServiceMock.getExpenseCategoryById).toHaveBeenCalledWith(
-      userId,
-      expenseCategoryId,
-    );
-    expect(categoryServiceMock.updateExpenseCategory).toHaveBeenCalledWith(
-      userId,
-      expenseCategoryId,
-      { expenseCount: 1 },
-    );
-    expect(expenseRepositoryMock.createExpense).toHaveBeenCalledWith({
-      ...mockExpenseResponse,
-      id: null,
-    });
   });
 
   it("should handle incorrect expense category in expense creation request", async () => {
@@ -159,7 +131,6 @@ describe("Expense Service tests", () => {
       userId: userId,
       name: "Food",
       description: "",
-      expenseCount: 0,
     });
 
     const createExpenseRequest = new ExpenseRequest({
@@ -192,14 +163,12 @@ describe("Expense Service tests", () => {
         userId: userId,
         name: "Food",
         description: "",
-        expenseCount: 1,
       }),
       new ExpenseCategoryResponse({
         id: "2",
         userId: userId,
         name: "Travel",
         description: "",
-        expenseCount: 1,
       }),
     ];
 
@@ -285,7 +254,6 @@ describe("Expense Service tests", () => {
       userId: userId,
       name: "Food",
       description: "",
-      expenseCount: 1,
     });
 
     const repositoryMockResponse = new Expense({
@@ -362,7 +330,6 @@ describe("Expense Service tests", () => {
       userId: userId,
       name: "Food",
       description: "",
-      expenseCount: 1,
     });
 
     const repositoryMockResponse = new Expense({

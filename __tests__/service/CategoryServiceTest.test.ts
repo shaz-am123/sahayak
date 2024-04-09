@@ -11,7 +11,6 @@ jest.mock("../../src/repositories/CategoryRepository", () => ({
       createCategory: jest.fn(),
       getExpenseCategories: jest.fn(),
       getExpenseCategoryById: jest.fn(),
-      updateExpenseCategory: jest.fn(),
     })),
   },
 }));
@@ -31,7 +30,6 @@ describe("Category Service tests", () => {
       ...createCategoryRequest,
       id: "1",
       userId: userId,
-      expenseCount: 0,
     });
 
     const mockCategoryResponse = new ExpenseCategory({
@@ -39,7 +37,6 @@ describe("Category Service tests", () => {
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
       userId: userId,
-      expenseCount: 0,
     });
 
     categoryRepositoryMock.createCategory.mockResolvedValue(
@@ -106,7 +103,6 @@ describe("Category Service tests", () => {
       userId: userId,
       name: "Food",
       description: "Zomato, Swiggy, Eatsure",
-      expenseCount: 0,
     });
     const expectedResponse = new ExpenseCategoryResponse({
       ...repositoryMockResponse,
@@ -131,61 +127,6 @@ describe("Category Service tests", () => {
     categoryRepositoryMock.getExpenseCategoryById.mockRejectedValue(mockError);
     try {
       await categoryService.getExpenseCategoryById(userId, expenseCategoryId);
-    } catch (error: any) {
-      expect(error).toBeInstanceOf(Error);
-      expect(error.message).toEqual(mockError.message);
-    }
-  });
-
-  it("should be able to update an expense category of an user using id", async () => {
-    const userId = "A001";
-    const expenseCategoryId = "1";
-    const repositoryMockResponse = new ExpenseCategory({
-      id: expenseCategoryId,
-      userId: userId,
-      name: "Food",
-      description: "Zomato, Swiggy, Eatsure",
-      expenseCount: 0,
-    });
-    const expectedResponse = new ExpenseCategoryResponse({
-      ...repositoryMockResponse,
-      id: expenseCategoryId,
-    });
-
-    categoryRepositoryMock.updateExpenseCategory.mockResolvedValue(
-      repositoryMockResponse,
-    );
-    const actualResponse = await categoryService.updateExpenseCategory(
-      userId,
-      expenseCategoryId,
-      {
-        expenseCount: 1,
-      },
-    );
-    expect(actualResponse).toEqual(expectedResponse);
-    expect(categoryRepositoryMock.updateExpenseCategory).toHaveBeenCalledWith(
-      userId,
-      expenseCategoryId,
-      { expenseCount: 1 },
-    );
-  });
-
-  it("should be able to handle any error that occurs while updating an expense category of an user", async () => {
-    const userId = "A001";
-    const expenseCategoryId = "1";
-    const mockError = new Error("Internal Server Error");
-
-    categoryRepositoryMock.updateExpenseCategory.mockRejectedValue(mockError);
-    try {
-      await categoryService.updateExpenseCategory(userId, expenseCategoryId, {
-        expenseCount: 1,
-      });
-
-      expect(categoryRepositoryMock.updateExpenseCategory).toHaveBeenCalledWith(
-        userId,
-        expenseCategoryId,
-        { expenseCount: 1 },
-      );
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toEqual(mockError.message);

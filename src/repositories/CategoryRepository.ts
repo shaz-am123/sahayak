@@ -19,7 +19,6 @@ export class CategoryRepository {
       name: categoryEntity.name,
       description: categoryEntity.description,
       userId: categoryEntity.userId.toString(),
-      expenseCount: categoryEntity.expenseCount,
     });
   }
 
@@ -33,7 +32,6 @@ export class CategoryRepository {
         userId: expenseCategoryEntity.userId.toString(),
         name: expenseCategoryEntity.name,
         description: expenseCategoryEntity.description,
-        expenseCount: expenseCategoryEntity.expenseCount,
       });
     });
   }
@@ -55,44 +53,6 @@ export class CategoryRepository {
       userId: expenseCategory.userId.toString(),
       name: expenseCategory.name,
       description: expenseCategory.description,
-      expenseCount: expenseCategory.expenseCount,
-    });
-  }
-
-  async updateExpenseCategory(
-    userId: string,
-    expenseCategoryId: string,
-    updates: Partial<{
-      name: string;
-      description: string;
-      expenseCount: number;
-    }>,
-  ) {
-    const updatedExpenseCategory = await ExpenseCategoryModel.findOneAndUpdate(
-      { id: expenseCategoryId, userId: userId },
-      updates,
-      { new: true },
-    );
-
-    if (!updatedExpenseCategory)
-      throw new Error("Expense category not found for given user");
-
-    return new ExpenseCategory({
-      id: updatedExpenseCategory.id,
-      userId: updatedExpenseCategory.userId.toString(),
-      name: updatedExpenseCategory.name,
-      description: updatedExpenseCategory.description,
-      expenseCount: updatedExpenseCategory.expenseCount,
-    });
-  }
-
-  async deleteExpenseCategory(
-    userId: string,
-    expenseCategoryId: string,
-  ): Promise<void> {
-    await ExpenseCategoryModel.deleteOne({
-      id: expenseCategoryId,
-      userId: userId,
     });
   }
 }
