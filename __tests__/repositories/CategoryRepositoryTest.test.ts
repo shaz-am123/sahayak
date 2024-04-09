@@ -189,4 +189,35 @@ describe("Category Repository Tests", () => {
       expect(error.message).toBe("Expense category not found for given user");
     }
   });
+
+  it("should be able to delete expense-category of an user using id", async () => {
+    const expectedResponse = new ExpenseCategory({
+      id: expenseCategoryId,
+      userId: userId.toString(),
+      name: "Food Orders",
+      description: "Zomato, Swiggy, Eatsure",
+      expenseCount: 0,
+    });
+
+    await categoryRepository.deleteExpenseCategory(
+      userId.toString(),
+      expenseCategoryId,
+    );
+
+    try {
+      await categoryRepository.deleteExpenseCategory(userId.toString(), expenseCategoryId);
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("Expense-category not found for given user");
+    }
+  });
+
+  it("should handle any error that occurs while deleting an expense-category of an user", async () => {
+    try {
+      await categoryRepository.deleteExpenseCategory(userId.toString(), "-1");
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("Expense-category not found for given user");
+    }
+  });
 });

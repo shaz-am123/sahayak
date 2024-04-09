@@ -40,7 +40,7 @@ export class CategoryRepository {
 
   async getExpenseCategoryById(
     userId: string,
-    expenseCategoryId: string,
+    expenseCategoryId: string
   ): Promise<ExpenseCategory> {
     const expenseCategory = await ExpenseCategoryModel.findOne({
       id: expenseCategoryId,
@@ -66,12 +66,12 @@ export class CategoryRepository {
       name: string;
       description: string;
       expenseCount: number;
-    }>,
+    }>
   ) {
     const updatedExpenseCategory = await ExpenseCategoryModel.findOneAndUpdate(
       { id: expenseCategoryId, userId: userId },
       updates,
-      { new: true },
+      { new: true }
     );
 
     if (!updatedExpenseCategory)
@@ -84,5 +84,19 @@ export class CategoryRepository {
       description: updatedExpenseCategory.description,
       expenseCount: updatedExpenseCategory.expenseCount,
     });
+  }
+
+  async deleteExpenseCategory(
+    userId: string,
+    expenseCategoryId: string
+  ): Promise<void> {
+    const expenseCategory = await ExpenseCategoryModel.findOneAndDelete({
+      id: expenseCategoryId,
+      userId: userId,
+    });
+
+    if (!expenseCategory) {
+      throw new Error("Expense-category not found for given user");
+    }
   }
 }

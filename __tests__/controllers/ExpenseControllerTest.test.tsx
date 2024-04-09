@@ -228,6 +228,7 @@ describe("Expense Controller tests", () => {
 
     expect(httpResponse.body).toEqual(expectedResponse);
     expect(httpResponse.statusCode).toBe(200);
+    expect(expenseServiceMock.deleteExpense).toHaveBeenCalledWith(userId, expenseId);
   });
 
   it("should handle any error that occurs while deleting expense of an user using expense-id", async () => {

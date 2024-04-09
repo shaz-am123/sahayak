@@ -12,6 +12,7 @@ jest.mock("../../src/repositories/CategoryRepository", () => ({
       getExpenseCategories: jest.fn(),
       getExpenseCategoryById: jest.fn(),
       updateExpenseCategory: jest.fn(),
+      deleteExpenseCategory: jest.fn(),
     })),
   },
 }));
@@ -43,11 +44,11 @@ describe("Category Service tests", () => {
     });
 
     categoryRepositoryMock.createCategory.mockResolvedValue(
-      mockCategoryResponse,
+      mockCategoryResponse
     );
     const createCategoryResponse = await categoryService.createCategory(
       userId,
-      createCategoryRequest,
+      createCategoryRequest
     );
     expect(createCategoryResponse).toEqual(expectedCreateCategoryResponse);
   });
@@ -79,7 +80,7 @@ describe("Category Service tests", () => {
     });
 
     categoryRepositoryMock.getExpenseCategories.mockResolvedValue(
-      repositoryMockResponse,
+      repositoryMockResponse
     );
     const actualResponse = await categoryService.getExpenseCategories(userId);
     expect(actualResponse).toEqual(expectedResponse);
@@ -114,11 +115,11 @@ describe("Category Service tests", () => {
     });
 
     categoryRepositoryMock.getExpenseCategoryById.mockResolvedValue(
-      repositoryMockResponse,
+      repositoryMockResponse
     );
     const actualResponse = await categoryService.getExpenseCategoryById(
       userId,
-      expenseCategoryId,
+      expenseCategoryId
     );
     expect(actualResponse).toEqual(expectedResponse);
   });
@@ -153,20 +154,20 @@ describe("Category Service tests", () => {
     });
 
     categoryRepositoryMock.updateExpenseCategory.mockResolvedValue(
-      repositoryMockResponse,
+      repositoryMockResponse
     );
     const actualResponse = await categoryService.updateExpenseCategory(
       userId,
       expenseCategoryId,
       {
         expenseCount: 1,
-      },
+      }
     );
     expect(actualResponse).toEqual(expectedResponse);
     expect(categoryRepositoryMock.updateExpenseCategory).toHaveBeenCalledWith(
       userId,
       expenseCategoryId,
-      { expenseCount: 1 },
+      { expenseCount: 1 }
     );
   });
 
@@ -184,11 +185,109 @@ describe("Category Service tests", () => {
       expect(categoryRepositoryMock.updateExpenseCategory).toHaveBeenCalledWith(
         userId,
         expenseCategoryId,
-        { expenseCount: 1 },
+        { expenseCount: 1 }
       );
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toEqual(mockError.message);
+    }
+  });
+
+  it("should be able to delete expense-category of an user using id", async () => {
+    const userId = "A001";
+    const expenseCategoryId = "1";
+
+    const expectedResponse = new ExpenseCategoryResponse({
+      id: expenseCategoryId,
+      userId: userId,
+      name: "Food",
+      description: "",
+      expenseCount: 0,
+    });
+
+    categoryRepositoryMock.getExpenseCategoryById.mockResolvedValue(
+      expectedResponse
+    );
+
+    categoryRepositoryMock.deleteExpenseCategory.mockResolvedValue();
+
+    const actualResponse = await categoryService.deleteExpenseCategory(
+      userId,
+      expenseCategoryId
+    );
+    expect(actualResponse).toEqual(expectedResponse);
+    expect(categoryRepositoryMock.getExpenseCategoryById).toHaveBeenCalledWith(
+      userId,
+      expenseCategoryId
+    );
+    expect(categoryRepositoryMock.deleteExpenseCategory).toHaveBeenCalledWith(
+      userId,
+      expenseCategoryId
+    );
+  });
+
+  it("should handle error that occurs while deleting an expense-category which has associated expenses", async () => {
+    const userId = "A001";
+    const expenseCategoryId = "1";
+
+    const mockExpenseCategory = new ExpenseCategoryResponse({
+      id: expenseCategoryId,
+      userId: userId,
+      name: "Food",
+      description: "",
+      expenseCount: 2,
+    });
+
+    categoryRepositoryMock.getExpenseCategoryById.mockResolvedValue(
+      mockExpenseCategory
+    );
+
+    try {
+      await categoryService.deleteExpenseCategory(userId, expenseCategoryId);
+      expect(
+        categoryRepositoryMock.getExpenseCategoryById
+      ).toHaveBeenCalledWith(userId, expenseCategoryId);
+      expect(
+        categoryRepositoryMock.deleteExpenseCategory
+      ).toHaveBeenCalledTimes(0);
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(
+        "Expense category cannot be deleted. Associated expenses exist"
+      );
+    }
+  });
+
+  it("should handle any error that occurs while deleting an expense-category", async () => {
+    const userId = "A001";
+    const expenseCategoryId = "1";
+
+    const mockExpenseCategory = new ExpenseCategoryResponse({
+      id: expenseCategoryId,
+      userId: userId,
+      name: "Food",
+      description: "",
+      expenseCount: 0,
+    });
+
+    const mockError = new Error("Internal Server Error");
+    categoryRepositoryMock.getExpenseCategoryById.mockResolvedValue(
+      mockExpenseCategory
+    );
+    categoryRepositoryMock.deleteExpenseCategory.mockRejectedValue(mockError);
+
+    try {
+      await categoryService.deleteExpenseCategory(userId, expenseCategoryId);
+      expect(
+        categoryRepositoryMock.getExpenseCategoryById
+      ).toHaveBeenCalledWith(userId, expenseCategoryId);
+      expect(categoryRepositoryMock.deleteExpenseCategory).toHaveBeenCalledWith(
+        userId,
+        expenseCategoryId
+      );
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(mockError.message);
     }
   });
 });
