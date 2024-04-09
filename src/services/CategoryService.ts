@@ -30,14 +30,18 @@ export class CategoryService {
       userId: userId,
       name: createCategoryRequest.name,
       description: createCategoryRequest.description,
+      expenseCount: 0,
     });
+
     const createdCategory =
       await this.categoryRepository.createCategory(category);
+
     return new ExpenseCategoryResponse({
       id: createdCategory.id!,
       userId: createdCategory.userId,
-      name: createCategoryRequest.name,
-      description: createCategoryRequest.description,
+      name: createdCategory.name,
+      description: createdCategory.description,
+      expenseCount: createdCategory.expenseCount,
     });
   }
 
@@ -55,6 +59,7 @@ export class CategoryService {
             userId: category.userId,
             name: category.name,
             description: category.description,
+            expenseCount: category.expenseCount,
           }),
       ),
       totalRecords: categories.length,
@@ -70,6 +75,27 @@ export class CategoryService {
         userId,
         expenseCategoryId,
       );
+    return new ExpenseCategoryResponse({
+      ...expenseCategory,
+      id: expenseCategory.id!,
+    });
+  }
+
+  async updateExpenseCategory(
+    userId: string,
+    expenseCategoryId: string,
+    updates: Partial<{
+      name: string;
+      description: string;
+      expenseCount: number;
+    }>,
+  ): Promise<ExpenseCategoryResponse> {
+    const expenseCategory = await this.categoryRepository.updateExpenseCategory(
+      userId,
+      expenseCategoryId,
+      updates,
+    );
+
     return new ExpenseCategoryResponse({
       ...expenseCategory,
       id: expenseCategory.id!,
