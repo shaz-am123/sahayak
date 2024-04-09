@@ -43,11 +43,11 @@ describe("Category Service tests", () => {
     });
 
     categoryRepositoryMock.createCategory.mockResolvedValue(
-      mockCategoryResponse
+      mockCategoryResponse,
     );
     const createCategoryResponse = await categoryService.createCategory(
       userId,
-      createCategoryRequest
+      createCategoryRequest,
     );
     expect(createCategoryResponse).toEqual(expectedCreateCategoryResponse);
   });
@@ -79,7 +79,7 @@ describe("Category Service tests", () => {
     });
 
     categoryRepositoryMock.getExpenseCategories.mockResolvedValue(
-      repositoryMockResponse
+      repositoryMockResponse,
     );
     const actualResponse = await categoryService.getExpenseCategories(userId);
     expect(actualResponse).toEqual(expectedResponse);
@@ -114,11 +114,11 @@ describe("Category Service tests", () => {
     });
 
     categoryRepositoryMock.getExpenseCategoryById.mockResolvedValue(
-      repositoryMockResponse
+      repositoryMockResponse,
     );
     const actualResponse = await categoryService.getExpenseCategoryById(
       userId,
-      expenseCategoryId
+      expenseCategoryId,
     );
     expect(actualResponse).toEqual(expectedResponse);
   });
@@ -153,20 +153,20 @@ describe("Category Service tests", () => {
     });
 
     categoryRepositoryMock.updateExpenseCategory.mockResolvedValue(
-      repositoryMockResponse
+      repositoryMockResponse,
     );
     const actualResponse = await categoryService.updateExpenseCategory(
       userId,
       expenseCategoryId,
       {
         expenseCount: 1,
-      }
+      },
     );
     expect(actualResponse).toEqual(expectedResponse);
     expect(categoryRepositoryMock.updateExpenseCategory).toHaveBeenCalledWith(
       userId,
       expenseCategoryId,
-      { expenseCount: 1 }
+      { expenseCount: 1 },
     );
   });
 
@@ -184,7 +184,7 @@ describe("Category Service tests", () => {
       expect(categoryRepositoryMock.updateExpenseCategory).toHaveBeenCalledWith(
         userId,
         expenseCategoryId,
-        { expenseCount: 1 }
+        { expenseCount: 1 },
       );
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);

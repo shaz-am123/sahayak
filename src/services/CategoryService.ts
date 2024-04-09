@@ -13,7 +13,7 @@ export class CategoryService {
   }
 
   public static getInstance(
-    categoryRepository: CategoryRepository = CategoryRepository.getInstance()
+    categoryRepository: CategoryRepository = CategoryRepository.getInstance(),
   ): CategoryService {
     if (!CategoryService.instance) {
       CategoryService.instance = new CategoryService(categoryRepository);
@@ -23,7 +23,7 @@ export class CategoryService {
 
   async createCategory(
     userId: string,
-    createCategoryRequest: ExpenseCategoryRequest
+    createCategoryRequest: ExpenseCategoryRequest,
   ): Promise<ExpenseCategoryResponse> {
     const category = new ExpenseCategory({
       id: null,
@@ -46,7 +46,7 @@ export class CategoryService {
   }
 
   async getExpenseCategories(
-    userId: string
+    userId: string,
   ): Promise<MultipleExpenseCategoriesResponse> {
     const categories =
       await this.categoryRepository.getExpenseCategories(userId);
@@ -60,7 +60,7 @@ export class CategoryService {
             name: category.name,
             description: category.description,
             expenseCount: category.expenseCount,
-          })
+          }),
       ),
       totalRecords: categories.length,
     });
@@ -68,12 +68,12 @@ export class CategoryService {
 
   async getExpenseCategoryById(
     userId: string,
-    expenseCategoryId: string
+    expenseCategoryId: string,
   ): Promise<ExpenseCategoryResponse> {
     const expenseCategory =
       await this.categoryRepository.getExpenseCategoryById(
         userId,
-        expenseCategoryId
+        expenseCategoryId,
       );
     return new ExpenseCategoryResponse({
       ...expenseCategory,
@@ -84,12 +84,16 @@ export class CategoryService {
   async updateExpenseCategory(
     userId: string,
     expenseCategoryId: string,
-    updates: Partial<{name: string, description: string, expenseCount: number}>
+    updates: Partial<{
+      name: string;
+      description: string;
+      expenseCount: number;
+    }>,
   ): Promise<ExpenseCategoryResponse> {
     const expenseCategory = await this.categoryRepository.updateExpenseCategory(
       userId,
       expenseCategoryId,
-      updates
+      updates,
     );
 
     return new ExpenseCategoryResponse({
@@ -100,17 +104,17 @@ export class CategoryService {
 
   async deleteExpense(
     userId: string,
-    expenseCategoryId: string
+    expenseCategoryId: string,
   ): Promise<ExpenseCategoryResponse> {
     const expenseCategory = await this.getExpenseCategoryById(
       userId,
-      expenseCategoryId
+      expenseCategoryId,
     );
 
     if (expenseCategory.expenseCount == 0) {
       await this.categoryRepository.deleteExpenseCategory(
         userId,
-        expenseCategoryId
+        expenseCategoryId,
       );
     }
 

@@ -44,7 +44,7 @@ describe("Expense Controller tests", () => {
         userId: userId,
         name: "Food",
         description: "",
-        expenseCount: 0
+        expenseCount: 0,
       }),
       description: "",
       date: new Date("2024-02-25"),
@@ -165,7 +165,7 @@ describe("Expense Controller tests", () => {
         userId: userId,
         name: "Food",
         description: "",
-        expenseCount: 0
+        expenseCount: 0,
       }),
       description: "",
       date: new Date("2024-02-25"),
@@ -213,7 +213,7 @@ describe("Expense Controller tests", () => {
         userId: userId,
         name: "Food",
         description: "",
-        expenseCount: 0
+        expenseCount: 0,
       }),
       description: "",
       date: new Date("2024-02-25"),

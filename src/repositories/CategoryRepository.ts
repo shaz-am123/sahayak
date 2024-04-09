@@ -40,7 +40,7 @@ export class CategoryRepository {
 
   async getExpenseCategoryById(
     userId: string,
-    expenseCategoryId: string
+    expenseCategoryId: string,
   ): Promise<ExpenseCategory> {
     const expenseCategory = await ExpenseCategoryModel.findOne({
       id: expenseCategoryId,
@@ -62,12 +62,16 @@ export class CategoryRepository {
   async updateExpenseCategory(
     userId: string,
     expenseCategoryId: string,
-    updates: Partial<{name: string, description: string, expenseCount: number}>
+    updates: Partial<{
+      name: string;
+      description: string;
+      expenseCount: number;
+    }>,
   ) {
     const updatedExpenseCategory = await ExpenseCategoryModel.findOneAndUpdate(
       { id: expenseCategoryId, userId: userId },
       updates,
-      { new: true }
+      { new: true },
     );
 
     if (!updatedExpenseCategory)
@@ -84,7 +88,7 @@ export class CategoryRepository {
 
   async deleteExpenseCategory(
     userId: string,
-    expenseCategoryId: string
+    expenseCategoryId: string,
   ): Promise<void> {
     await ExpenseCategoryModel.deleteOne({
       id: expenseCategoryId,

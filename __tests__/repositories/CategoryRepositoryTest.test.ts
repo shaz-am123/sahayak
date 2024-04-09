@@ -172,16 +172,18 @@ describe("Category Repository Tests", () => {
       expenseCategoryId,
       {
         name: "Food Orders",
-        expenseCount: 2
-      }
+        expenseCount: 2,
+      },
     );
 
     expect(actualResponse).toEqual(expectedResponse);
   });
-  
+
   it("should handle any error that occurs while updating an expense category of an user", async () => {
     try {
-      await categoryRepository.updateExpenseCategory(userId.toString(), "-1", {expenseCount: 1});
+      await categoryRepository.updateExpenseCategory(userId.toString(), "-1", {
+        expenseCount: 1,
+      });
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("Expense category not found for given user");

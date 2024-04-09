@@ -17,7 +17,7 @@ const ExpenseCategorySchema: Schema = new Schema({
     ref: "user",
     required: true,
   },
-  expenseCount: { type: Number, required: true}
+  expenseCount: { type: Number, required: true },
 });
 
 ExpenseCategorySchema.index({ userId: 1, name: 1 }, { unique: true });
