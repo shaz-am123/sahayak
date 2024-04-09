@@ -13,7 +13,7 @@ export class CategoryService {
   }
 
   public static getInstance(
-    categoryRepository: CategoryRepository = CategoryRepository.getInstance(),
+    categoryRepository: CategoryRepository = CategoryRepository.getInstance()
   ): CategoryService {
     if (!CategoryService.instance) {
       CategoryService.instance = new CategoryService(categoryRepository);
@@ -23,26 +23,30 @@ export class CategoryService {
 
   async createCategory(
     userId: string,
-    createCategoryRequest: ExpenseCategoryRequest,
+    createCategoryRequest: ExpenseCategoryRequest
   ): Promise<ExpenseCategoryResponse> {
     const category = new ExpenseCategory({
       id: null,
       userId: userId,
       name: createCategoryRequest.name,
       description: createCategoryRequest.description,
+      expenseCount: 0,
     });
+
     const createdCategory =
       await this.categoryRepository.createCategory(category);
+
     return new ExpenseCategoryResponse({
       id: createdCategory.id!,
       userId: createdCategory.userId,
-      name: createCategoryRequest.name,
-      description: createCategoryRequest.description,
+      name: createdCategory.name,
+      description: createdCategory.description,
+      expenseCount: createdCategory.expenseCount,
     });
   }
 
   async getExpenseCategories(
-    userId: string,
+    userId: string
   ): Promise<MultipleExpenseCategoriesResponse> {
     const categories =
       await this.categoryRepository.getExpenseCategories(userId);
@@ -55,7 +59,8 @@ export class CategoryService {
             userId: category.userId,
             name: category.name,
             description: category.description,
-          }),
+            expenseCount: category.expenseCount,
+          })
       ),
       totalRecords: categories.length,
     });
@@ -63,13 +68,52 @@ export class CategoryService {
 
   async getExpenseCategoryById(
     userId: string,
-    expenseCategoryId: string,
+    expenseCategoryId: string
   ): Promise<ExpenseCategoryResponse> {
     const expenseCategory =
       await this.categoryRepository.getExpenseCategoryById(
         userId,
-        expenseCategoryId,
+        expenseCategoryId
       );
+    return new ExpenseCategoryResponse({
+      ...expenseCategory,
+      id: expenseCategory.id!,
+    });
+  }
+
+  async updateExpenseCategory(
+    userId: string,
+    expenseCategoryId: string,
+    updates: Partial<{name: string, description: string, expenseCount: number}>
+  ): Promise<ExpenseCategoryResponse> {
+    const expenseCategory = await this.categoryRepository.updateExpenseCategory(
+      userId,
+      expenseCategoryId,
+      updates
+    );
+
+    return new ExpenseCategoryResponse({
+      ...expenseCategory,
+      id: expenseCategory.id!,
+    });
+  }
+
+  async deleteExpense(
+    userId: string,
+    expenseCategoryId: string
+  ): Promise<ExpenseCategoryResponse> {
+    const expenseCategory = await this.getExpenseCategoryById(
+      userId,
+      expenseCategoryId
+    );
+
+    if (expenseCategory.expenseCount == 0) {
+      await this.categoryRepository.deleteExpenseCategory(
+        userId,
+        expenseCategoryId
+      );
+    }
+
     return new ExpenseCategoryResponse({
       ...expenseCategory,
       id: expenseCategory.id!,
