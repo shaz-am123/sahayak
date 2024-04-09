@@ -173,7 +173,7 @@ describe("Expense Repository Tests", () => {
 
     expect(actualResponse).toEqual(expectedResponse);
     try {
-      await expenseRepository.getExpenseById(userId.toString(), expenseId);
+      await expenseRepository.deleteExpense(userId.toString(), expenseId);
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("Expense not found for given user");
