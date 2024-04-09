@@ -55,4 +55,18 @@ router.get(
   },
 );
 
+router.delete(
+  "/:expenseId",
+  verifyToken,
+  async (req: express.Request, res: express.Response) => {
+    const userId = req.userId!;
+    const expenseId = req.params.expenseId;
+    const expenseResponse = await expenseController.deleteExpense(
+      userId,
+      expenseId,
+    );
+    res.status(expenseResponse.statusCode).json(expenseResponse.body);
+  },
+);
+
 export default router;

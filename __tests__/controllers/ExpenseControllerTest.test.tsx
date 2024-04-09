@@ -13,6 +13,7 @@ jest.mock("../../src/services/ExpenseService", () => ({
       createExpense: jest.fn(),
       getExpenses: jest.fn(),
       getExpenseById: jest.fn(),
+      deleteExpense: jest.fn(),
     })),
   },
 }));
@@ -187,6 +188,53 @@ describe("Expense Controller tests", () => {
     expenseServiceMock.getExpenseById.mockRejectedValue(mockError);
 
     const httpResponse = await expenseController.getExpenseById(
+      userId,
+      expenseId,
+    );
+
+    expect(httpResponse.body).toEqual({ error: mockError.message });
+    expect(httpResponse.statusCode).toBe(500);
+  });
+
+  it("should be able to delete expense of an user using expense-id", async () => {
+    const userId = "A001";
+    const expenseId = "1";
+    const expenseCategoryId = "1";
+
+    const expectedResponse = new ExpenseResponse({
+      id: expenseId,
+      userId: userId,
+      amount: 100,
+      currency: Currency["INR" as keyof typeof Currency],
+      expenseCategory: new ExpenseCategoryResponse({
+        id: expenseCategoryId,
+        userId: userId,
+        name: "Food",
+        description: "",
+      }),
+      description: "",
+      date: new Date("2024-02-25"),
+    });
+
+    expenseServiceMock.deleteExpense.mockResolvedValue(expectedResponse);
+
+    const httpResponse = await expenseController.deleteExpense(
+      userId,
+      expenseId,
+    );
+
+    expect(httpResponse.body).toEqual(expectedResponse);
+    expect(httpResponse.statusCode).toBe(200);
+  });
+
+  it("should handle any error that occurs while deleting expense of an user using expense-id", async () => {
+    const userId = "A001";
+    const expenseId = "1";
+    const mockError = new Error("Internal Server Error");
+
+    expenseServiceMock.deleteExpense.mockRejectedValue(mockError);
+
+    const httpResponse = await expenseController.deleteExpense(
       userId,
       expenseId,
     );

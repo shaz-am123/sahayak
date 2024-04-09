@@ -127,4 +127,33 @@ export class ExpenseService {
       date: expense.date,
     });
   }
+
+  async deleteExpense(
+    userId: string,
+    expenseId: string,
+  ): Promise<ExpenseResponse> {
+    const expense = await this.expenseRepository.deleteExpense(
+      userId,
+      expenseId,
+    );
+
+    const expenseCategoryResponse =
+      await this.categoryService.getExpenseCategoryById(
+        userId,
+        expense.expenseCategoryId,
+      );
+
+    return new ExpenseResponse({
+      id: expense.id!,
+      userId: expense.userId,
+      amount: expense.amount,
+      currency: expense.currency,
+      expenseCategory: new ExpenseCategoryResponse({
+        ...expenseCategoryResponse,
+        id: expenseCategoryResponse.id!,
+      }),
+      description: expense.description,
+      date: expense.date,
+    });
+  }
 }

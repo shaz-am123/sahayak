@@ -15,6 +15,7 @@ jest.mock("../../src/repositories/ExpenseRepository", () => ({
       createExpense: jest.fn(),
       getExpenses: jest.fn(),
       getExpenseById: jest.fn(),
+      deleteExpense: jest.fn(),
     })),
   },
 }));
@@ -46,6 +47,7 @@ describe("Expense Service tests", () => {
 
   it("should be able to create an expense", async () => {
     const userId = "A001";
+    const expenseId = "1";
     const expenseCategoryId = "1";
     const createExpenseRequest = new ExpenseRequest({
       amount: 100,
@@ -63,7 +65,7 @@ describe("Expense Service tests", () => {
     });
 
     const expectedCreateExpenseResponse = new ExpenseResponse({
-      id: "1",
+      id: expenseId,
       userId: userId,
       amount: 100,
       currency: Currency["INR" as keyof typeof Currency],
@@ -73,7 +75,7 @@ describe("Expense Service tests", () => {
     });
 
     const mockExpenseResponse = new Expense({
-      id: "1",
+      id: expenseId,
       userId: userId,
       amount: 100,
       currency: Currency["INR" as keyof typeof Currency],
@@ -248,18 +250,18 @@ describe("Expense Service tests", () => {
     const expenseCategoryId = "1";
 
     const mockExpenseCategory = new ExpenseCategoryResponse({
-      id: "1",
+      id: expenseCategoryId,
       userId: userId,
       name: "Food",
       description: "",
     });
 
     const repositoryMockResponse = new Expense({
-      id: "1",
+      id: expenseId,
       userId: userId,
       amount: 100,
       currency: Currency["INR" as keyof typeof Currency],
-      expenseCategoryId: "1",
+      expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
     });
@@ -290,7 +292,6 @@ describe("Expense Service tests", () => {
   it("should handle any error that occurs in categoryService while getting expense by id", async () => {
     const userId = "A001";
     const expenseId = "1";
-    const expenseCategoryId = "1";
 
     const expenseCategoryServiceError = new Error("Cateogory Service Error");
     categoryServiceMock.getExpenseCategoryById.mockRejectedValue(
@@ -316,6 +317,66 @@ describe("Expense Service tests", () => {
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toEqual(mockError.message);
+    }
+  });
+
+  it("should be able to delete expense of an user using expense-id", async () => {
+    const userId = "A001";
+    const expenseId = "1";
+    const expenseCategoryId = "1";
+
+    const mockExpenseCategory = new ExpenseCategoryResponse({
+      id: expenseCategoryId,
+      userId: userId,
+      name: "Food",
+      description: "",
+    });
+
+    const repositoryMockResponse = new Expense({
+      id: expenseId,
+      userId: userId,
+      amount: 100,
+      currency: Currency["INR" as keyof typeof Currency],
+      expenseCategoryId: expenseCategoryId,
+      description: "",
+      date: new Date("2024-02-25"),
+    });
+
+    const expectedResponse = new ExpenseResponse({
+      id: "1",
+      userId: userId,
+      amount: 100,
+      currency: Currency["INR" as keyof typeof Currency],
+      expenseCategory: mockExpenseCategory,
+      description: "",
+      date: new Date("2024-02-25"),
+    });
+
+    categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
+      mockExpenseCategory,
+    );
+    expenseRepositoryMock.deleteExpense.mockResolvedValue(
+      repositoryMockResponse,
+    );
+    const actualResponse = await expenseService.deleteExpense(
+      userId,
+      expenseId,
+    );
+    expect(actualResponse).toEqual(expectedResponse);
+  });
+
+  it("should handle any error that occurs while deleting an expense", async () => {
+    const userId = "A001";
+    const expenseId = "1";
+
+    const mockError = new Error("Internal Server Error");
+    expenseRepositoryMock.deleteExpense.mockRejectedValue(mockError);
+
+    try {
+      await expenseService.getExpenseById(userId, expenseId);
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe(mockError.message);
     }
   });
 });
