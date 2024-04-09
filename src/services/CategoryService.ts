@@ -101,26 +101,4 @@ export class CategoryService {
       id: expenseCategory.id!,
     });
   }
-
-  async deleteExpense(
-    userId: string,
-    expenseCategoryId: string,
-  ): Promise<ExpenseCategoryResponse> {
-    const expenseCategory = await this.getExpenseCategoryById(
-      userId,
-      expenseCategoryId,
-    );
-
-    if (expenseCategory.expenseCount == 0) {
-      await this.categoryRepository.deleteExpenseCategory(
-        userId,
-        expenseCategoryId,
-      );
-    }
-
-    return new ExpenseCategoryResponse({
-      ...expenseCategory,
-      id: expenseCategory.id!,
-    });
-  }
 }

@@ -85,14 +85,4 @@ export class CategoryRepository {
       expenseCount: updatedExpenseCategory.expenseCount,
     });
   }
-
-  async deleteExpenseCategory(
-    userId: string,
-    expenseCategoryId: string,
-  ): Promise<void> {
-    await ExpenseCategoryModel.deleteOne({
-      id: expenseCategoryId,
-      userId: userId,
-    });
-  }
 }
