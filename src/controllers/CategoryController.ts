@@ -91,6 +91,31 @@ export class CategoryController {
     }
   }
 
+  async updateExpenseCategory(
+    userId: string,
+    exepenseCategoryId: string,
+    updates: Partial<{
+      name: string;
+      description: string;
+      expenseCount: number;
+    }>,
+  ): Promise<HttpResponse> {
+    try {
+      const expenseCategoryResponse =
+        await this.categoryService.updateExpenseCategory(
+          userId,
+          exepenseCategoryId,
+          updates,
+        );
+      return new HttpResponse({
+        statusCode: 200,
+        body: expenseCategoryResponse,
+      });
+    } catch (error) {
+      return this.handleErrors(error);
+    }
+  }
+
   private handleErrors(error: any): HttpResponse {
     if (error instanceof CustomValidationError) {
       return new HttpResponse({
