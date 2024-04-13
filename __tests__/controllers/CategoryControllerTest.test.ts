@@ -255,7 +255,7 @@ describe("Category Controller tests", () => {
     );
   });
 
-  it("should handle any error that occurs while deleting expense of an user using expense-id", async () => {
+  it("should handle any error that occurs while updating expense-category of an user", async () => {
     const userId = "A001";
     const expenseCategoryId = "1";
     const mockError = new Error("Internal Server Error");
