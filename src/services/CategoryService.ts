@@ -127,4 +127,13 @@ export class CategoryService {
       id: expenseCategory.id!,
     });
   }
+
+  async getExpenseCount(
+    userId: string,
+    expenseCategoryId: string,
+  ): Promise<number> {
+    return this.getExpenseCategoryById(userId, expenseCategoryId).then(
+      (expenseCategory) => expenseCategory.expenseCount,
+    );
+  }
 }

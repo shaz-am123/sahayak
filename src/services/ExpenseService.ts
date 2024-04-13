@@ -37,11 +37,6 @@ export class ExpenseService {
     userId: string,
     createExpenseRequest: ExpenseRequest,
   ): Promise<ExpenseResponse> {
-    const expenseCategory = await this.categoryService.getExpenseCategoryById(
-      userId,
-      createExpenseRequest.expenseCategoryId,
-    );
-
     const expense = new Expense({
       id: null,
       userId: userId,
@@ -52,26 +47,27 @@ export class ExpenseService {
       date: createExpenseRequest.date,
     });
 
-    const createdExpense = await this.expenseRepository
-      .createExpense(expense)
-      .then(async (expense) => {
-        await this.categoryService.updateExpenseCategory(
-          userId,
-          expenseCategory.id,
-          {
-            expenseCount: expenseCategory.expenseCount + 1,
-          },
-        );
+    const expenseCount = await this.categoryService.getExpenseCount(
+      userId,
+      createExpenseRequest.expenseCategoryId,
+    );
+    const createdExpense = await this.expenseRepository.createExpense(expense);
 
-        return expense;
-      });
+    const expenseCategoryResponse =
+      await this.categoryService.updateExpenseCategory(
+        userId,
+        createExpenseRequest.expenseCategoryId,
+        {
+          expenseCount: expenseCount + 1,
+        },
+      );
 
     return new ExpenseResponse({
       id: createdExpense.id!,
       userId: createdExpense.userId,
       amount: createdExpense.amount,
       currency: createdExpense.currency,
-      expenseCategory: expenseCategory,
+      expenseCategory: expenseCategoryResponse,
       description: createdExpense.description,
       date: createdExpense.date,
     });
@@ -150,18 +146,17 @@ export class ExpenseService {
       expenseId,
     );
 
-    const expenseCategoryResponse =
-      await this.categoryService.getExpenseCategoryById(
-        userId,
-        expense.expenseCategoryId,
-      );
+    const expenseCount = await this.categoryService.getExpenseCount(
+      userId,
+      expense.expenseCategoryId,
+    );
 
     const newExpenseCategoryResponse =
       await this.categoryService.updateExpenseCategory(
         userId,
         expense.expenseCategoryId,
         {
-          expenseCount: expenseCategoryResponse.expenseCount - 1,
+          expenseCount: expenseCount - 1,
         },
       );
 
