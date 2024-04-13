@@ -27,6 +27,7 @@ jest.mock("../../src/services/CategoryService", () => ({
       getExpenseCategoryById: jest.fn(),
       getExpenseCategories: jest.fn(),
       updateExpenseCategory: jest.fn(),
+      getExpenseCount: jest.fn(),
     })),
   },
 }));
@@ -59,14 +60,6 @@ describe("Expense Service tests", () => {
       date: new Date("2024-02-25"),
     });
 
-    const mockCategoryResponse = new ExpenseCategoryResponse({
-      id: expenseCategoryId,
-      userId: userId,
-      name: "Food",
-      description: "",
-      expenseCount: 0,
-    });
-
     const mockUpdateCategoryResponse = new ExpenseCategoryResponse({
       id: expenseCategoryId,
       userId: userId,
@@ -80,7 +73,7 @@ describe("Expense Service tests", () => {
       userId: userId,
       amount: 100,
       currency: Currency["INR" as keyof typeof Currency],
-      expenseCategory: mockCategoryResponse,
+      expenseCategory: mockUpdateCategoryResponse,
       description: "",
       date: new Date("2024-02-25"),
     });
@@ -95,9 +88,7 @@ describe("Expense Service tests", () => {
       date: new Date("2024-02-25"),
     });
 
-    categoryServiceMock.getExpenseCategoryById.mockResolvedValueOnce(
-      mockCategoryResponse,
-    );
+    categoryServiceMock.getExpenseCount.mockResolvedValueOnce(0);
 
     categoryServiceMock.updateExpenseCategory.mockResolvedValueOnce(
       mockUpdateCategoryResponse,
@@ -111,7 +102,7 @@ describe("Expense Service tests", () => {
       createExpenseRequest,
     );
     expect(createExpenseResponse).toEqual(expectedCreateExpenseResponse);
-    expect(categoryServiceMock.getExpenseCategoryById).toHaveBeenCalledWith(
+    expect(categoryServiceMock.getExpenseCount).toHaveBeenCalledWith(
       userId,
       expenseCategoryId,
     );
@@ -140,7 +131,7 @@ describe("Expense Service tests", () => {
     const expenseCategoryNotFoundError = new Error(
       "The expense category was not found for the user",
     );
-    categoryServiceMock.getExpenseCategoryById.mockRejectedValue(
+    categoryServiceMock.getExpenseCount.mockRejectedValue(
       expenseCategoryNotFoundError,
     );
 
@@ -171,9 +162,7 @@ describe("Expense Service tests", () => {
       date: new Date("2024-02-25"),
     });
 
-    categoryServiceMock.getExpenseCategoryById.mockResolvedValue(
-      mockExpenseCategory,
-    );
+    categoryServiceMock.getExpenseCount.mockResolvedValue(0);
     const serverError = new Error("Internal Server Error");
     expenseRepositoryMock.createExpense.mockRejectedValue(serverError);
 
