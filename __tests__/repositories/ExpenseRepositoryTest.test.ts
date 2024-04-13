@@ -188,4 +188,40 @@ describe("Expense Repository Tests", () => {
       expect(error.message).toBe("Expense not found for given user");
     }
   });
+
+  it("should be able to update expense of an user using id", async () => {
+    const expectedResponse = new Expense({
+      id: expenseId,
+      userId: userId.toString(),
+      amount: 200,
+      currency: Currency["INR" as keyof typeof Currency],
+      expenseCategoryId: expenseCategoryId,
+      description: "Zomato dinner order",
+      date: new Date("2024-02-25"),
+    });
+
+    await expenseRepository.updateExpense(userId.toString(), expenseId, {
+      amount: "200",
+      description: "Zomato dinner order",
+    });
+
+    const updatedResponse = await expenseRepository.getExpenseById(
+      userId.toString(),
+      expenseId,
+    );
+
+    expect(updatedResponse).toEqual(expectedResponse);
+  });
+
+  it("should handle any error that occurs while updating an expense category of an user", async () => {
+    try {
+      await expenseRepository.updateExpense(userId.toString(), "-1", {
+        amount: 200,
+        description: "Zomato dinner order",
+      });
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("Expense not found for given user");
+    }
+  });
 });

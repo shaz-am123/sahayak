@@ -69,4 +69,22 @@ router.delete(
   },
 );
 
+router.put(
+  "/:expenseId",
+  verifyToken,
+  async (req: express.Request, res: express.Response) => {
+    const userId = req.userId!;
+    const expenseId = req.params.expenseId;
+    const updates: Partial<ExpenseRequest> = { ...req.body };
+    const expenseCategoryResponse = await expenseController.updateExpense(
+      userId,
+      expenseId,
+      updates,
+    );
+    res
+      .status(expenseCategoryResponse.statusCode)
+      .json(expenseCategoryResponse.body);
+  },
+);
+
 export default router;

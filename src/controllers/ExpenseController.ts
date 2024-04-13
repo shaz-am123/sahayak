@@ -89,6 +89,26 @@ export class ExpenseController {
     }
   }
 
+  async updateExpense(
+    userId: string,
+    expenseId: string,
+    updates: Partial<ExpenseRequest>,
+  ): Promise<HttpResponse> {
+    try {
+      const expenseResponse = await this.expenseService.updateExpense(
+        userId,
+        expenseId,
+        updates,
+      );
+      return new HttpResponse({
+        statusCode: 200,
+        body: expenseResponse,
+      });
+    } catch (error) {
+      return this.handleErrors(error);
+    }
+  }
+
   private handleErrors(error: any): HttpResponse {
     if (error instanceof CustomValidationError) {
       return new HttpResponse({

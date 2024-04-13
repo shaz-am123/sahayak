@@ -16,6 +16,7 @@ jest.mock("../../src/repositories/ExpenseRepository", () => ({
       getExpenses: jest.fn(),
       getExpenseById: jest.fn(),
       deleteExpense: jest.fn(),
+      updateExpense: jest.fn(),
     })),
   },
 }));
@@ -417,6 +418,88 @@ describe("Expense Service tests", () => {
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe(mockError.message);
+    }
+  });
+
+  it("should be able to update an expense of an user using id", async () => {
+    const userId = "A001";
+    const expenseId = "1";
+    const expenseCategoryId = "1";
+
+    const mockExpenseCategory = new ExpenseCategoryResponse({
+      id: expenseCategoryId,
+      userId: userId,
+      name: "Food",
+      description: "",
+      expenseCount: 1,
+    });
+
+    const repositoryMockResponse = new Expense({
+      id: expenseId,
+      userId: userId,
+      amount: 200,
+      currency: Currency["INR" as keyof typeof Currency],
+      expenseCategoryId: expenseCategoryId,
+      description: "Zomato dinner order",
+      date: new Date("2024-02-25"),
+    });
+
+    const expectedResponse = new ExpenseResponse({
+      ...repositoryMockResponse,
+      id: expenseId,
+      expenseCategory: mockExpenseCategory,
+    });
+
+    expenseRepositoryMock.updateExpense.mockResolvedValue();
+    expenseRepositoryMock.getExpenseById.mockResolvedValue(
+      repositoryMockResponse,
+    );
+
+    const actualResponse = await expenseService.updateExpense(
+      userId,
+      expenseId,
+      {
+        amount: 200,
+        description: "Zomato dinner order",
+      },
+    );
+    expect(actualResponse).toEqual(expectedResponse);
+    expect(expenseRepositoryMock.updateExpense).toHaveBeenCalledWith(
+      userId,
+      expenseId,
+      {
+        amount: 200,
+        description: "Zomato dinner order",
+      },
+    );
+    expect(expenseRepositoryMock.getExpenseById).toHaveBeenCalledWith(
+      userId,
+      expenseId,
+    );
+  });
+
+  it("should be able to handle any error that occurs while updating an expense category of an user", async () => {
+    const userId = "A001";
+    const expenseId = "1";
+    const expenseCategoryId = "1";
+
+    const mockError = new Error("Internal Server Error");
+
+    expenseRepositoryMock.updateExpense.mockRejectedValue(mockError);
+    try {
+      await expenseService.updateExpense(userId, expenseId, {
+        amount: 200,
+        description: "Zomato dinner order",
+      });
+
+      expect(expenseRepositoryMock.updateExpense).toHaveBeenCalledWith(
+        userId,
+        expenseId,
+        { expenseCount: 1 },
+      );
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toEqual(mockError.message);
     }
   });
 });

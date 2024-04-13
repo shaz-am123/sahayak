@@ -14,6 +14,7 @@ jest.mock("../../src/services/ExpenseService", () => ({
       getExpenses: jest.fn(),
       getExpenseById: jest.fn(),
       deleteExpense: jest.fn(),
+      updateExpense: jest.fn(),
     })),
   },
 }));
@@ -246,6 +247,72 @@ describe("Expense Controller tests", () => {
       expenseId,
     );
 
+    expect(httpResponse.body).toEqual({ error: mockError.message });
+    expect(httpResponse.statusCode).toBe(500);
+  });
+
+  it("should be able to update an expense of an user", async () => {
+    const userId = "A001";
+    const expenseId = "1";
+    const expenseCategoryId = "1";
+
+    const expectedResponse = new ExpenseResponse({
+      id: expenseId,
+      userId: userId,
+      amount: 200,
+      currency: Currency["INR" as keyof typeof Currency],
+      expenseCategory: new ExpenseCategoryResponse({
+        id: expenseCategoryId,
+        userId: userId,
+        name: "Food",
+        description: "",
+        expenseCount: 0,
+      }),
+      description: "",
+      date: new Date("2024-02-25"),
+    });
+
+    expenseServiceMock.updateExpense.mockResolvedValue(expectedResponse);
+
+    const httpResponse = await expenseController.updateExpense(
+      userId,
+      expenseId,
+      {
+        amount: 200,
+        description: "",
+      },
+    );
+
+    expect(httpResponse.body).toEqual(expectedResponse);
+    expect(httpResponse.statusCode).toBe(200);
+    expect(expenseServiceMock.updateExpense).toHaveBeenCalledWith(
+      userId,
+      expenseId,
+      {
+        amount: 200,
+        description: "",
+      },
+    );
+  });
+
+  it("should handle any error that occurs while updating expense of an user", async () => {
+    const userId = "A001";
+    const expenseId = "1";
+    const mockError = new Error("Internal Server Error");
+
+    expenseServiceMock.updateExpense.mockRejectedValue(mockError);
+
+    const httpResponse = await expenseController.updateExpense(
+      userId,
+      expenseId,
+      {},
+    );
+
+    expect(expenseServiceMock.updateExpense).toHaveBeenCalledWith(
+      userId,
+      expenseId,
+      {},
+    );
     expect(httpResponse.body).toEqual({ error: mockError.message });
     expect(httpResponse.statusCode).toBe(500);
   });
