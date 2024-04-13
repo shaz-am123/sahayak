@@ -178,4 +178,14 @@ export class ExpenseService {
       date: expense.date,
     });
   }
+
+  async updateExpense(
+    userId: string,
+    expenseId: string,
+    updates: Partial<ExpenseRequest>,
+  ): Promise<ExpenseResponse> {
+    await this.expenseRepository.updateExpense(userId, expenseId, updates);
+
+    return this.getExpenseById(userId, expenseId);
+  }
 }

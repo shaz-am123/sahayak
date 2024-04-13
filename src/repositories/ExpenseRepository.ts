@@ -82,4 +82,18 @@ export class ExpenseRepository {
       date: expense.date,
     });
   }
+
+  async updateExpense(
+    userId: string,
+    expenseId: string,
+    updates: Object,
+  ): Promise<void> {
+    const updatedExpense = await ExpenseModel.findOneAndUpdate(
+      { id: expenseId, userId: userId },
+      updates,
+      { new: true },
+    );
+
+    if (!updatedExpense) throw new Error("Expense not found for given user");
+  }
 }

@@ -3,7 +3,6 @@ const router = express.Router();
 import { CategoryController } from "../controllers/CategoryController";
 import verifyToken from "../middleware/authMiddleware";
 import ExpenseCategoryRequest from "../dto/ExpenseCategoryRequest";
-import ExpenseCategory from "../domain/ExpenseCategory";
 
 const categoryController = CategoryController.getInstance();
 router.post(
@@ -76,7 +75,7 @@ router.put(
   async (req: express.Request, res: express.Response) => {
     const userId = req.userId!;
     const expenseCategoryId = req.params.expenseCategoryId;
-    const updates: Partial<ExpenseCategory> = { ...req.body };
+    const updates: Partial<ExpenseCategoryRequest> = { ...req.body };
     const expenseCategoryResponse =
       await categoryController.updateExpenseCategory(
         userId,
