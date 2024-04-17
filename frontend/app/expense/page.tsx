@@ -10,7 +10,7 @@ export default function Home() {
 
   return (
     <>
-      <h2>Home page</h2>
+      <h2>Expense page</h2>
       <Button onClick={handleClick}>Click me</Button>
       <div>{count}</div>
     </>
