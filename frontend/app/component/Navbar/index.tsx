@@ -2,8 +2,12 @@ import React from "react";
 import { Menubar } from "primereact/menubar";
 import { Image } from "primereact/image";
 import styles from "./styles.module.css";
+import { Button } from "primereact/button";
+import { handleLogout } from "../../api/auth/AuthService";
+import { useRouter } from "next/navigation";
 
 export default function Navbar() {
+  const router = useRouter()
   const menuItems = [
     {
       label: "Home",
@@ -25,11 +29,6 @@ export default function Navbar() {
       icon: "pi pi-fw pi-chart-bar",
       url: "/dashboard",
     },
-    {
-      label: "Logout",
-      icon: "pi pi-fw pi-sign-out",
-      url: "/logout",
-    },
   ];
 
   const logo = (
@@ -43,9 +42,13 @@ export default function Navbar() {
     </div>
   );
 
+  const logoutButton = (
+    <Button onClick={()=>handleLogout(router)}>Logout</Button>
+  )
+
   return (
     <div className={styles.card} data-testid="navbar">
-      <Menubar start={logo} model={menuItems} hidden={true} />
+      <Menubar start={logo} model={menuItems} hidden={true} end={logoutButton} />
     </div>
   );
 }
