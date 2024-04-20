@@ -1,28 +1,31 @@
-"use client"
-import { Button } from 'primereact/button';
-import { InputText } from 'primereact/inputtext';
-import { useState } from 'react';
-import { handleLogin } from './api/auth/AuthService';
-import { useRouter } from 'next/navigation';
+"use client";
+import { Button } from "primereact/button";
+import { useState } from "react";
+import styles from "./signupPage.module.scss";
+import LoginForm from "./component/LoginForm";
+import RegistrationForm from "./component/RegistrationForm";
 
 const LoginPage: React.FC = () => {
-  const router = useRouter();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-
+  const [isRegistered, setIsRegistered] = useState(true);
   return (
     <div>
-      <h2>Login</h2>
-      <div className="p-field">
-        <label htmlFor="username">Username</label>
-        <InputText id="username" value={username} onChange={(e) => setUsername(e.target.value)} />
-      </div>
-      <div className="p-field">
-        <label htmlFor="password">Password</label>
-        <InputText id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
-      </div>
-      <Button label="Login" onClick={()=>handleLogin(username, password, router)} />
+      {isRegistered && (
+        <>
+          <LoginForm />
+          <Button
+            className={styles.registerationButton}
+            label="New to Sahayak?"
+            severity="info"
+            rounded
+            onClick={() => {
+              setIsRegistered(false);
+            }}
+          />
+        </>
+      )}
+      {!isRegistered && (
+        <RegistrationForm />
+      )}
     </div>
   );
 };
