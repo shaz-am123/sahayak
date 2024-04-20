@@ -18,7 +18,7 @@ export default function Navbar() {
     {
       label: "Expense Categories",
       icon: "pi pi-fw pi-list",
-      url: "/category"
+      url: "/expenseCategory"
     },
     {
       label: "Reports",
