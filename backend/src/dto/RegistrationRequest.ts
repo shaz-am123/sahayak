@@ -23,10 +23,13 @@ class RegistrationRequest {
 
   @IsNotEmpty({ message: "Password is required" })
   @MinLength(8, { message: "Password must be at least 8 characters long" })
-  @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/, {
-    message:
-      "Password must contain at least one uppercase letter, one lowercase letter, and one number",
-  })
+  @Matches(
+    /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?])[a-zA-Z\d!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]{8,}$/,
+    {
+      message:
+        "Password must contain at least one uppercase letter, one lowercase letter, and one number",
+    }
+  )
   password: string;
 
   constructor(data: {
