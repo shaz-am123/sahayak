@@ -44,7 +44,7 @@ export default function Navbar() {
   );
 
   return (
-    <div className={styles.card}>
+    <div className={styles.card} data-testid="navbar">
       <Menubar start={logo} model={menuItems} hidden={true}/>
     </div>
   );
