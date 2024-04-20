@@ -8,27 +8,27 @@ export default function Navbar() {
     {
       label: "Home",
       icon: "pi pi-fw pi-home",
-      url: "/home"
+      url: "/home",
     },
     {
       label: "Expenses",
       icon: "pi pi-fw pi-money-bill",
-      url: "/expense"
+      url: "/expense",
     },
     {
       label: "Expense Categories",
       icon: "pi pi-fw pi-list",
-      url: "/expenseCategory"
+      url: "/expenseCategory",
     },
     {
       label: "Reports",
       icon: "pi pi-fw pi-chart-bar",
-      url: "/dashboard"
+      url: "/dashboard",
     },
     {
       label: "Logout",
       icon: "pi pi-fw pi-sign-out",
-      url: "/logout"
+      url: "/logout",
     },
   ];
 
@@ -45,7 +45,7 @@ export default function Navbar() {
 
   return (
     <div className={styles.card} data-testid="navbar">
-      <Menubar start={logo} model={menuItems} hidden={true}/>
+      <Menubar start={logo} model={menuItems} hidden={true} />
     </div>
   );
 }
