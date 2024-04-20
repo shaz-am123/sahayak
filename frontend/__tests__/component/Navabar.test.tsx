@@ -2,9 +2,9 @@ import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent } from "@testing-library/react";
 import Navbar from "../../app/component/Navbar";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 
-jest.mock("next/router", () => ({
+jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
@@ -18,7 +18,7 @@ describe("Navbar component", () => {
     expect(logo).toBeInTheDocument();
   });
 
-  test("should have all the navigation items", () => {
+  test("should have all the navigation items and a logout button", () => {
     render(<Navbar />);
 
     screen.getByText("Home");
