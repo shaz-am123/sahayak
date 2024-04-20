@@ -1,6 +1,6 @@
 import React from "react";
-import '@testing-library/jest-dom'
-import { render, screen, fireEvent } from '@testing-library/react'
+import "@testing-library/jest-dom";
+import { render, screen, fireEvent } from "@testing-library/react";
 import Navbar from "../../app/component/Navbar";
 import { useRouter } from "next/router";
 
@@ -9,7 +9,7 @@ jest.mock("next/router", () => ({
 }));
 
 describe("Navbar component", () => {
-  test("renders correctly", () => { 
+  test("renders correctly", () => {
     render(<Navbar />);
     const navbar = screen.getByTestId("navbar");
     expect(navbar).toBeInTheDocument();
