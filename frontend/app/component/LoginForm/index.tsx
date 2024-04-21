@@ -11,8 +11,8 @@ export default function LoginForm() {
   const [password, setPassword] = useState("");
 
   return (
-    <div className={styles.formContainer}>
-      <h1>Login</h1>
+    <div className={styles.formContainer} data-testid="loginForm">
+      <h1 data-testid = "heading">Login</h1>
       <label htmlFor="username">Username</label>
       <InputText
         className={styles.inputField}

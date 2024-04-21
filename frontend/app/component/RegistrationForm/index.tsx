@@ -14,8 +14,8 @@ export default function RegistrationForm() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   return (
-    <div className={styles.formContainer}>
-      <h1>Register</h1>
+    <div className={styles.formContainer} data-testid = "registrationForm">
+      <h1 data-testid = "heading">Register</h1>
       <label htmlFor="username">Username</label>
       <InputText
         className={styles.inputField}
