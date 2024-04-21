@@ -1,33 +1,25 @@
 "use client";
-import { Button } from "primereact/button";
-import { useState } from "react";
-import styles from "./signupPage.module.scss";
-import LoginForm from "./component/LoginForm";
+import React, { useState } from "react";
+import { InputSwitch } from "primereact/inputswitch";
+import styles from "./styles.module.scss";
 import RegistrationForm from "./component/RegistrationForm";
+import LoginForm from "./component/LoginForm";
 
-const LoginPage: React.FC = () => {
-  const [isRegistered, setIsRegistered] = useState(true);
+export default function StartPage() {
+  const [isNewUser, setIsNewUser] = useState(false);
+
   return (
-    <div>
-      {isRegistered && (
-        <>
-          <LoginForm />
-          <Button
-            className={styles.registerationButton}
-            label="New to Sahayak?"
-            severity="info"
-            rounded
-            onClick={() => {
-              setIsRegistered(false);
-            }}
-          />
-        </>
-      )}
-      {!isRegistered && (
-        <RegistrationForm />
-      )}
+    <div className={styles.formContainer}>
+      <label className={styles.label} htmlFor="newUserCheckbox">
+        New User?
+      </label>
+      <InputSwitch
+        id="newUserCheckBox"
+        checked={isNewUser}
+        onChange={(e) => setIsNewUser(e.value)}
+      />
+      {isNewUser && <RegistrationForm />}
+      {!isNewUser && <LoginForm />}
     </div>
   );
-};
-
-export default LoginPage;
+}

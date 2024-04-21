@@ -1,34 +1,35 @@
 html {
-  font-size: 14px;
+  font-size: 15px;
 }
 
 body {
   min-height: 100vh;
   max-width: 100vw;
-  color: #333;
+  color: black;
   background: radial-gradient(
       135.35% 140.89% at 107.72% -60.35%,
-      rgba(183, 230, 243, 0.8) 75%,
-      rgba(255, 255, 255, 0) 100%
+      rgba(246, 246, 244, 0.881) 75%,
+      rgb(27, 25, 33) 100%
     ),
-    #f0f0f0;
-
+    #fff;
   margin: 0 auto;
   width: 100%;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 400;
   margin: 0;
   line-height: 1.6;
-  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
-    Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 }
 
+.indie-flower-regular {
+  font-family: "Indie Flower", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+
 .main-wrapper {
-  background-image: url("/background.svg");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: contain;
