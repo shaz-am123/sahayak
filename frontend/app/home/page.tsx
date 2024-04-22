@@ -9,9 +9,5 @@ export default function Home() {
       <h2>Home page</h2>
     </>
   );
-  return (
-    <ProtectedContent
-      pageContent={pageContent}
-    />
-  );
+  return <ProtectedContent pageContent={pageContent} />;
 }

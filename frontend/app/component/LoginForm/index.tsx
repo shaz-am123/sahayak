@@ -12,7 +12,7 @@ export default function LoginForm() {
 
   return (
     <div className={styles.formContainer} data-testid="loginForm">
-      <h1 data-testid = "heading">Login</h1>
+      <h1 data-testid="heading">Login</h1>
       <label htmlFor="username">Username</label>
       <InputText
         className={styles.inputField}

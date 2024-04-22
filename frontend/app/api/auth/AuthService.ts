@@ -5,7 +5,7 @@ const BACKEND_SERVICE_URL =
 export const handleLogin = async (
   username: string,
   password: string,
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ) => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/login`, {
     method: "POST",
@@ -33,7 +33,7 @@ export const handleRegistration = async (
   name: string,
   emailAddress: string,
   password: string,
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ) => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/register`, {
     method: "POST",
@@ -50,6 +50,6 @@ export const handleRegistration = async (
 
   if (!res.ok) alert("Registration failed");
   else {
-    handleLogin(username, password, router)
+    handleLogin(username, password, router);
   }
 };

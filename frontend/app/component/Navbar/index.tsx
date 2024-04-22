@@ -7,7 +7,7 @@ import { handleLogout } from "../../api/auth/AuthService";
 import { useRouter } from "next/navigation";
 
 export default function Navbar() {
-  const router = useRouter()
+  const router = useRouter();
   const menuItems = [
     {
       label: "Home",
@@ -43,12 +43,17 @@ export default function Navbar() {
   );
 
   const logoutButton = (
-    <Button onClick={()=>handleLogout(router)}>Logout</Button>
-  )
+    <Button onClick={() => handleLogout(router)}>Logout</Button>
+  );
 
   return (
     <div className={styles.card} data-testid="navbar">
-      <Menubar start={logo} model={menuItems} hidden={true} end={logoutButton} />
+      <Menubar
+        start={logo}
+        model={menuItems}
+        hidden={true}
+        end={logoutButton}
+      />
     </div>
   );
 }

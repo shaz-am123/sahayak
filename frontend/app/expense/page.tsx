@@ -9,9 +9,5 @@ export default function Expense() {
       <h2>Expense page</h2>
     </>
   );
-  return (
-    <ProtectedContent
-      pageContent={pageContent}
-    />
-  );
+  return <ProtectedContent pageContent={pageContent} />;
 }

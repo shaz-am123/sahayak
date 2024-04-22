@@ -9,9 +9,5 @@ export default function Dashboard() {
       <h2>Dashboard page</h2>
     </>
   );
-  return (
-    <ProtectedContent
-      pageContent={pageContent}
-    />
-  );
+  return <ProtectedContent pageContent={pageContent} />;
 }
