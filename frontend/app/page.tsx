@@ -10,13 +10,14 @@ export default function StartPage() {
 
   return (
     <div className={styles.formContainer}>
-      <label className={styles.label} htmlFor="newUserCheckbox">
+      <label className={styles.label} htmlFor="newUserToggle">
         New User?
       </label>
       <InputSwitch
+        data-testid="newUserToggle"
         id="newUserCheckBox"
         checked={isNewUser}
-        onChange={(e) => setIsNewUser(e.value)}
+        onClick={() => setIsNewUser(!isNewUser)}
       />
       {isNewUser && <RegistrationForm />}
       {!isNewUser && <LoginForm />}
