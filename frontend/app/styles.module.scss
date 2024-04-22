@@ -1,0 +1,17 @@
+.formContainer{
+    margin: 3% auto;
+    width: 30%;
+    height: 85vh;
+    background-color: rgba(255, 255, 255, 0.10);
+    padding: 24px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+}
+
+.label{
+    font-size: small;
+    position: relative;
+    bottom: 6px;
+    margin:  0 5px;
+    font-weight: bold;
+}

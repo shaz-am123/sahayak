@@ -3,8 +3,18 @@ import userRoutes from "./routes/category";
 import authRoutes from "./routes/auth";
 import expenseRoutes from "./routes/expense";
 import { DatabaseConfiguration } from "./db";
+import cors from "cors";
+import bodyParser from "body-parser";
 
 const app = express();
+const corsOptions = {
+  origin: process.env.FRONTEND_SERVICE_URL,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+};
+
+app.use(cors(corsOptions));
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 
 DatabaseConfiguration.getInstance();

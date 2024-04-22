@@ -1,18 +1,26 @@
 "use client";
-import { Button } from "primereact/button";
-import { useState } from "react";
+import React, { useState } from "react";
+import { InputSwitch } from "primereact/inputswitch";
+import styles from "./styles.module.scss";
+import RegistrationForm from "./component/RegistrationForm";
+import LoginForm from "./component/LoginForm";
 
-export default function Home() {
-  const [count, setCount] = useState(0);
-  const handleClick = () => {
-    setCount(count + 1);
-  };
+export default function StartPage() {
+  const [isNewUser, setIsNewUser] = useState(false);
 
   return (
-    <>
-      <h2>Home page</h2>
-      <Button onClick={handleClick}>Click me</Button>
-      <div>{count}</div>
-    </>
+    <div className={styles.formContainer}>
+      <label className={styles.label} htmlFor="newUserToggle">
+        New User?
+      </label>
+      <InputSwitch
+        data-testid="newUserToggle"
+        id="newUserCheckBox"
+        checked={isNewUser}
+        onClick={() => setIsNewUser(!isNewUser)}
+      />
+      {isNewUser && <RegistrationForm />}
+      {!isNewUser && <LoginForm />}
+    </div>
   );
 }

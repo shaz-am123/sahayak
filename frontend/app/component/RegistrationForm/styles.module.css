@@ -1,0 +1,13 @@
+.formContainer{
+    padding: 2%;   
+    justify-content: center;
+}
+
+.inputField{
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.button{
+    margin: 10px 0;
+}
