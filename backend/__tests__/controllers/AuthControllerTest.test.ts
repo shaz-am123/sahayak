@@ -22,7 +22,7 @@ describe("Auth Controller tests", () => {
   it("should handle login of a user", async () => {
     const loginRequest = new LoginRequest({
       username: "ram123",
-      password: "myPassword123",
+      password: "myPassword123!",
     });
     const expectedResponse = new LoginResponse({
       id: "A001",
@@ -43,7 +43,7 @@ describe("Auth Controller tests", () => {
       name: "Ram",
       emailAddress: "ram@gmail.com",
       username: "ram123",
-      password: "myPassword123",
+      password: "myPassword123!",
     });
     const expectedResponse: RegistrationResponse = {
       ...registrationRequest,
@@ -63,7 +63,7 @@ describe("Auth Controller tests", () => {
       name: "ram",
       emailAddress: "ram@gmail.com",
       username: "",
-      password: "myPass123",
+      password: "myPassword123!",
     });
     const validationError = new CustomValidationError("Validation error", [
       {
@@ -71,7 +71,7 @@ describe("Auth Controller tests", () => {
           name: "ram",
           emailAddress: "ram@gmail.com",
           username: "",
-          password: "myPass123",
+          password: "myPassword123!",
         },
         value: "",
         property: "username",
@@ -126,7 +126,7 @@ describe("Auth Controller tests", () => {
       name: "Ram",
       emailAddress: "ram@gmail.com",
       username: "ram123",
-      password: "myPassword123",
+      password: "myPassword123!",
     });
     const errorMessage = "Internal Server Error";
     const error = new Error(errorMessage);
@@ -144,7 +144,7 @@ describe("Auth Controller tests", () => {
   it("should handle other errors during user login", async () => {
     const mockLoginRequest = new LoginRequest({
       username: "ram123",
-      password: "myPassword123",
+      password: "myPassword123!",
     });
     const errorMessage = "Internal Server Error";
     const error = new Error(errorMessage);
