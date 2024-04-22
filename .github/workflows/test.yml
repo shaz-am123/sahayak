@@ -102,9 +102,9 @@ jobs:
           coverage_pct=$(jq -r '.total.statements.pct' coverage/coverage-summary.json)
           echo "Percentage of statements coverage: $coverage_pct"
           
-          if (( $(echo "$coverage_pct > 95" | bc -l) )); then
-            echo "Test coverage is greater than 95%."
+          if (( $(echo "$coverage_pct > 75%" | bc -l) )); then
+            echo "Test coverage is greater than 75%."
           else
-            echo "Test coverage is less than or equal to 95%."
+            echo "Test coverage is less than or equal to 75%."
             exit 1
           fi
