@@ -60,7 +60,6 @@ export default function RegistrationForm() {
 
       <Button
         label="Register"
-        severity="success"
         onClick={() => {
           if (confirmPassword !== password) {
             alert("The passwords don't match");
