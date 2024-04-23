@@ -1,22 +1,23 @@
 import React from "react";
 import AccessDenied from "../AccessDenied";
 import Navbar from "../Navbar";
+import styles from "./styles.module.scss"
+import { isAuthenticated } from "../../api/auth/AuthService";
 
-interface ProtectedContentProps{
-  pageContent: JSX.Element,
-  alternateContent?: JSX.Element
+interface ProtectedContentProps {
+  pageContent: JSX.Element;
+  alternateContent?: JSX.Element;
 }
 export default function ProtectedContent({
   pageContent,
   alternateContent = <AccessDenied />,
 }: ProtectedContentProps) {
-  const token = localStorage.getItem("token");
-  if (!token) return alternateContent;
+  if (!isAuthenticated()) return alternateContent;
   else
     return (
       <>
         <Navbar />
-        {pageContent}
+        <div className={styles.pageContentContainer}>{pageContent}</div>
       </>
     );
 }
