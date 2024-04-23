@@ -5,6 +5,7 @@ import styles from "./styles.module.css";
 import { Button } from "primereact/button";
 import { handleLogout } from "../../api/auth/AuthService";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function Navbar() {
   const router = useRouter();
@@ -42,17 +43,31 @@ export default function Navbar() {
     </div>
   );
 
-  const logoutButton = (
-    <Button onClick={() => handleLogout(router)}>Logout</Button>
+  const menu = (
+    <>
+      {menuItems.map((menuItem) => (
+        <Link
+          key={menuItem.label}
+          href={menuItem.url}
+          className={styles.navLink}
+        >
+          <p className={`${menuItem.icon} menuIcon`} />
+          {" " + menuItem.label}
+        </Link>
+      ))}
+      <Button data-testid="logoutButton" onClick={() => handleLogout(router)}>
+        Logout
+      </Button>
+    </>
   );
 
   return (
-    <div className={styles.card} data-testid="navbar">
+    <div data-testid="navbar">
       <Menubar
         start={logo}
-        model={menuItems}
         hidden={true}
-        end={logoutButton}
+        end={menu}
+        className={styles.menubar}
       />
     </div>
   );
