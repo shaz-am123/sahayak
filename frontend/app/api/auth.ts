@@ -69,3 +69,7 @@ export const getUser = async () => {
     return data;
   }
 };
+
+export const isAuthenticated = async () =>{
+  return localStorage.getItem("token")!== null
+}
