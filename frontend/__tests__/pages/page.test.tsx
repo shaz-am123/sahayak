@@ -8,7 +8,6 @@ import {
 } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import StartPage from "../../app/page";
-import { useRouter } from "next/navigation";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
