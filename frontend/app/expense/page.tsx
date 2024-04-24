@@ -3,7 +3,7 @@ import ProtectedContent from "../component/ProtectedContent";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useEffect, useState } from "react";
-import { getExpenses } from "../api/endpoints/expense";
+import { getExpenses } from "../api/expense";
 
 interface ExpenseTable {}
 export default function Expense() {
