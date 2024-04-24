@@ -4,7 +4,6 @@ import ExpenseRequest from "../../src/dto/ExpenseRequest";
 import ExpenseResponse from "../../src/dto/ExpenseResponse";
 import MultipleExpenseCategoriesResponse from "../../src/dto/MultipleExpenseCategoriesResponse";
 import MultipleExpensesResponse from "../../src/dto/MultipleExpensesResponse";
-import Currency from "../../src/enums/Currency";
 import { ExpenseRepository } from "../../src/repositories/ExpenseRepository";
 import { CategoryService } from "../../src/services/CategoryService";
 import { ExpenseService } from "../../src/services/ExpenseService";
@@ -54,7 +53,6 @@ describe("Expense Service tests", () => {
     const expenseCategoryId = "1";
     const createExpenseRequest = new ExpenseRequest({
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -72,7 +70,6 @@ describe("Expense Service tests", () => {
       id: expenseId,
       userId: userId,
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategory: mockUpdateCategoryResponse,
       description: "",
       date: new Date("2024-02-25"),
@@ -82,7 +79,6 @@ describe("Expense Service tests", () => {
       id: expenseId,
       userId: userId,
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -122,7 +118,6 @@ describe("Expense Service tests", () => {
     const expenseCategoryId = "1";
     const createExpenseRequest = new ExpenseRequest({
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -156,7 +151,6 @@ describe("Expense Service tests", () => {
 
     const createExpenseRequest = new ExpenseRequest({
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -198,7 +192,6 @@ describe("Expense Service tests", () => {
         id: "1",
         userId: userId,
         amount: 100,
-        currency: Currency["INR" as keyof typeof Currency],
         expenseCategoryId: "1",
         description: "",
         date: new Date("2024-02-25"),
@@ -207,7 +200,6 @@ describe("Expense Service tests", () => {
         id: "2",
         userId: userId,
         amount: 500,
-        currency: Currency["INR" as keyof typeof Currency],
         expenseCategoryId: "2",
         description: "",
         date: new Date("2024-02-15"),
@@ -220,7 +212,6 @@ describe("Expense Service tests", () => {
           id: "1",
           userId: userId,
           amount: 100,
-          currency: Currency["INR" as keyof typeof Currency],
           expenseCategory: mockCategories[0],
           description: "",
           date: new Date("2024-02-25"),
@@ -229,7 +220,6 @@ describe("Expense Service tests", () => {
           id: "2",
           userId: userId,
           amount: 500,
-          currency: Currency["INR" as keyof typeof Currency],
           expenseCategory: mockCategories[1],
           description: "",
           date: new Date("2024-02-15"),
@@ -282,7 +272,6 @@ describe("Expense Service tests", () => {
       id: expenseId,
       userId: userId,
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -292,7 +281,6 @@ describe("Expense Service tests", () => {
       id: "1",
       userId: userId,
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategory: mockExpenseCategory,
       description: "",
       date: new Date("2024-02-25"),
@@ -359,7 +347,6 @@ describe("Expense Service tests", () => {
       id: expenseId,
       userId: userId,
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -369,7 +356,6 @@ describe("Expense Service tests", () => {
       id: "1",
       userId: userId,
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategory: mockExpenseCategory,
       description: "",
       date: new Date("2024-02-25"),
@@ -427,7 +413,6 @@ describe("Expense Service tests", () => {
       id: expenseId,
       userId: userId,
       amount: 200,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "Zomato dinner order",
       date: new Date("2024-02-25"),

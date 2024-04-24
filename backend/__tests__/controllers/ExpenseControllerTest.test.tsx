@@ -2,7 +2,6 @@ import ExpenseCategoryResponse from "../../src/dto/ExpenseCategoryResponse";
 import ExpenseRequest from "../../src/dto/ExpenseRequest";
 import ExpenseResponse from "../../src/dto/ExpenseResponse";
 import MultipleExpensesResponse from "../../src/dto/MultipleExpensesResponse";
-import Currency from "../../src/enums/Currency";
 import { CustomValidationError } from "../../src/errors/CustomValidationError";
 import { ExpenseController } from "./../../src/controllers/ExpenseController";
 import { ExpenseService } from "./../../src/services/ExpenseService";
@@ -30,7 +29,6 @@ describe("Expense Controller tests", () => {
     const expenseCategoryId = "1";
     const createExpenseRequest = new ExpenseRequest({
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -39,7 +37,6 @@ describe("Expense Controller tests", () => {
       id: expenseId,
       userId: userId,
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategory: new ExpenseCategoryResponse({
         id: expenseCategoryId,
         userId: userId,
@@ -67,7 +64,6 @@ describe("Expense Controller tests", () => {
     const expenseCategoryId = "1";
     const mockCreateExpenseRequest = new ExpenseRequest({
       amount: -5,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -76,7 +72,6 @@ describe("Expense Controller tests", () => {
       {
         target: {
           amount: -5,
-          currency: "INR",
           expenseCategoryId: expenseCategoryId,
           description: "",
           date: new Date("2024-02-25"),
@@ -106,7 +101,6 @@ describe("Expense Controller tests", () => {
     const expenseCategoryId = "1";
     const mockCreateExpenseRequest = new ExpenseRequest({
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -160,7 +154,6 @@ describe("Expense Controller tests", () => {
       id: expenseId,
       userId: userId,
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategory: new ExpenseCategoryResponse({
         id: expenseCategoryId,
         userId: userId,
@@ -208,7 +201,6 @@ describe("Expense Controller tests", () => {
       id: expenseId,
       userId: userId,
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategory: new ExpenseCategoryResponse({
         id: expenseCategoryId,
         userId: userId,
@@ -260,7 +252,6 @@ describe("Expense Controller tests", () => {
       id: expenseId,
       userId: userId,
       amount: 200,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategory: new ExpenseCategoryResponse({
         id: expenseCategoryId,
         userId: userId,
