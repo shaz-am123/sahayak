@@ -1,4 +1,3 @@
-
 class Expense {
   id: string | null;
   userId: string;
