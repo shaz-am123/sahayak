@@ -53,3 +53,20 @@ export const handleRegistration = async (
     handleLogin(username, password, router);
   }
 };
+
+
+export const getUser = async ()=>{
+  const res = await fetch(`${BACKEND_SERVICE_URL}/auth/user`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      "Authorization": localStorage.getItem("token")!
+    },
+  });
+
+  if (!res.ok) alert("Couldn't find user");
+  else {
+    const data = await res.json();
+    return data;
+  }
+}
