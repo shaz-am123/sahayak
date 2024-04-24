@@ -20,11 +20,6 @@ export default function Expense() {
       sort: true,
     },
     {
-      field: "currency",
-      header: "Currency",
-      sort: false,
-    },
-    {
       field: "expenseCategory.name",
       header: "Category",
       sort: false,
