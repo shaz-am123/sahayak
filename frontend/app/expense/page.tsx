@@ -16,7 +16,7 @@ export default function Expense() {
   const expenseTableColumns = [
     {
       field: "amount",
-      header: "Amount",
+      header: "Amount(₹)",
       sort: true,
     },
     {
