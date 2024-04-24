@@ -70,6 +70,6 @@ export const getUser = async () => {
   }
 };
 
-export const isAuthenticated = async () =>{
-  return localStorage.getItem("token")!== null
-}
+export const isAuthenticated = async () => {
+  return localStorage.getItem("token") !== null;
+};

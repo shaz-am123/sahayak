@@ -5,9 +5,8 @@ import { Column } from "primereact/column";
 import { useEffect, useState } from "react";
 import { getExpenses } from "../api/expense";
 
-interface ExpenseTable {}
 export default function Expense() {
-  const [tableData, setTableData] = useState<ExpenseTable[]>([]);
+  const [tableData, setTableData] = useState();
 
   useEffect(() => {
     getExpenses().then((response) => {
@@ -42,7 +41,7 @@ export default function Expense() {
           month: "short",
           day: "2-digit",
         });
-      }
+      },
     },
     {
       field: "description",
@@ -61,13 +60,21 @@ export default function Expense() {
         {...(column.body && { body: column.body })}
       />
     ));
-  const pageContent = (
-    <>
-      <h2>My Expenses</h2>
-      <DataTable stripedRows showGridlines value={tableData}>
-        {getExpenseTableColumns()}
-      </DataTable>
-    </>
-  );
+  const pageContent =
+    tableData === undefined ? (
+      <p>Loading</p>
+    ) : (
+      <>
+        <h2>My Expenses</h2>
+        <DataTable
+          stripedRows
+          showGridlines
+          value={tableData}
+          data-testid="expenses-table"
+        >
+          {getExpenseTableColumns()}
+        </DataTable>
+      </>
+    );
   return <ProtectedContent pageContent={pageContent} />;
 }

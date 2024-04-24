@@ -1,11 +1,5 @@
 import React from "react";
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-  waitFor,
-} from "@testing-library/react";
+import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Home from "../../app/home/page";
 jest.mock("next/navigation", () => ({
@@ -13,9 +7,9 @@ jest.mock("next/navigation", () => ({
 }));
 
 jest.mock("../../app/api/auth", () => ({
-    getUser: jest.fn(() => Promise.resolve({ name: "Test User" })),
-    isAuthenticated: jest.fn(() => Promise.resolve(true))
-  }));
+  getUser: jest.fn(() => Promise.resolve({ name: "Test User" })),
+  isAuthenticated: jest.fn(() => Promise.resolve(true)),
+}));
 
 describe("HomePage component", () => {
   it("renders welcome message with user's name", async () => {
@@ -27,8 +21,8 @@ describe("HomePage component", () => {
       expect(screen.getByText("Welcome Test User!")).toBeInTheDocument();
       expect(
         screen.getByText(
-          "Sahayak, your trusted partner for effortless money management. Simplify your finances and achieve your goals with confidence."
-        )
+          "Sahayak, your trusted partner for effortless money management. Simplify your finances and achieve your goals with confidence.",
+        ),
       ).toBeInTheDocument();
     });
   });

@@ -4,14 +4,13 @@ const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
 
 export const getExpenses = async () => {
-    if(!isAuthenticated())
-        return;
+  if (!isAuthenticated()) return;
 
   const res = await fetch(`${BACKEND_SERVICE_URL}/expenses`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": localStorage.getItem("token")!
+      Authorization: localStorage.getItem("token")!,
     },
   });
 

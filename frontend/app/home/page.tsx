@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import ProtectedContent from "../component/ProtectedContent";
 import UserResponse from "../types/UserResponse";
 import { getUser } from "../api/auth";
-import styles from "./styles.module.scss"
+import styles from "./styles.module.scss";
 
 export default function Home() {
   const [user, setUser] = useState<UserResponse>();
@@ -11,13 +11,16 @@ export default function Home() {
     getUser().then((user) => setUser(user));
   }, []);
   const pageContent =
-    user == undefined ? (
+    user === undefined ? (
       <p>Loading</p>
     ) : (
       <>
         <div className={styles.greetingContainer}>
           <h1>Welcome {user.name}!</h1>
-          <h3>Sahayak, your trusted partner for effortless money management. Simplify your finances and achieve your goals with confidence.</h3>
+          <h3>
+            Sahayak, your trusted partner for effortless money management.
+            Simplify your finances and achieve your goals with confidence.
+          </h3>
         </div>
       </>
     );
