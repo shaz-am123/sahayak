@@ -54,13 +54,12 @@ export const handleRegistration = async (
   }
 };
 
-
-export const getUser = async ()=>{
+export const getUser = async () => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/user`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": localStorage.getItem("token")!
+      Authorization: localStorage.getItem("token")!,
     },
   });
 
@@ -69,4 +68,4 @@ export const getUser = async ()=>{
     const data = await res.json();
     return data;
   }
-}
+};

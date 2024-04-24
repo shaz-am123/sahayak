@@ -1,11 +1,6 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import {
-  render,
-  screen,
-  fireEvent,
-  act,
-} from "@testing-library/react";
+import { render, screen, fireEvent, act } from "@testing-library/react";
 import RegistrationForm from "../../app/component/RegistrationForm";
 import { handleRegistration } from "../../app/api/auth";
 
