@@ -41,7 +41,6 @@ export class ExpenseService {
       id: null,
       userId: userId,
       amount: createExpenseRequest.amount,
-      currency: createExpenseRequest.currency,
       expenseCategoryId: createExpenseRequest.expenseCategoryId,
       description: createExpenseRequest.description,
       date: createExpenseRequest.date,
@@ -66,7 +65,6 @@ export class ExpenseService {
       id: createdExpense.id!,
       userId: createdExpense.userId,
       amount: createdExpense.amount,
-      currency: createdExpense.currency,
       expenseCategory: expenseCategoryResponse,
       description: createdExpense.description,
       date: createdExpense.date,
@@ -92,7 +90,6 @@ export class ExpenseService {
         id: expense.id!,
         userId: expense.userId,
         amount: expense.amount,
-        currency: expense.currency,
         expenseCategory: new ExpenseCategoryResponse({
           ...expenseCategoryResponse,
           id: expenseCategoryResponse.id!,
@@ -127,7 +124,6 @@ export class ExpenseService {
       id: expense.id!,
       userId: expense.userId,
       amount: expense.amount,
-      currency: expense.currency,
       expenseCategory: new ExpenseCategoryResponse({
         ...expenseCategoryResponse,
         id: expenseCategoryResponse.id!,
@@ -164,7 +160,6 @@ export class ExpenseService {
       id: expense.id!,
       userId: expense.userId,
       amount: expense.amount,
-      currency: expense.currency,
       expenseCategory: new ExpenseCategoryResponse({
         ...newExpenseCategoryResponse,
         id: newExpenseCategoryResponse.id!,

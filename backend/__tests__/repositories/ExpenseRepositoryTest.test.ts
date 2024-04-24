@@ -3,7 +3,6 @@ import { DatabaseConfiguration } from "../../src/db";
 import Expense from "../../src/domain/Expense";
 import ExpenseModel from "../../src/models/ExpenseModel";
 import { ExpenseRepository } from "../../src/repositories/ExpenseRepository";
-import Currency from "../../src/enums/Currency";
 
 describe("Expense Repository Tests", () => {
   const userId = new mongoose.Types.ObjectId("660a9ca3cdaf2bd4e9f86c2c");
@@ -24,7 +23,6 @@ describe("Expense Repository Tests", () => {
     const expenseEntity = new ExpenseModel({
       userId: userId,
       amount: 100,
-      currency: "INR",
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -43,7 +41,6 @@ describe("Expense Repository Tests", () => {
       id: null,
       userId: userId.toString(),
       amount: 500,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -62,7 +59,6 @@ describe("Expense Repository Tests", () => {
       id: null,
       userId: userId.toString(),
       amount: 500,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -90,7 +86,6 @@ describe("Expense Repository Tests", () => {
         id: expenseId,
         userId: userId.toString(),
         amount: 100,
-        currency: Currency["INR" as keyof typeof Currency],
         expenseCategoryId: expenseCategoryId,
         description: "",
         date: new Date("2024-02-25"),
@@ -132,7 +127,6 @@ describe("Expense Repository Tests", () => {
       id: expenseId,
       userId: userId.toString(),
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -160,7 +154,6 @@ describe("Expense Repository Tests", () => {
       id: expenseId,
       userId: userId.toString(),
       amount: 100,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "",
       date: new Date("2024-02-25"),
@@ -194,7 +187,6 @@ describe("Expense Repository Tests", () => {
       id: expenseId,
       userId: userId.toString(),
       amount: 200,
-      currency: Currency["INR" as keyof typeof Currency],
       expenseCategoryId: expenseCategoryId,
       description: "Zomato dinner order",
       date: new Date("2024-02-25"),

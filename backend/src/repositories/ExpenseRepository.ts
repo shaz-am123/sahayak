@@ -1,5 +1,4 @@
 import Expense from "../domain/Expense";
-import Currency from "../enums/Currency";
 import ExpenseModel from "../models/ExpenseModel";
 
 export class ExpenseRepository {
@@ -19,7 +18,6 @@ export class ExpenseRepository {
       id: expenseEntity.id,
       userId: expenseEntity.userId.toString(),
       amount: expenseEntity.amount,
-      currency: Currency[expenseEntity.currency as keyof typeof Currency],
       expenseCategoryId: expenseEntity.expenseCategoryId,
       description: expenseEntity.description,
       date: expenseEntity.date,
@@ -35,7 +33,6 @@ export class ExpenseRepository {
         id: expenseEntity.id,
         userId: expenseEntity.userId.toString(),
         amount: expenseEntity.amount,
-        currency: Currency[expenseEntity.currency as keyof typeof Currency],
         expenseCategoryId: expenseEntity.expenseCategoryId,
         description: expenseEntity.description,
         date: expenseEntity.date,
@@ -55,7 +52,6 @@ export class ExpenseRepository {
       id: expense.id,
       userId: expense.userId.toString(),
       amount: expense.amount,
-      currency: Currency[expense.currency as keyof typeof Currency],
       expenseCategoryId: expense.expenseCategoryId,
       description: expense.description,
       date: expense.date,
@@ -76,7 +72,6 @@ export class ExpenseRepository {
       id: expense.id,
       userId: expense.userId.toString(),
       amount: expense.amount,
-      currency: Currency[expense.currency as keyof typeof Currency],
       expenseCategoryId: expense.expenseCategoryId,
       description: expense.description,
       date: expense.date,

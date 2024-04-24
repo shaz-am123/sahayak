@@ -6,17 +6,12 @@ import {
   IsNotEmpty,
   IsPositive,
 } from "class-validator";
-import Currency from "../enums/Currency";
 
 class ExpenseRequest {
   @IsNotEmpty({ message: "Amount must not be empty" })
   @IsNumber({}, { message: "Amount must be a number" })
   @IsPositive({ message: "Amount must be a positive number" })
   amount: number;
-
-  @IsNotEmpty({ message: "Currency must not be empty" })
-  @IsEnum(Currency, { message: "Invalid currency" })
-  currency: Currency;
 
   @IsNotEmpty({ message: "Expense category ID must not be empty" })
   @IsString({ message: "Expense category ID must be a string" })
@@ -34,10 +29,8 @@ class ExpenseRequest {
     expenseCategoryId: string;
     description: string;
     date: Date;
-    currency: Currency;
   }) {
     this.amount = data.amount;
-    this.currency = data.currency;
     this.expenseCategoryId = data.expenseCategoryId;
     this.description = data.description;
     this.date = data.date;

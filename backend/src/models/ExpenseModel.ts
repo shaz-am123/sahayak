@@ -4,7 +4,6 @@ interface IExpense extends Document {
   id: string;
   userId: string;
   amount: number;
-  currency: string;
   expenseCategoryId: string;
   description: string;
   date: Date;
@@ -18,7 +17,6 @@ const ExpenseSchema: Schema = new Schema({
     required: true,
   },
   amount: { type: Number, required: true },
-  currency: { type: String, required: true },
   expenseCategoryId: { type: String, required: true },
   description: { type: String, required: false },
   date: { type: Date, required: true },

@@ -6,15 +6,13 @@ import Expense from "../../app/expense/page";
 const mockExpenses = {
   expenses: [
     {
-      amount: "160",
-      currency: "AUS",
+      amount: 160,
       expenseCategory: { name: "Food" },
       date: "2022-04-24T00:00:00.000Z",
       description: "Lunch",
     },
     {
-      amount: "1800",
-      currency: "USD",
+      amount: 1800,
       expenseCategory: { name: "Travel" },
       date: "2022-04-25T00:00:00.000Z",
       description: "Hotel Booking",
@@ -46,7 +44,6 @@ describe("Expenses listing component", () => {
       expect(screen.getByTestId("expenses-table")).toBeInTheDocument();
       mockExpenses.expenses.map((expense): void => {
         expect(screen.getByText(expense.amount)).toBeInTheDocument();
-        expect(screen.getByText(expense.currency)).toBeInTheDocument();
         expect(
           screen.getByText(expense.expenseCategory.name),
         ).toBeInTheDocument();
