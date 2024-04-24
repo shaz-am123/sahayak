@@ -63,6 +63,7 @@ export default function RegistrationForm() {
         onClick={() => {
           if (confirmPassword !== password) {
             alert("The passwords don't match");
+            throw new Error("The passwords don't match")
           }
           handleRegistration(username, name, emailAddress, password, router);
         }}
