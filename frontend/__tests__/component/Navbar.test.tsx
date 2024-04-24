@@ -2,7 +2,6 @@ import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Navbar from "../../app/component/Navbar";
-import { useRouter } from "next/navigation";
 import { handleLogout } from "../../app/api/auth";
 
 jest.mock("next/navigation", () => ({
