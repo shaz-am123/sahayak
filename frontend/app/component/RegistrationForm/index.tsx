@@ -2,7 +2,7 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { handleRegistration } from "../../api/auth/AuthService";
+import { handleRegistration } from "../../api/auth";
 import styles from "./styles.module.css";
 
 export default function RegistrationForm() {

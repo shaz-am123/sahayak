@@ -5,12 +5,11 @@ import {
   screen,
   fireEvent,
   act,
-  waitFor,
 } from "@testing-library/react";
 import RegistrationForm from "../../app/component/RegistrationForm";
-import { handleRegistration } from "../../app/api/auth/AuthService";
+import { handleRegistration } from "../../app/api/auth";
 
-jest.mock("../../app/api/auth/AuthService", () => ({
+jest.mock("../../app/api/auth", () => ({
   handleRegistration: jest.fn(),
 }));
 

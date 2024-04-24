@@ -3,7 +3,7 @@ import { Menubar } from "primereact/menubar";
 import { Image } from "primereact/image";
 import styles from "./styles.module.css";
 import { Button } from "primereact/button";
-import { handleLogout } from "../../api/auth/AuthService";
+import { handleLogout } from "../../api/auth";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 
