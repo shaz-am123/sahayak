@@ -2,24 +2,7 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Expense from "../../app/expense/page";
-
-const mockExpenses = {
-  expenses: [
-    {
-      amount: 160,
-      expenseCategory: { name: "Food" },
-      date: "2022-04-24T00:00:00.000Z",
-      description: "Lunch",
-    },
-    {
-      amount: 1800,
-      expenseCategory: { name: "Travel" },
-      date: "2022-04-25T00:00:00.000Z",
-      description: "Hotel Booking",
-    },
-  ],
-  totalRecords: 2,
-};
+import mockExpenses from "../__mocks__/mockExpenses";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
