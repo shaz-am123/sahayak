@@ -64,7 +64,13 @@ export class AuthService {
     });
   }
 
-  async validateUserId(userId: string) {
-    await this.authRepository.getUserById(userId);
+  async validateUserId(userId: string): Promise<RegistrationResponse> {
+    const user = await this.authRepository.getUserById(userId);
+    return new RegistrationResponse({
+      id: user.id!,
+      name: user.name,
+      username: user.username,
+      emailAddress: user.emailAddress,
+    });
   }
 }

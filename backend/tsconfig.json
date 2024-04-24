@@ -8,6 +8,7 @@
     "lib": ["es2023"],
     "module": "node16",
     "target": "es2022",
+    "types": ["jest"],
 
     "strict": true,
     "esModuleInterop": true,
@@ -15,9 +16,9 @@
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node16",
     "outDir": "./build",
-    "rootDir": "./src",
+    "rootDir": "./",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
   },
-  "include": ["src/**/*.ts"]
+  "include": ["src/**/*.ts", "**/*.test.ts", "**/*.spec.ts"]
 }

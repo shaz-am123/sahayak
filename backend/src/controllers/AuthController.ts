@@ -45,6 +45,15 @@ export class AuthController {
     }
   }
 
+  async getUser(userId: string): Promise<HttpResponse> {
+    try {
+      const userResponse = await this.authService.validateUserId(userId);
+      return new HttpResponse({ statusCode: 200, body: userResponse });
+    } catch (error) {
+      return this.handleErrors(error);
+    }
+  }
+
   private handleErrors(error: any): HttpResponse {
     if (error instanceof CustomValidationError) {
       return new HttpResponse({

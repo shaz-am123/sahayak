@@ -158,6 +158,27 @@ describe("Auth Service tests", () => {
     }
   });
 
+  it("should be able to get user details using userId", async () => {
+    const userId = "A001";
+    const mockUserResponse = new User({
+      id: userId,
+      name: "Ram",
+      username: "ram123",
+      emailAddress: "ram123@gmail.com",
+      hashedPassword: "mockHashedPassword",
+    });
+
+    const expectedResponse = new RegistrationResponse({
+      ...mockUserResponse,
+      id: userId,
+    });
+
+    authRepositoryMock.getUserById.mockResolvedValue(mockUserResponse);
+    const actualResponse = await authService.validateUserId(userId);
+    expect(actualResponse).toEqual(expectedResponse);
+    expect(authRepositoryMock.getUserById).toHaveBeenCalledWith(userId);
+  });
+
   it("should throw an error if the userId is invalid or does not exist", async () => {
     const userNotFoundError = new Error("User not found, invalid userId");
     authRepositoryMock.getUserById.mockRejectedValue(userNotFoundError);
