@@ -1,4 +1,4 @@
-import { isAuthenticated } from "../auth/AuthService";
+import { isAuthenticated } from "./auth";
 
 const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
