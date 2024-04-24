@@ -11,6 +11,7 @@ jest.mock("../../src/services/AuthService", () => ({
     getInstance: jest.fn(() => ({
       registerUser: jest.fn(),
       login: jest.fn(),
+      validateUserId: jest.fn(),
     })),
   },
 }));
@@ -154,6 +155,39 @@ describe("Auth Controller tests", () => {
     const httpResponse = await authController.login(mockLoginRequest);
 
     expect(httpResponse.body).toEqual({ error: errorMessage });
+    expect(httpResponse.statusCode).toBe(500);
+  });
+
+  it("should be able to get details of a user", async () => {
+    const userId = "A001";
+    const expectedResponse = new RegistrationResponse({
+      id: userId,
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+    });
+    authServiceMock.validateUserId.mockResolvedValue(expectedResponse);
+
+    const httpResponse = await authController.getUser(userId);
+
+    expect(httpResponse.body).toEqual(expectedResponse);
+    expect(httpResponse.statusCode).toBe(200);
+  });
+
+  it("should be able to handle any error that occurs while getting details of a user", async () => {
+    const userId = "A001";
+    const mockUserResponse = new RegistrationResponse({
+      id: userId,
+      name: "Ram",
+      emailAddress: "ram@gmail.com",
+      username: "ram123",
+    });
+    const serverError = new Error("Internal Server Error");
+    authServiceMock.validateUserId.mockRejectedValue(serverError);
+
+    const httpResponse = await authController.getUser(userId);
+
+    expect(httpResponse.body).toEqual({ error: serverError.message });
     expect(httpResponse.statusCode).toBe(500);
   });
 });

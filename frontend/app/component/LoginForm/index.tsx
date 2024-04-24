@@ -3,7 +3,7 @@ import styles from "./styles.module.css";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { handleLogin } from "../../api/auth/AuthService";
+import { handleLogin } from "../../api/auth";
 
 export default function LoginForm() {
   const router = useRouter();

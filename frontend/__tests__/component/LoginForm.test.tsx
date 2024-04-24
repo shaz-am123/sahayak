@@ -2,9 +2,9 @@ import React from "react";
 import "@testing-library/jest-dom";
 import { render, screen, fireEvent, act } from "@testing-library/react";
 import LoginForm from "../../app/component/LoginForm";
-import { handleLogin } from "../../app/api/auth/AuthService";
+import { handleLogin } from "../../app/api/auth";
 
-jest.mock("../../app/api/auth/AuthService", () => ({
+jest.mock("../../app/api/auth", () => ({
   handleLogin: jest.fn(),
 }));
 
