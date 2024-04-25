@@ -5,7 +5,7 @@ const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
 
 export const getExpenses = async (): Promise<MultipleExpensesResponse> => {
-  if (!isAuthenticated()){
+  if (!isAuthenticated()) {
     alert("Not Authenticated");
     throw new Error("Not Authenticated");
   }

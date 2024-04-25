@@ -1,5 +1,5 @@
 import { InputText } from "primereact/inputtext";
-import styles from "./styles.module.css";
+import styles from "./styles.module.scss";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";

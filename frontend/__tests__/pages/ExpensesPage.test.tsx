@@ -8,18 +8,19 @@ jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
 }));
 
-jest.mock("../../app/api/expense", () => ({
-  getExpenses: jest.fn(() => Promise.resolve(mockExpenses)),
-}));
-
 jest.mock("../../app/api/auth", () => ({
   isAuthenticated: jest.fn(() => Promise.resolve(true)),
 }));
 
-describe("Expenses listing component", () => {
-  it("renders expenses table", async () => {
-    render(<Expense />);
+jest.mock("../../app/api/expense", () => ({
+  getExpenses: jest.fn(() => Promise.resolve(mockExpenses)),
+}));
 
+describe("Expenses listing component", () => {
+  beforeEach(() => {
+    render(<Expense />);
+  });
+  it("renders expenses table", async () => {
     expect(screen.getByText("Loading")).toBeInTheDocument();
 
     await waitFor(() => {
@@ -28,7 +29,7 @@ describe("Expenses listing component", () => {
       mockExpenses.expenses.map((expense): void => {
         expect(screen.getByText(expense.amount)).toBeInTheDocument();
         expect(
-          screen.getByText(expense.expenseCategory.name),
+          screen.getByText(expense.expenseCategory.name)
         ).toBeInTheDocument();
         expect(screen.getByText(expense.description)).toBeInTheDocument();
 
