@@ -2,41 +2,25 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Expense from "../../app/expense/page";
-
-const mockExpenses = {
-  expenses: [
-    {
-      amount: 160,
-      expenseCategory: { name: "Food" },
-      date: "2022-04-24T00:00:00.000Z",
-      description: "Lunch",
-    },
-    {
-      amount: 1800,
-      expenseCategory: { name: "Travel" },
-      date: "2022-04-25T00:00:00.000Z",
-      description: "Hotel Booking",
-    },
-  ],
-  totalRecords: 2,
-};
+import mockExpenses from "../../__mocks__/mockExpenses";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
-}));
-
-jest.mock("../../app/api/expense", () => ({
-  getExpenses: jest.fn(() => Promise.resolve(mockExpenses)),
 }));
 
 jest.mock("../../app/api/auth", () => ({
   isAuthenticated: jest.fn(() => Promise.resolve(true)),
 }));
 
-describe("Expenses listing component", () => {
-  it("renders expenses table", async () => {
-    render(<Expense />);
+jest.mock("../../app/api/expense", () => ({
+  getExpenses: jest.fn(() => Promise.resolve(mockExpenses)),
+}));
 
+describe("Expenses listing component", () => {
+  beforeEach(() => {
+    render(<Expense />);
+  });
+  it("renders expenses table", async () => {
     expect(screen.getByText("Loading")).toBeInTheDocument();
 
     await waitFor(() => {

@@ -12,7 +12,6 @@ router.post(
     const userId = req.userId!;
     const createExpenseRequest = new ExpenseRequest({
       amount: req.body.amount,
-      currency: req.body.currency,
       expenseCategoryId: req.body.expenseCategoryId,
       date: new Date(req.body.date),
       description: req.body.description,

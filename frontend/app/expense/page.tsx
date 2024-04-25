@@ -4,9 +4,10 @@ import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useEffect, useState } from "react";
 import { getExpenses } from "../api/expense";
+import ExpenseResponse from "../types/ExpenseResponse";
 
 export default function Expense() {
-  const [tableData, setTableData] = useState();
+  const [tableData, setTableData] = useState<ExpenseResponse[]>();
 
   useEffect(() => {
     getExpenses().then((response) => {
