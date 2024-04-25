@@ -19,11 +19,10 @@ export const handleLogin = async (
     },
   });
 
-  if (!res.ok){
+  if (!res.ok) {
     const errorResponse = await res.json();
     alert(`Login failed: ${errorResponse.error}`);
-  }
-  else {
+  } else {
     const data: LoginResponse = await res.json();
     localStorage.setItem("token", data.token);
     router.push("/home");
@@ -51,12 +50,11 @@ export const handleRegistration = async (
     },
   });
 
-  if (!res.ok){
+  if (!res.ok) {
     const errorResponse = await res.json();
     console.log(errorResponse.error);
-  }
-  else {
-    const loginRequest: LoginRequest = {...registrationRequest}
+  } else {
+    const loginRequest: LoginRequest = { ...registrationRequest };
     handleLogin(loginRequest, router);
   }
 };
@@ -74,15 +72,28 @@ export const getUser = async (): Promise<UserResponse> => {
     const errorResponse = await res.json();
     alert(`Couldn't get user: ${errorResponse.error}`);
     throw new Error(`Couldn't get user: ${errorResponse.error}`);
-  }
-  else
-  {
+  } else {
     const data = await res.json();
     return data;
   }
-  
 };
 
 export const isAuthenticated = async (): Promise<boolean> => {
   return localStorage.getItem("token") !== null;
+};
+
+export const isUniqueUsername = async (username: string): Promise<{isUnique: boolean}> => {
+  const res = await fetch(`${BACKEND_SERVICE_URL}/auth/check-username?username=${username}`, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    alert("Server error");
+    throw new Error("Server error");
+  }
+
+  return await res.json();
 };

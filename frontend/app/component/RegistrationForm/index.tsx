@@ -2,7 +2,7 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { handleRegistration } from "../../api/auth";
+import { handleRegistration, isUniqueUsername } from "../../api/auth";
 import styles from "./styles.module.scss";
 
 export default function RegistrationForm() {
@@ -11,6 +11,7 @@ export default function RegistrationForm() {
   const [name, setName] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
+  const [isValidUsername, setIsValidUsername] = useState<boolean>(true);
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isValidPassword, setIsValidPassword] = useState<boolean>(true);
   const [isPasswordMatching, setIsPasswordMatching] = useState<boolean>(true);
@@ -27,16 +28,22 @@ export default function RegistrationForm() {
     return emailRegex.test(email);
   };
 
+  const validateUsername = async (username: string) => {
+    return (await isUniqueUsername(username)).isUnique;
+  }
+
     const registerUser = async () => {
       const isValidEmail = validateEmail(emailAddress);
       const isValidPassword = validatePassword(password);
       const isPasswordMatching = confirmPassword === password;
+      const isValidUsername = await validateUsername(username);
 
       setIsValidEmail(isValidEmail);
       setIsValidPassword(isValidPassword);
       setIsPasswordMatching(isPasswordMatching);
+      setIsValidUsername(isValidUsername);
 
-      if (isValidEmail && isValidPassword && isPasswordMatching) {
+      if (isValidUsername && isValidEmail && isValidPassword && isPasswordMatching) {
         await handleRegistration(
           {
             username: username,
@@ -59,6 +66,9 @@ export default function RegistrationForm() {
         value={username}
         onChange={(e) => setUsername(e.target.value)}
       />
+      {!isValidUsername && (
+        <p className={styles.fieldError}>Username should be unique</p>
+      )}
 
       <label htmlFor="name">Name</label>
       <InputText
