@@ -1,15 +1,18 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import LoginRequest from "../types/LoginRequest";
+import UserResponse from "../types/UserResponse";
+import RegistraionRequest from "../types/RegistrationRequest";
 
 const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
+
 export const handleLogin = async (
-  username: string,
-  password: string,
-  router: AppRouterInstance,
-) => {
+  loginRequest: LoginRequest,
+  router: AppRouterInstance
+): Promise<void> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/login`, {
     method: "POST",
-    body: JSON.stringify({ username: username, password: password }),
+    body: JSON.stringify({ ...loginRequest }),
     headers: {
       "Content-Type": "application/json",
     },
@@ -23,25 +26,21 @@ export const handleLogin = async (
   }
 };
 
-export const handleLogout = async (router: AppRouterInstance) => {
+export const handleLogout = async (
+  router: AppRouterInstance
+): Promise<void> => {
   localStorage.removeItem("token");
   router.push("/");
 };
 
 export const handleRegistration = async (
-  username: string,
-  name: string,
-  emailAddress: string,
-  password: string,
-  router: AppRouterInstance,
-) => {
+  registrationRequest: RegistraionRequest,
+  router: AppRouterInstance
+): Promise<void> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/register`, {
     method: "POST",
     body: JSON.stringify({
-      username: username,
-      name: name,
-      emailAddress: emailAddress,
-      password: password,
+      ...registrationRequest,
     }),
     headers: {
       "Content-Type": "application/json",
@@ -50,11 +49,12 @@ export const handleRegistration = async (
 
   if (!res.ok) alert("Registration failed");
   else {
-    handleLogin(username, password, router);
+    const loginRequest: LoginRequest = {...registrationRequest}
+    handleLogin(loginRequest, router);
   }
 };
 
-export const getUser = async () => {
+export const getUser = async (): Promise<UserResponse> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/user`, {
     method: "GET",
     headers: {
@@ -63,13 +63,15 @@ export const getUser = async () => {
     },
   });
 
-  if (!res.ok) alert("Couldn't find user");
-  else {
-    const data = await res.json();
-    return data;
+  if (!res.ok) {
+    alert("Couldn't get user");
+    throw new Error("Couldn't get user");
   }
+
+  const data = await res.json();
+  return data;
 };
 
-export const isAuthenticated = async () => {
+export const isAuthenticated = async (): Promise<boolean> => {
   return localStorage.getItem("token") !== null;
 };

@@ -32,7 +32,9 @@ export default function LoginForm() {
 
       <Button
         label="Login"
-        onClick={() => handleLogin(username, password, router)}
+        onClick={() =>
+          handleLogin({ username: username, password: password }, router)
+        }
         className={styles.button}
       />
     </div>

@@ -13,6 +13,21 @@ export default function RegistrationForm() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
 
+  const registerUser = async () => {
+    if (confirmPassword !== password) {
+      alert("The passwords don't match");
+      throw new Error("The passwords don't match");
+    }
+    await handleRegistration(
+      {
+        username: username,
+        name: name,
+        emailAddress: emailAddress,
+        password: password,
+      },
+      router
+    );
+  };
   return (
     <div className={styles.formContainer} data-testid="registrationForm">
       <h1 data-testid="heading">Register</h1>
@@ -60,13 +75,7 @@ export default function RegistrationForm() {
 
       <Button
         label="Register"
-        onClick={() => {
-          if (confirmPassword !== password) {
-            alert("The passwords don't match");
-            throw new Error("The passwords don't match");
-          }
-          handleRegistration(username, name, emailAddress, password, router);
-        }}
+        onClick={registerUser}
         className={styles.button}
       />
     </div>
