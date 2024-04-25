@@ -12,6 +12,7 @@ jest.mock("../../src/services/AuthService", () => ({
       registerUser: jest.fn(),
       login: jest.fn(),
       validateUserId: jest.fn(),
+      checkUsernameUniqueness: jest.fn(),
     })),
   },
 }));
@@ -186,6 +187,32 @@ describe("Auth Controller tests", () => {
     authServiceMock.validateUserId.mockRejectedValue(serverError);
 
     const httpResponse = await authController.getUser(userId);
+
+    expect(httpResponse.body).toEqual({ error: serverError.message });
+    expect(httpResponse.statusCode).toBe(500);
+  });
+
+  it("should be able to check whether an username is unique or not", async () => {
+    const username = "ram123";
+    const expectedResponse = {
+      isUnique: true,
+    };
+    authServiceMock.checkUsernameUniqueness.mockResolvedValue(expectedResponse);
+
+    const httpResponse =
+      await authController.checkUsernameUniquesness(username);
+
+    expect(httpResponse.body).toEqual(expectedResponse);
+    expect(httpResponse.statusCode).toBe(200);
+  });
+
+  it("should be able to handle any error that occurs while checking the uniqueness of an username", async () => {
+    const username = "ram123";
+    const serverError = new Error("Internal Server Error");
+    authServiceMock.checkUsernameUniqueness.mockRejectedValue(serverError);
+
+    const httpResponse =
+      await authController.checkUsernameUniquesness(username);
 
     expect(httpResponse.body).toEqual({ error: serverError.message });
     expect(httpResponse.statusCode).toBe(500);

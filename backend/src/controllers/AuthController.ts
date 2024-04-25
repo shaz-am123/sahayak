@@ -54,6 +54,15 @@ export class AuthController {
     }
   }
 
+  async checkUsernameUniquesness(username: string): Promise<HttpResponse> {
+    try {
+      const response = await this.authService.checkUsernameUniqueness(username);
+      return new HttpResponse({ statusCode: 200, body: response });
+    } catch (error) {
+      return this.handleErrors(error);
+    }
+  }
+
   private handleErrors(error: any): HttpResponse {
     if (error instanceof CustomValidationError) {
       return new HttpResponse({

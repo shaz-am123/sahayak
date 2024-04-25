@@ -41,4 +41,13 @@ router.get(
   },
 );
 
+router.get(
+  "/check-username",
+  async (req: express.Request, res: express.Response) => {
+    const { username } = req.query as { username: string };
+    const response = await authController.checkUsernameUniquesness(username);
+    res.status(response.statusCode).json(response.body);
+  },
+);
+
 export default router;

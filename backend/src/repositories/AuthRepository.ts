@@ -52,4 +52,18 @@ export class AuthRepository {
       hashedPassword: userEntity.hashedPassword,
     });
   }
+
+  async getUsers(): Promise<User[]> {
+    const userEntities = await UserModel.find();
+
+    return userEntities.map((userEntity) => {
+      return new User({
+        id: userEntity._id.toString(),
+        name: userEntity.name,
+        emailAddress: userEntity.emailAddress,
+        username: userEntity.username,
+        hashedPassword: userEntity.hashedPassword,
+      });
+    });
+  }
 }
