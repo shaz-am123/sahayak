@@ -2,6 +2,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import LoginRequest from "../types/LoginRequest";
 import UserResponse from "../types/UserResponse";
 import RegistraionRequest from "../types/RegistrationRequest";
+import LoginResponse from "../types/LoginResponse";
 
 const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
@@ -18,9 +19,12 @@ export const handleLogin = async (
     },
   });
 
-  if (!res.ok) alert("Login failed");
+  if (!res.ok){
+    const errorResponse = await res.json();
+    alert(`Login failed: ${errorResponse.error}`);
+  }
   else {
-    const data = await res.json();
+    const data: LoginResponse = await res.json();
     localStorage.setItem("token", data.token);
     router.push("/home");
   }
@@ -47,7 +51,11 @@ export const handleRegistration = async (
     },
   });
 
-  if (!res.ok) alert("Registration failed");
+  if (!res.ok){
+    const errorResponse = await res.json();
+    console.log(errorResponse.error);
+    alert(`Registration failed: ${errorResponse.error}`);
+  }
   else {
     const loginRequest: LoginRequest = {...registrationRequest}
     handleLogin(loginRequest, router);
@@ -64,12 +72,16 @@ export const getUser = async (): Promise<UserResponse> => {
   });
 
   if (!res.ok) {
-    alert("Couldn't get user");
-    throw new Error("Couldn't get user");
+    const errorResponse = await res.json();
+    alert(`Couldn't get user: ${errorResponse.error}`);
+    throw new Error(`Couldn't get user: ${errorResponse.error}`);
   }
-
-  const data = await res.json();
-  return data;
+  else
+  {
+    const data = await res.json();
+    return data;
+  }
+  
 };
 
 export const isAuthenticated = async (): Promise<boolean> => {
