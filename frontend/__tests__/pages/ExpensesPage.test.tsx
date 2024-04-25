@@ -2,7 +2,7 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Expense from "../../app/expense/page";
-import mockExpenses from "../__mocks__/mockExpenses";
+import mockExpenses from "../../__mocks__/mockExpenses";
 
 jest.mock("next/navigation", () => ({
   useRouter: jest.fn(),
@@ -29,7 +29,7 @@ describe("Expenses listing component", () => {
       mockExpenses.expenses.map((expense): void => {
         expect(screen.getByText(expense.amount)).toBeInTheDocument();
         expect(
-          screen.getByText(expense.expenseCategory.name)
+          screen.getByText(expense.expenseCategory.name),
         ).toBeInTheDocument();
         expect(screen.getByText(expense.description)).toBeInTheDocument();
 

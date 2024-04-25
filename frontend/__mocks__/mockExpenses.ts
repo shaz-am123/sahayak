@@ -1,4 +1,4 @@
-import MultipleExpensesResponse from "../../app/types/MultipleExpensesResponse";
+import MultipleExpensesResponse from "../app/types/MultipleExpensesResponse";
 
 const mockExpenses: MultipleExpensesResponse = {
   expenses: [
