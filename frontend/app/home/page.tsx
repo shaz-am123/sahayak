@@ -9,7 +9,7 @@ export default function Home() {
   const [user, setUser] = useState<UserResponse>();
   useEffect(() => {
     getUser().then((user: UserResponse) => {
-        setUser(user);
+      setUser(user);
     });
   }, []);
   const pageContent =

@@ -30,31 +30,36 @@ export default function RegistrationForm() {
 
   const validateUsername = async (username: string) => {
     return (await isUniqueUsername(username)).isUnique;
-  }
+  };
 
-    const registerUser = async () => {
-      const isValidEmail = validateEmail(emailAddress);
-      const isValidPassword = validatePassword(password);
-      const isPasswordMatching = confirmPassword === password;
-      const isValidUsername = await validateUsername(username);
+  const registerUser = async () => {
+    const isValidEmail = validateEmail(emailAddress);
+    const isValidPassword = validatePassword(password);
+    const isPasswordMatching = confirmPassword === password;
+    const isValidUsername = await validateUsername(username);
 
-      setIsValidEmail(isValidEmail);
-      setIsValidPassword(isValidPassword);
-      setIsPasswordMatching(isPasswordMatching);
-      setIsValidUsername(isValidUsername);
+    setIsValidEmail(isValidEmail);
+    setIsValidPassword(isValidPassword);
+    setIsPasswordMatching(isPasswordMatching);
+    setIsValidUsername(isValidUsername);
 
-      if (isValidUsername && isValidEmail && isValidPassword && isPasswordMatching) {
-        await handleRegistration(
-          {
-            username: username,
-            name: name,
-            emailAddress: emailAddress,
-            password: password,
-          },
-          router
-        );
-      }
-    };
+    if (
+      isValidUsername &&
+      isValidEmail &&
+      isValidPassword &&
+      isPasswordMatching
+    ) {
+      await handleRegistration(
+        {
+          username: username,
+          name: name,
+          emailAddress: emailAddress,
+          password: password,
+        },
+        router,
+      );
+    }
+  };
 
   return (
     <div className={styles.formContainer} data-testid="registrationForm">
