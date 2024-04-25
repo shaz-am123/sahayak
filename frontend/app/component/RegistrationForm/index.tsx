@@ -1,7 +1,7 @@
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { handleRegistration } from "../../api/auth";
 import styles from "./styles.module.scss";
 
@@ -12,22 +12,43 @@ export default function RegistrationForm() {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [isValidPassword, setIsValidPassword] = useState<boolean>(true);
+  const [isPasswordMatching, setIsPasswordMatching] = useState<boolean>(true);
+  const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
 
-  const registerUser = async () => {
-    if (confirmPassword !== password) {
-      alert("The passwords don't match");
-      throw new Error("The passwords don't match");
-    }
-    await handleRegistration(
-      {
-        username: username,
-        name: name,
-        emailAddress: emailAddress,
-        password: password,
-      },
-      router
-    );
+  const validatePassword = (password: string) => {
+    const passwordRegex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return passwordRegex.test(password);
   };
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return emailRegex.test(email);
+  };
+
+    const registerUser = async () => {
+      const isValidEmail = validateEmail(emailAddress);
+      const isValidPassword = validatePassword(password);
+      const isPasswordMatching = confirmPassword === password;
+
+      setIsValidEmail(isValidEmail);
+      setIsValidPassword(isValidPassword);
+      setIsPasswordMatching(isPasswordMatching);
+
+      if (isValidEmail && isValidPassword && isPasswordMatching) {
+        await handleRegistration(
+          {
+            username: username,
+            name: name,
+            emailAddress: emailAddress,
+            password: password,
+          },
+          router
+        );
+      }
+    };
+
   return (
     <div className={styles.formContainer} data-testid="registrationForm">
       <h1 data-testid="heading">Register</h1>
@@ -42,6 +63,7 @@ export default function RegistrationForm() {
       <label htmlFor="name">Name</label>
       <InputText
         className={styles.inputField}
+        keyfilter={"alpha"}
         id="name"
         value={name}
         onChange={(e) => setName(e.target.value)}
@@ -49,29 +71,47 @@ export default function RegistrationForm() {
 
       <label htmlFor="emailAddress">Email</label>
       <InputText
-        className={styles.inputField}
+        className={`${!isValidEmail ? "p-invalid" : ""} ${styles.inputField}`}
         id="emailAddress"
         value={emailAddress}
-        onChange={(e) => setEmailAddress(e.target.value)}
+        onChange={(e) => {
+          setEmailAddress(e.target.value);
+        }}
       />
+      {!isValidEmail && (
+        <p className={styles.fieldError}>Invalid Email address</p>
+      )}
 
       <label htmlFor="password">Password</label>
       <InputText
-        className={styles.inputField}
         id="password"
         type="password"
+        onChange={(e) => {
+          setPassword(e.target.value);
+        }}
         value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        className={`${!isValidPassword ? "p-invalid" : ""} ${styles.inputField}`}
       />
+      {!isValidPassword && (
+        <p className={styles.fieldError}>
+          Password must include 8 letters with at least 1 uppercase, 1
+          lowercase, 1 number, and 1 special character
+        </p>
+      )}
 
       <label htmlFor="confirm-password">Confirm Password</label>
       <InputText
-        className={styles.inputField}
         id="confirm-password"
         type="password"
+        onChange={(e) => {
+          setConfirmPassword(e.target.value);
+        }}
         value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
+        className={`${!isValidPassword ? "p-invalid" : ""} ${styles.inputField}`}
       />
+      {!isPasswordMatching && (
+        <p className={styles.fieldError}>Passwords do not match!</p>
+      )}
 
       <Button
         label="Register"

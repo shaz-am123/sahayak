@@ -54,7 +54,6 @@ export const handleRegistration = async (
   if (!res.ok){
     const errorResponse = await res.json();
     console.log(errorResponse.error);
-    alert(`Registration failed: ${errorResponse.error}`);
   }
   else {
     const loginRequest: LoginRequest = {...registrationRequest}
