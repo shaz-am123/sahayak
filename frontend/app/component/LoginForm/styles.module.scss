@@ -1,26 +1,32 @@
 .formContainer {
     padding: 0 1.5%;
     justify-content: center;
-  }
-  
-  .inputField {
+}
+
+.inputField {
     width: 100%;
     margin-bottom: 10px;
-  }
-  
-  .button {
+}
+
+.button {
     margin: 10px 0 0 0;
-  }
-  
-  .fieldError {
+}
+
+.fieldError {
     font-size: 0.75rem;
     margin: 0 auto 15px auto;
     position: relative;
     padding: 0;
     line-height: 0.4rem;
     color: red;
-  }
-  
-  .fieldLabel {
+}
+
+.fieldLabel {
     font-size: 0.85rem;
-  }
+}
+
+.requiredField::after {
+    content: '*';
+    color: red;
+    margin-left: 0.2em;
+}
