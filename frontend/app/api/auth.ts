@@ -3,6 +3,7 @@ import LoginRequest from "../types/LoginRequest";
 import UserResponse from "../types/UserResponse";
 import RegistraionRequest from "../types/RegistrationRequest";
 import LoginResponse from "../types/LoginResponse";
+import RequestSuccessStatus from "../types/RequestSuccessStatus";
 
 const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
@@ -10,7 +11,7 @@ const BACKEND_SERVICE_URL =
 export const handleLogin = async (
   loginRequest: LoginRequest,
   router: AppRouterInstance,
-): Promise<void> => {
+): Promise<RequestSuccessStatus> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/login`, {
     method: "POST",
     body: JSON.stringify({ ...loginRequest }),
@@ -21,25 +22,35 @@ export const handleLogin = async (
 
   if (!res.ok) {
     const errorResponse = await res.json();
-    alert(`Login failed: ${errorResponse.error}`);
-  } else {
-    const data: LoginResponse = await res.json();
-    localStorage.setItem("token", data.token);
-    router.push("/home");
+    return {
+      success: false,
+      message: errorResponse.error,
+    } as RequestSuccessStatus;
   }
+  const data: LoginResponse = await res.json();
+  localStorage.setItem("token", data.token);
+  router.push("/home");
+  return {
+    success: true,
+    message: "Login Successful",
+  } as RequestSuccessStatus;
 };
 
 export const handleLogout = async (
   router: AppRouterInstance,
-): Promise<void> => {
+): Promise<RequestSuccessStatus> => {
   localStorage.removeItem("token");
   router.push("/");
+  return {
+    success: true,
+    message: "Logout Successful",
+  } as RequestSuccessStatus;
 };
 
 export const handleRegistration = async (
   registrationRequest: RegistraionRequest,
   router: AppRouterInstance,
-): Promise<void> => {
+): Promise<RequestSuccessStatus> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/register`, {
     method: "POST",
     body: JSON.stringify({
@@ -52,14 +63,22 @@ export const handleRegistration = async (
 
   if (!res.ok) {
     const errorResponse = await res.json();
-    console.log(errorResponse.error);
-  } else {
-    const loginRequest: LoginRequest = { ...registrationRequest };
-    handleLogin(loginRequest, router);
+    return {
+      success: false,
+      message: errorResponse.error
+        ? errorResponse.error
+        : "Internal Server Error",
+    } as RequestSuccessStatus;
   }
+
+  router.refresh();
+  return {
+    success: true,
+    message: "Registration successful",
+  } as RequestSuccessStatus;
 };
 
-export const getUser = async (): Promise<UserResponse> => {
+export const getUser = async (): Promise<RequestSuccessStatus> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/user`, {
     method: "GET",
     headers: {
@@ -70,12 +89,19 @@ export const getUser = async (): Promise<UserResponse> => {
 
   if (!res.ok) {
     const errorResponse = await res.json();
-    alert(`Couldn't get user: ${errorResponse.error}`);
-    throw new Error(`Couldn't get user: ${errorResponse.error}`);
-  } else {
-    const data = await res.json();
-    return data;
+    return {
+      success: false,
+      message: errorResponse.error
+        ? errorResponse.error
+        : "Internal Server Error",
+    } as RequestSuccessStatus;
   }
+  const data = await res.json();
+  return {
+    success: true,
+    message: "User details retrieved successfully",
+    data: data as UserResponse,
+  } as RequestSuccessStatus;
 };
 
 export const isAuthenticated = async (): Promise<boolean> => {
@@ -84,7 +110,7 @@ export const isAuthenticated = async (): Promise<boolean> => {
 
 export const isUniqueUsername = async (
   username: string,
-): Promise<{ isUnique: boolean }> => {
+): Promise<RequestSuccessStatus> => {
   const res = await fetch(
     `${BACKEND_SERVICE_URL}/auth/check-username?username=${username}`,
     {
