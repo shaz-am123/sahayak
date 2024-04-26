@@ -1,138 +1,122 @@
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { handleRegistration, isUniqueUsername } from "../../api/auth";
 import styles from "./styles.module.scss";
+import { useFormik } from "formik";
+import registrationSchema from "./registrationSchema";
 
 export default function RegistrationForm() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [name, setName] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  const [password, setPassword] = useState("");
-  const [isValidUsername, setIsValidUsername] = useState<boolean>(true);
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [isValidPassword, setIsValidPassword] = useState<boolean>(true);
-  const [isPasswordMatching, setIsPasswordMatching] = useState<boolean>(true);
-  const [isValidEmail, setIsValidEmail] = useState<boolean>(true);
-
-  const validatePassword = (password: string) => {
-    const passwordRegex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return passwordRegex.test(password);
-  };
-
-  const validateEmail = (email: string) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-  const validateUsername = async (username: string) => {
-    return (await isUniqueUsername(username)).isUnique;
-  };
-
-  const registerUser = async () => {
-    const isValidEmail = validateEmail(emailAddress);
-    const isValidPassword = validatePassword(password);
-    const isPasswordMatching = confirmPassword === password;
-    const isValidUsername = await validateUsername(username);
-
-    setIsValidEmail(isValidEmail);
-    setIsValidPassword(isValidPassword);
-    setIsPasswordMatching(isPasswordMatching);
-    setIsValidUsername(isValidUsername);
-
-    if (
-      isValidUsername &&
-      isValidEmail &&
-      isValidPassword &&
-      isPasswordMatching
-    ) {
-      await handleRegistration(
-        {
-          username: username,
-          name: name,
-          emailAddress: emailAddress,
-          password: password,
-        },
-        router,
-      );
-    }
-  };
+  const [loading, setLoading] = useState(false);
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        username: "",
+        name: "",
+        emailAddress: "",
+        password: "",
+        confirmPassword: "",
+      },
+      validationSchema: registrationSchema,
+      onSubmit: (values, action) => {
+        setLoading(true);
+        handleRegistration({ ...values }, router).then(() => {
+          action.resetForm();
+          setLoading(false);
+        });
+      },
+    });
 
   return (
-    <div className={styles.formContainer} data-testid="registrationForm">
-      <h1 data-testid="heading">Register</h1>
-      <label htmlFor="username">Username</label>
+    <form
+      className={styles.formContainer}
+      data-testid="registrationForm"
+      onSubmit={handleSubmit}
+    >
+      <h2 data-testid="heading">Register</h2>
+      <label className={styles.fieldLabel} htmlFor="username">
+        Username
+      </label>
       <InputText
-        className={styles.inputField}
         id="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        autoComplete="off"
+        onChange={handleChange}
+        value={values.username}
+        onBlur={handleBlur}
+        className={`${errors.username && touched.username ? "p-invalid" : ""} ${styles.inputField}`}
       />
-      {!isValidUsername && (
-        <p className={styles.fieldError}>Username should be unique</p>
+      {errors.username && touched.username && (
+        <p className={styles.fieldError}>{errors.username}</p>
       )}
 
-      <label htmlFor="name">Name</label>
+      <label className={styles.fieldLabel} htmlFor="name">
+        Name
+      </label>
       <InputText
-        className={styles.inputField}
         keyfilter={"alpha"}
         id="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        autoComplete="off"
+        value={values.name}
+        onBlur={handleBlur}
+        className={`${errors.name && touched.name ? "p-invalid" : ""} ${styles.inputField}`}
+        onChange={handleChange}
       />
-
-      <label htmlFor="emailAddress">Email</label>
-      <InputText
-        className={`${!isValidEmail ? "p-invalid" : ""} ${styles.inputField}`}
-        id="emailAddress"
-        value={emailAddress}
-        onChange={(e) => {
-          setEmailAddress(e.target.value);
-        }}
-      />
-      {!isValidEmail && (
-        <p className={styles.fieldError}>Invalid Email address</p>
+      {errors.name && touched.name && (
+        <p className={styles.fieldError}>{errors.name}</p>
       )}
 
-      <label htmlFor="password">Password</label>
+      <label className={styles.fieldLabel} htmlFor="emailAddress">
+        Email
+      </label>
+      <InputText
+        id="emailAddress"
+        autoComplete="off"
+        value={values.emailAddress}
+        onBlur={handleBlur}
+        className={`${errors.emailAddress && touched.emailAddress ? "p-invalid" : ""} ${styles.inputField}`}
+        onChange={handleChange}
+      />
+      {errors.emailAddress && touched.emailAddress ? (
+        <p className={styles.fieldError}>{errors.emailAddress}</p>
+      ) : null}
+
+      <label className={styles.fieldLabel} htmlFor="password">
+        Password
+      </label>
       <InputText
         id="password"
         type="password"
-        onChange={(e) => {
-          setPassword(e.target.value);
-        }}
-        value={password}
-        className={`${!isValidPassword ? "p-invalid" : ""} ${styles.inputField}`}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={`${errors.password && touched.password ? "p-invalid" : ""} ${styles.inputField}`}
+        value={values.password}
       />
-      {!isValidPassword && (
-        <p className={styles.fieldError}>
-          Password must include 8 letters with at least 1 uppercase, 1
-          lowercase, 1 number, and 1 special character
-        </p>
-      )}
+      {errors.password && touched.password ? (
+        <p className={styles.fieldError}>{errors.password}</p>
+      ) : null}
 
-      <label htmlFor="confirm-password">Confirm Password</label>
+      <label className={styles.fieldLabel} htmlFor="confirmPassword">
+        Confirm Password
+      </label>
       <InputText
-        id="confirm-password"
+        id="confirmPassword"
         type="password"
-        onChange={(e) => {
-          setConfirmPassword(e.target.value);
-        }}
-        value={confirmPassword}
-        className={`${!isValidPassword ? "p-invalid" : ""} ${styles.inputField}`}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={`${errors.confirmPassword && touched.confirmPassword ? "p-invalid" : ""} ${styles.inputField}`}
+        value={values.confirmPassword}
       />
-      {!isPasswordMatching && (
-        <p className={styles.fieldError}>Passwords do not match!</p>
-      )}
+      {errors.confirmPassword && touched.confirmPassword ? (
+        <p className={styles.fieldError}>{errors.confirmPassword}</p>
+      ) : null}
 
       <Button
-        label="Register"
-        onClick={registerUser}
+        label={loading ? "..." : "Register"}
+        type="submit"
         className={styles.button}
       />
-    </div>
+    </form>
   );
 }

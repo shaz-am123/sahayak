@@ -1,21 +1,26 @@
-.formContainer{
-    padding: 2%;   
-    justify-content: center;
+.formContainer {
+  padding: 0 1.5%;
+  justify-content: center;
 }
 
-.inputField{
-    width: 100%;
-    margin-bottom: 7px;
+.inputField {
+  width: 100%;
+  margin-bottom: 10px;
 }
 
-.button{
-    margin: 10px 0 0 0;
+.button {
+  margin: 10px 0 0 0;
 }
 
-.fieldError{
-    font-size: 0.75rem;
-    margin: 0 auto 4px auto;
-    padding: 0;
-    line-height: 0.8rem;
-    color: red;
+.fieldError {
+  font-size: 0.75rem;
+  margin: 0 auto 15px auto;
+  position: relative;
+  padding: 0;
+  line-height: 0.4rem;
+  color: red;
+}
+
+.fieldLabel {
+  font-size: 0.85rem;
 }
