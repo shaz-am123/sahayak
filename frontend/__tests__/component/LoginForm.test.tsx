@@ -1,6 +1,12 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import {
+  render,
+  screen,
+  fireEvent,
+  act,
+  waitFor,
+} from "@testing-library/react";
 import LoginForm from "../../app/component/LoginForm";
 import { handleLogin } from "../../app/api/auth";
 
@@ -33,7 +39,7 @@ describe("LoginForm component", () => {
     expect(loginButton).toBeInTheDocument();
   });
 
-  test("should call handleLogin when login button is clicked", () => {
+  test("should call handleLogin when login button is clicked", async () => {
     const loginButton = screen.getByLabelText("Login");
     const usernameField = screen.getByLabelText("Username");
     const passwordField = screen.getByLabelText("Password");
@@ -47,6 +53,29 @@ describe("LoginForm component", () => {
       fireEvent.click(loginButton);
     });
 
-    expect(handleLogin).toHaveBeenCalled();
+    await waitFor(() => {
+      expect(handleLogin).toHaveBeenCalled();
+    });
+  });
+
+  test("should show missing field messages when required", async () => {
+    const usernameField = screen.getByLabelText("Username");
+    const passwordField = screen.getByLabelText("Password");
+    const loginButton = screen.getByLabelText("Login");
+
+    expect(usernameField).toBeInTheDocument();
+    expect(passwordField).toBeInTheDocument();
+    expect(loginButton).toBeInTheDocument();
+
+    act(() => {
+      fireEvent.change(usernameField, { target: { value: "" } });
+      fireEvent.change(passwordField, { target: { value: "" } });
+      fireEvent.click(loginButton);
+    });
+
+    await waitFor(() => {
+      expect(screen.getByText("Username is required")).toBeInTheDocument();
+      expect(screen.getByText("Password is required")).toBeInTheDocument();
+    });
   });
 });
