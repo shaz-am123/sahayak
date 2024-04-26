@@ -73,4 +73,12 @@ export class AuthService {
       emailAddress: user.emailAddress,
     });
   }
+
+  async checkUsernameUniqueness(
+    username: string,
+  ): Promise<{ isUnique: boolean }> {
+    const users = await this.authRepository.getUsers();
+    const usernames = users.map((user) => user.username);
+    return { isUnique: !usernames.includes(username) };
+  }
 }

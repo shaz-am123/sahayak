@@ -1,40 +1,73 @@
 import { InputText } from "primereact/inputtext";
-import styles from "./styles.module.scss";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { handleLogin } from "../../api/auth";
+import styles from "./styles.module.scss";
+import { useFormik } from "formik";
+import loginSchema from "./loginSchema";
 
-export default function LoginForm() {
+export default function RegistrationForm() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        username: "",
+        password: "",
+      },
+      validationSchema: loginSchema,
+      onSubmit: (values, action) => {
+        setLoading(true);
+        handleLogin({ ...values }, router).then(() => {
+          action.resetForm();
+          setLoading(false);
+        });
+      },
+    });
 
   return (
-    <div className={styles.formContainer} data-testid="loginForm">
-      <h1 data-testid="heading">Login</h1>
-      <label htmlFor="username">Username</label>
+    <form
+      className={styles.formContainer}
+      data-testid="loginForm"
+      onSubmit={handleSubmit}
+    >
+      <h2 data-testid="heading">Login</h2>
+      <label className={styles.fieldLabel} htmlFor="username">
+        Username
+      </label>
       <InputText
-        className={styles.inputField}
         id="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        autoComplete="off"
+        onChange={handleChange}
+        value={values.username}
+        onBlur={handleBlur}
+        className={`${errors.username && touched.username ? "p-invalid" : ""} ${styles.inputField}`}
       />
+      {errors.username && touched.username && (
+        <p className={styles.fieldError}>{errors.username}</p>
+      )}
 
-      <label htmlFor="password">Password</label>
+      <label className={styles.fieldLabel} htmlFor="password">
+        Password
+      </label>
       <InputText
-        className={styles.inputField}
         id="password"
         type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={`${errors.password && touched.password ? "p-invalid" : ""} ${styles.inputField}`}
+        value={values.password}
       />
+      {errors.password && touched.password ? (
+        <p className={styles.fieldError}>{errors.password}</p>
+      ) : null}
 
       <Button
-        label="Login"
-        onClick={() => handleLogin(username, password, router)}
+        label={loading ? "..." : "Login"}
+        type="submit"
         className={styles.button}
       />
-    </div>
+    </form>
   );
 }

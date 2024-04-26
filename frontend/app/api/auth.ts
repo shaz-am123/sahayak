@@ -1,60 +1,65 @@
 import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.shared-runtime";
+import LoginRequest from "../types/LoginRequest";
+import UserResponse from "../types/UserResponse";
+import RegistraionRequest from "../types/RegistrationRequest";
+import LoginResponse from "../types/LoginResponse";
 
 const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
+
 export const handleLogin = async (
-  username: string,
-  password: string,
+  loginRequest: LoginRequest,
   router: AppRouterInstance,
-) => {
+): Promise<void> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/login`, {
     method: "POST",
-    body: JSON.stringify({ username: username, password: password }),
+    body: JSON.stringify({ ...loginRequest }),
     headers: {
       "Content-Type": "application/json",
     },
   });
 
-  if (!res.ok) alert("Login failed");
-  else {
-    const data = await res.json();
+  if (!res.ok) {
+    const errorResponse = await res.json();
+    alert(`Login failed: ${errorResponse.error}`);
+  } else {
+    const data: LoginResponse = await res.json();
     localStorage.setItem("token", data.token);
     router.push("/home");
   }
 };
 
-export const handleLogout = async (router: AppRouterInstance) => {
+export const handleLogout = async (
+  router: AppRouterInstance,
+): Promise<void> => {
   localStorage.removeItem("token");
   router.push("/");
 };
 
 export const handleRegistration = async (
-  username: string,
-  name: string,
-  emailAddress: string,
-  password: string,
+  registrationRequest: RegistraionRequest,
   router: AppRouterInstance,
-) => {
+): Promise<void> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/register`, {
     method: "POST",
     body: JSON.stringify({
-      username: username,
-      name: name,
-      emailAddress: emailAddress,
-      password: password,
+      ...registrationRequest,
     }),
     headers: {
       "Content-Type": "application/json",
     },
   });
 
-  if (!res.ok) alert("Registration failed");
-  else {
-    handleLogin(username, password, router);
+  if (!res.ok) {
+    const errorResponse = await res.json();
+    console.log(errorResponse.error);
+  } else {
+    const loginRequest: LoginRequest = { ...registrationRequest };
+    handleLogin(loginRequest, router);
   }
 };
 
-export const getUser = async () => {
+export const getUser = async (): Promise<UserResponse> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/user`, {
     method: "GET",
     headers: {
@@ -63,13 +68,37 @@ export const getUser = async () => {
     },
   });
 
-  if (!res.ok) alert("Couldn't find user");
-  else {
+  if (!res.ok) {
+    const errorResponse = await res.json();
+    alert(`Couldn't get user: ${errorResponse.error}`);
+    throw new Error(`Couldn't get user: ${errorResponse.error}`);
+  } else {
     const data = await res.json();
     return data;
   }
 };
 
-export const isAuthenticated = async () => {
+export const isAuthenticated = async (): Promise<boolean> => {
   return localStorage.getItem("token") !== null;
+};
+
+export const isUniqueUsername = async (
+  username: string,
+): Promise<{ isUnique: boolean }> => {
+  const res = await fetch(
+    `${BACKEND_SERVICE_URL}/auth/check-username?username=${username}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    },
+  );
+
+  if (!res.ok) {
+    alert("Server error");
+    throw new Error("Server error");
+  }
+
+  return await res.json();
 };

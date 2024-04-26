@@ -2,73 +2,121 @@ import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { handleRegistration } from "../../api/auth";
+import { handleRegistration, isUniqueUsername } from "../../api/auth";
 import styles from "./styles.module.scss";
+import { useFormik } from "formik";
+import registrationSchema from "./registrationSchema";
 
 export default function RegistrationForm() {
   const router = useRouter();
-  const [username, setUsername] = useState("");
-  const [name, setName] = useState("");
-  const [emailAddress, setEmailAddress] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [loading, setLoading] = useState(false);
+  const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
+    useFormik({
+      initialValues: {
+        username: "",
+        name: "",
+        emailAddress: "",
+        password: "",
+        confirmPassword: "",
+      },
+      validationSchema: registrationSchema,
+      onSubmit: (values, action) => {
+        setLoading(true);
+        handleRegistration({ ...values }, router).then(() => {
+          action.resetForm();
+          setLoading(false);
+        });
+      },
+    });
 
   return (
-    <div className={styles.formContainer} data-testid="registrationForm">
-      <h1 data-testid="heading">Register</h1>
-      <label htmlFor="username">Username</label>
+    <form
+      className={styles.formContainer}
+      data-testid="registrationForm"
+      onSubmit={handleSubmit}
+    >
+      <h2 data-testid="heading">Register</h2>
+      <label className={styles.fieldLabel} htmlFor="username">
+        Username
+      </label>
       <InputText
-        className={styles.inputField}
         id="username"
-        value={username}
-        onChange={(e) => setUsername(e.target.value)}
+        autoComplete="off"
+        onChange={handleChange}
+        value={values.username}
+        onBlur={handleBlur}
+        className={`${errors.username && touched.username ? "p-invalid" : ""} ${styles.inputField}`}
       />
+      {errors.username && touched.username && (
+        <p className={styles.fieldError}>{errors.username}</p>
+      )}
 
-      <label htmlFor="name">Name</label>
+      <label className={styles.fieldLabel} htmlFor="name">
+        Name
+      </label>
       <InputText
-        className={styles.inputField}
+        keyfilter={"alpha"}
         id="name"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        autoComplete="off"
+        value={values.name}
+        onBlur={handleBlur}
+        className={`${errors.name && touched.name ? "p-invalid" : ""} ${styles.inputField}`}
+        onChange={handleChange}
       />
+      {errors.name && touched.name && (
+        <p className={styles.fieldError}>{errors.name}</p>
+      )}
 
-      <label htmlFor="emailAddress">Email</label>
+      <label className={styles.fieldLabel} htmlFor="emailAddress">
+        Email
+      </label>
       <InputText
-        className={styles.inputField}
         id="emailAddress"
-        value={emailAddress}
-        onChange={(e) => setEmailAddress(e.target.value)}
+        autoComplete="off"
+        value={values.emailAddress}
+        onBlur={handleBlur}
+        className={`${errors.emailAddress && touched.emailAddress ? "p-invalid" : ""} ${styles.inputField}`}
+        onChange={handleChange}
       />
+      {errors.emailAddress && touched.emailAddress ? (
+        <p className={styles.fieldError}>{errors.emailAddress}</p>
+      ) : null}
 
-      <label htmlFor="password">Password</label>
+      <label className={styles.fieldLabel} htmlFor="password">
+        Password
+      </label>
       <InputText
-        className={styles.inputField}
         id="password"
         type="password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={`${errors.password && touched.password ? "p-invalid" : ""} ${styles.inputField}`}
+        value={values.password}
       />
+      {errors.password && touched.password ? (
+        <p className={styles.fieldError}>{errors.password}</p>
+      ) : null}
 
-      <label htmlFor="confirm-password">Confirm Password</label>
+      <label className={styles.fieldLabel} htmlFor="confirmPassword">
+        Confirm Password
+      </label>
       <InputText
-        className={styles.inputField}
-        id="confirm-password"
+        id="confirmPassword"
         type="password"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        className={`${errors.confirmPassword && touched.confirmPassword ? "p-invalid" : ""} ${styles.inputField}`}
+        value={values.confirmPassword}
       />
+      {errors.confirmPassword && touched.confirmPassword ? (
+        <p className={styles.fieldError}>{errors.confirmPassword}</p>
+      ) : null}
 
       <Button
-        label="Register"
-        onClick={() => {
-          if (confirmPassword !== password) {
-            alert("The passwords don't match");
-            throw new Error("The passwords don't match");
-          }
-          handleRegistration(username, name, emailAddress, password, router);
-        }}
+        label={loading ? "..." : "Register"}
+        type="submit"
         className={styles.button}
       />
-    </div>
+    </form>
   );
 }

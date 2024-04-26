@@ -137,4 +137,35 @@ describe("Authentication Repository tests", () => {
 
     findUserMock.mockRestore();
   });
+
+  it("should be able to return all the users", async () => {
+    const userEntity = new UserModel({
+      name: "Shyam",
+      username: "shyam123",
+      emailAddress: "shyam@gmail.com",
+      hashedPassword: "mockHashedPassword",
+    });
+    await userEntity.save();
+
+    const expectedResponse = [
+      new User({
+        id: "A001",
+        name: "Vikram",
+        emailAddress: "vikram@gmail.com",
+        username: "vikram123",
+        hashedPassword: "mockHashedPassword",
+      }),
+      new User({
+        id: "A002",
+        name: "Shyam",
+        username: "shyam123",
+        emailAddress: "shyam@gmail.com",
+        hashedPassword: "mockHashedPassword",
+      }),
+    ];
+    const actualResponse = await authRepository.getUsers();
+    expectedResponse.map((user, index) => {
+      expect({ ...actualResponse[index], id: user.id }).toEqual(user);
+    });
+  });
 });

@@ -14,6 +14,7 @@ jest.mock("../../src/repositories/AuthRepository", () => ({
       registerUser: jest.fn(),
       getUserByUsername: jest.fn(),
       getUserById: jest.fn(),
+      getUsers: jest.fn(),
     })),
   },
 }));
@@ -187,6 +188,51 @@ describe("Auth Service tests", () => {
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toBe("User not found, invalid userId");
+    }
+  });
+
+  it("should check for username uniqueness", async () => {
+    const mockRepositoryResponse = [
+      new User({
+        id: "A001",
+        name: "Ram",
+        username: "ram123",
+        emailAddress: "ram123@gmail.com",
+        hashedPassword: "mockHashedPassword",
+      }),
+      new User({
+        id: "A002",
+        name: "Shyam",
+        username: "shyam123",
+        emailAddress: "shyam123@gmail.com",
+        hashedPassword: "mockHashedPassword",
+      }),
+      new User({
+        id: "A003",
+        name: "John",
+        username: "john101",
+        emailAddress: "john123@gmail.com",
+        hashedPassword: "mockHashedPassword",
+      }),
+    ];
+
+    authRepositoryMock.getUsers.mockResolvedValue(mockRepositoryResponse);
+
+    var actualResponse = await authService.checkUsernameUniqueness("shyam123");
+    expect(actualResponse).toEqual({ isUnique: false });
+
+    actualResponse = await authService.checkUsernameUniqueness("alex123");
+    expect(actualResponse).toEqual({ isUnique: true });
+  });
+
+  it("should handle any error that occurs while getting users from repository", async () => {
+    const dbError = new Error("Database Error");
+    authRepositoryMock.getUsers.mockRejectedValue(dbError);
+    try {
+      await authService.checkUsernameUniqueness("ram123");
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("Database Error");
     }
   });
 });

@@ -8,7 +8,9 @@ import styles from "./styles.module.scss";
 export default function Home() {
   const [user, setUser] = useState<UserResponse>();
   useEffect(() => {
-    getUser().then((user) => setUser(user));
+    getUser().then((user: UserResponse) => {
+      setUser(user);
+    });
   }, []);
   const pageContent =
     user === undefined ? (
