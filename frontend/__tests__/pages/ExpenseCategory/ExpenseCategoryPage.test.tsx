@@ -1,17 +1,17 @@
 import React from "react";
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import ExpenseCategory from "../../app/expenseCategory/page";
-import mockExpenseCategories from "../../__mocks__/mockExpenseCategories";
+import ExpenseCategory from "../../../app/expenseCategory/page";
 import mockRouter from "next-router-mock";
+import mockExpenseCategories from "../../../__mocks__/mockExpenseCategories";
 
 jest.mock("next/navigation", () => require("next-router-mock"));
 
-jest.mock("../../app/api/auth", () => ({
+jest.mock("../../../app/api/auth", () => ({
   isAuthenticated: jest.fn(() => Promise.resolve(true)),
 }));
 
-jest.mock("../../app/api/expenseCategory", () => ({
+jest.mock("../../../app/api/expenseCategory", () => ({
   getExpenseCategories: jest.fn(() => Promise.resolve(mockExpenseCategories)),
 }));
 
@@ -48,7 +48,7 @@ describe("Expenses listing component", () => {
       const addButton = screen.getByTestId("add-button");
       expect(addButton).toBeInTheDocument();
       fireEvent.click(addButton);
-      expect(pushMock).toHaveBeenCalledWith("/expenseCategory/add");
+      expect(pushMock).toHaveBeenCalledWith("/expenseCategory/addCategory");
     });
   });
 });

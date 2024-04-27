@@ -31,7 +31,7 @@ export default function ExpenseCategory() {
           label="Add"
           rounded
           data-testid="add-button"
-          onClick={() => router.push("/expenseCategory/add")}
+          onClick={() => router.push("/expenseCategory/addCategory")}
         />
 
         {expenseCategories.map((expenseCategory) => {
