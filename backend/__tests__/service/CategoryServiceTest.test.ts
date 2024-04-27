@@ -290,4 +290,59 @@ describe("Category Service tests", () => {
       expect(error.message).toBe(mockError.message);
     }
   });
+
+  it("should check for expense-category uniqueness for an user", async () => {
+    const userId = "A001";
+    const mockRepositoryResponse = [
+      new ExpenseCategory({
+        id: "1",
+        userId: userId,
+        name: "Travel",
+        description: "",
+        expenseCount: 1,
+      }),
+      new ExpenseCategory({
+        id: "2",
+        userId: userId,
+        name: "Groceries",
+        description: "",
+        expenseCount: 1,
+      }),
+      new ExpenseCategory({
+        id: "3",
+        userId: userId,
+        name: "Stationary",
+        description: "",
+        expenseCount: 2,
+      }),
+    ];
+
+    categoryRepositoryMock.getExpenseCategories.mockResolvedValue(
+      mockRepositoryResponse,
+    );
+
+    var actualResponse = await categoryService.checkCategoryUniqueness(
+      userId,
+      "Travel",
+    );
+    expect(actualResponse).toEqual({ isUnique: false });
+
+    actualResponse = await categoryService.checkCategoryUniqueness(
+      userId,
+      "Shopping",
+    );
+    expect(actualResponse).toEqual({ isUnique: true });
+  });
+
+  it("should handle any error that occurs while getting users from repository", async () => {
+    const userId = "A001";
+    const dbError = new Error("Database Error");
+    categoryRepositoryMock.getExpenseCategories.mockRejectedValue(dbError);
+    try {
+      await categoryService.checkCategoryUniqueness(userId, "Travel");
+    } catch (error: any) {
+      expect(error).toBeInstanceOf(Error);
+      expect(error.message).toBe("Database Error");
+    }
+  });
 });

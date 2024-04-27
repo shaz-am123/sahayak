@@ -79,7 +79,11 @@ export const getUser = async (): Promise<UserResponse> => {
 };
 
 export const isAuthenticated = async (): Promise<boolean> => {
-  return localStorage.getItem("token") !== null;
+  try {
+    return localStorage.getItem("token") !== null;
+  } catch (e) {
+    return false;
+  }
 };
 
 export const isUniqueUsername = async (

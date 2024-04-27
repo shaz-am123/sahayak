@@ -39,6 +39,20 @@ router.get(
 );
 
 router.get(
+  "/check-category",
+  verifyToken,
+  async (req: express.Request, res: express.Response) => {
+    const userId = req.userId!;
+    const { categoryName } = req.query as { categoryName: string };
+    const response = await categoryController.checkCategoryUniquesness(
+      userId,
+      categoryName,
+    );
+    res.status(response.statusCode).json(response.body);
+  },
+);
+
+router.get(
   "/:expenseCategoryId",
   verifyToken,
   async (req: express.Request, res: express.Response) => {
