@@ -1,5 +1,4 @@
 export default interface ExpenseCategoryResponse {
-    name: string;
-    description: string;
-  }
-  
+  name: string;
+  description: string;
+}

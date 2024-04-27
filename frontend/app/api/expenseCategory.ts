@@ -32,7 +32,7 @@ export const getExpenseCategories =
 
 export const addExpenseCategory = async (
   expenseCategoryRequest: ExpenseCategoryRequest,
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ): Promise<void> => {
   if (!isAuthenticated()) {
     alert("Not Authenticated");
@@ -51,8 +51,7 @@ export const addExpenseCategory = async (
   if (!res.ok) {
     alert("Request failed");
     throw new Error("Request failed");
-  }
-  else{
-    router.refresh;
+  } else {
+    router.push("/expenseCategory");
   }
 };
