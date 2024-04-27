@@ -24,7 +24,6 @@ export default function RegistrationForm() {
         setLoading(true);
         handleRegistration({ ...values }, router).then(() => {
           action.resetForm();
-          setLoading(false);
         });
       },
     });
