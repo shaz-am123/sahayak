@@ -1,5 +1,4 @@
 import * as Yup from "yup";
-import { isUniqueUsername } from "../../api/auth";
 
 const loginSchema = Yup.object({
   username: Yup.string().required("Username is required"),

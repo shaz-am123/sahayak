@@ -7,7 +7,7 @@ import styles from "./styles.module.scss";
 import { useFormik } from "formik";
 import loginSchema from "./loginSchema";
 
-export default function RegistrationForm() {
+export default function LoginForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
