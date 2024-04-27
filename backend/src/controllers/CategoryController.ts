@@ -116,6 +116,21 @@ export class CategoryController {
     }
   }
 
+  async checkCategoryUniquesness(
+    userId: string,
+    categoryName: string,
+  ): Promise<HttpResponse> {
+    try {
+      const response = await this.categoryService.checkCategoryUniqueness(
+        userId,
+        categoryName,
+      );
+      return new HttpResponse({ statusCode: 200, body: response });
+    } catch (error) {
+      return this.handleErrors(error);
+    }
+  }
+
   private handleErrors(error: any): HttpResponse {
     if (error instanceof CustomValidationError) {
       return new HttpResponse({

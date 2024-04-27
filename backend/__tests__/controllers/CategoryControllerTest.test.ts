@@ -13,6 +13,7 @@ jest.mock("../../src/services/CategoryService", () => ({
       getExpenseCategoryById: jest.fn(),
       deleteExpenseCategory: jest.fn(),
       updateExpenseCategory: jest.fn(),
+      checkCategoryUniqueness: jest.fn(),
     })),
   },
 }));
@@ -269,6 +270,41 @@ describe("Category Controller tests", () => {
     );
 
     expect(httpResponse.body).toEqual({ error: mockError.message });
+    expect(httpResponse.statusCode).toBe(500);
+  });
+
+  it("should be able to check whether an expense-category is unique for a user or not", async () => {
+    const expenseCategoryName = "Travel";
+    const userId = "A001";
+
+    const expectedResponse = {
+      isUnique: true,
+    };
+    categoryServiceMock.checkCategoryUniqueness.mockResolvedValue(
+      expectedResponse,
+    );
+
+    const httpResponse = await categoryController.checkCategoryUniquesness(
+      userId,
+      expenseCategoryName,
+    );
+
+    expect(httpResponse.body).toEqual(expectedResponse);
+    expect(httpResponse.statusCode).toBe(200);
+  });
+
+  it("should be able to handle any error that occurs while checking the uniqueness of an expense-category", async () => {
+    const expenseCategoryName = "Travel";
+    const userId = "A001";
+    const serverError = new Error("Internal Server Error");
+    categoryServiceMock.checkCategoryUniqueness.mockRejectedValue(serverError);
+
+    const httpResponse = await categoryController.checkCategoryUniquesness(
+      userId,
+      expenseCategoryName,
+    );
+
+    expect(httpResponse.body).toEqual({ error: serverError.message });
     expect(httpResponse.statusCode).toBe(500);
   });
 });

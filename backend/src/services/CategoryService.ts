@@ -136,4 +136,14 @@ export class CategoryService {
       (expenseCategory) => expenseCategory.expenseCount,
     );
   }
+
+  async checkCategoryUniqueness(
+    userId: string,
+    categoryName: string,
+  ): Promise<{ isUnique: boolean }> {
+    const categories =
+      await this.categoryRepository.getExpenseCategories(userId);
+    const categoryNames = categories.map((category) => category.name);
+    return { isUnique: !categoryNames.includes(categoryName) };
+  }
 }
