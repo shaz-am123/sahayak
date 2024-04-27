@@ -24,3 +24,10 @@
 .fieldLabel {
   font-size: 0.85rem;
 }
+
+.requiredField::after {
+    content: '*';
+    color: red;
+    margin-left: 0.2em;
+}
+

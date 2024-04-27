@@ -33,7 +33,10 @@ export default function RegistrationForm() {
       onSubmit={handleSubmit}
     >
       <h2 data-testid="heading">Login</h2>
-      <label className={styles.fieldLabel} htmlFor="username">
+      <label
+        className={`${styles.fieldLabel} ${styles.requiredField}`}
+        htmlFor="username"
+      >
         Username
       </label>
       <InputText
@@ -48,7 +51,10 @@ export default function RegistrationForm() {
         <p className={styles.fieldError}>{errors.username}</p>
       )}
 
-      <label className={styles.fieldLabel} htmlFor="password">
+      <label
+        className={`${styles.fieldLabel} ${styles.requiredField}`}
+        htmlFor="password"
+      >
         Password
       </label>
       <InputText

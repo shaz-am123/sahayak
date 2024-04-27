@@ -36,7 +36,10 @@ export default function RegistrationForm() {
       onSubmit={handleSubmit}
     >
       <h2 data-testid="heading">Register</h2>
-      <label className={styles.fieldLabel} htmlFor="username">
+      <label
+        className={`${styles.fieldLabel} ${styles.requiredField}`}
+        htmlFor="username"
+      >
         Username
       </label>
       <InputText
@@ -51,7 +54,10 @@ export default function RegistrationForm() {
         <p className={styles.fieldError}>{errors.username}</p>
       )}
 
-      <label className={styles.fieldLabel} htmlFor="name">
+      <label
+        className={`${styles.fieldLabel} ${styles.requiredField}`}
+        htmlFor="name"
+      >
         Name
       </label>
       <InputText
@@ -67,7 +73,10 @@ export default function RegistrationForm() {
         <p className={styles.fieldError}>{errors.name}</p>
       )}
 
-      <label className={styles.fieldLabel} htmlFor="emailAddress">
+      <label
+        className={`${styles.fieldLabel} ${styles.requiredField}`}
+        htmlFor="emailAddress"
+      >
         Email
       </label>
       <InputText
@@ -82,7 +91,10 @@ export default function RegistrationForm() {
         <p className={styles.fieldError}>{errors.emailAddress}</p>
       ) : null}
 
-      <label className={styles.fieldLabel} htmlFor="password">
+      <label
+        className={`${styles.fieldLabel} ${styles.requiredField}`}
+        htmlFor="password"
+      >
         Password
       </label>
       <InputText
@@ -97,7 +109,10 @@ export default function RegistrationForm() {
         <p className={styles.fieldError}>{errors.password}</p>
       ) : null}
 
-      <label className={styles.fieldLabel} htmlFor="confirmPassword">
+      <label
+        className={`${styles.fieldLabel} ${styles.requiredField}`}
+        htmlFor="confirmPassword"
+      >
         Confirm Password
       </label>
       <InputText
