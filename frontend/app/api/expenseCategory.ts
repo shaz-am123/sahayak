@@ -2,6 +2,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import ExpenseCategoryRequest from "../types/ExpenseCategoryRequest";
 import MultipleExpenseCategoriesResponse from "../types/MultipleExpenseCategoriesResponse";
 import { isAuthenticated } from "./auth";
+import { capitalize } from "../utils/formatter";
 
 const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
@@ -41,7 +42,10 @@ export const addExpenseCategory = async (
 
   const res = await fetch(`${BACKEND_SERVICE_URL}/categories/`, {
     method: "POST",
-    body: JSON.stringify({ ...expenseCategoryRequest }),
+    body: JSON.stringify({
+      ...expenseCategoryRequest,
+      name: capitalize(expenseCategoryRequest.name),
+    }),
     headers: {
       "Content-Type": "application/json",
       Authorization: localStorage.getItem("token")!,
@@ -54,4 +58,31 @@ export const addExpenseCategory = async (
   } else {
     router.push("/expenseCategory");
   }
+};
+
+export const isUniqueCategory = async (
+  categoryName: string,
+): Promise<{ isUnique: boolean }> => {
+  if (!isAuthenticated()) {
+    alert("Not Authenticated");
+    throw new Error("Not Authenticated");
+  }
+
+  const res = await fetch(
+    `${BACKEND_SERVICE_URL}/categories/check-category?categoryName=${capitalize(categoryName)}`,
+    {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: localStorage.getItem("token")!,
+      },
+    },
+  );
+
+  if (!res.ok) {
+    alert("Server error");
+    throw new Error("Server error");
+  }
+
+  return await res.json();
 };
