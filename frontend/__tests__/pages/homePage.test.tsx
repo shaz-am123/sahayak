@@ -2,9 +2,8 @@ import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
 import Home from "../../app/home/page";
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-}));
+
+jest.mock("next/navigation", () => require("next-router-mock"));
 
 jest.mock("../../app/api/auth", () => ({
   getUser: jest.fn(() => Promise.resolve({ name: "Test User" })),

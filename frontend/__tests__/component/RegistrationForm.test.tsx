@@ -15,9 +15,7 @@ jest.mock("../../app/api/auth", () => ({
   isUniqueUsername: jest.fn(() => Promise.resolve({ isUnique: true })),
 }));
 
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-}));
+jest.mock("next/navigation", () => require("next-router-mock"));
 
 describe("RegistrationForm component", () => {
   beforeEach(() => {

@@ -14,9 +14,7 @@ jest.mock("../../app/api/auth", () => ({
   handleLogin: jest.fn(),
 }));
 
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-}));
+jest.mock("next/navigation", () => require("next-router-mock"));
 
 describe("LoginForm component", () => {
   beforeEach(() => {

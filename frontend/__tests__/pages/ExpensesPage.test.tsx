@@ -4,9 +4,7 @@ import "@testing-library/jest-dom";
 import Expense from "../../app/expense/page";
 import mockExpenses from "../../__mocks__/mockExpenses";
 
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-}));
+jest.mock("next/navigation", () => require("next-router-mock"));
 
 jest.mock("../../app/api/auth", () => ({
   isAuthenticated: jest.fn(() => Promise.resolve(true)),

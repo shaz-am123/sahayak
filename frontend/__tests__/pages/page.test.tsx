@@ -9,9 +9,7 @@ import {
 import "@testing-library/jest-dom";
 import StartPage from "../../app/page";
 
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-}));
+jest.mock("next/navigation", () => require("next-router-mock"));
 
 describe("StartPage component", () => {
   beforeEach(() => {

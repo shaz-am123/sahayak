@@ -4,9 +4,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import Navbar from "../../app/component/Navbar";
 import { handleLogout } from "../../app/api/auth";
 
-jest.mock("next/navigation", () => ({
-  useRouter: jest.fn(),
-}));
+jest.mock("next/navigation", () => require("next-router-mock"));
 
 jest.mock("../../app/api/auth", () => ({
   handleLogout: jest.fn(),
