@@ -1,6 +1,6 @@
 import ExpenseCategoryResponse from "./ExpenseCategoryResponse";
 
 export default interface MultipleExpenseCategoriesResponse {
-  expenses: ExpenseCategoryResponse[];
+  expenseCategories: ExpenseCategoryResponse[];
   totalRecords: number;
 }

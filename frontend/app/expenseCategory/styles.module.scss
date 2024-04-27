@@ -1,0 +1,19 @@
+.categoryCard {
+    width: calc(33.33% - 1.5rem);
+    margin: 1.5rem 1.5rem;
+    margin-right: 0;
+    height: 27vh;
+    float: left;
+}
+
+.inputText {
+    width: 85%;
+    margin-right: 5px;
+    border-radius: 12px;
+}
+
+.addCategoryButton {
+    position: absolute;
+    right: 2.4rem;
+    top: 8rem;
+}

@@ -44,7 +44,7 @@ export default function Navbar() {
   );
 
   const menu = (
-    <>
+    <div className="p-mr-4">
       {menuItems.map((menuItem) => (
         <Link
           key={menuItem.label}
@@ -58,7 +58,7 @@ export default function Navbar() {
       <Button data-testid="logoutButton" onClick={() => handleLogout(router)}>
         Logout
       </Button>
-    </>
+    </div>
   );
 
   return (

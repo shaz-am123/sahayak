@@ -7,11 +7,11 @@ import { getExpenses } from "../api/expense";
 import ExpenseResponse from "../types/ExpenseResponse";
 
 export default function Expense() {
-  const [tableData, setTableData] = useState<ExpenseResponse[]>();
+  const [expenses, setExpenses] = useState<ExpenseResponse[]>();
 
   useEffect(() => {
     getExpenses().then((response) => {
-      setTableData(response.expenses);
+      setExpenses(response.expenses);
     });
   }, []);
   const expenseTableColumns = [
@@ -57,7 +57,7 @@ export default function Expense() {
       />
     ));
   const pageContent =
-    tableData === undefined ? (
+    expenses === undefined ? (
       <p>Loading</p>
     ) : (
       <>
@@ -65,7 +65,7 @@ export default function Expense() {
         <DataTable
           stripedRows
           showGridlines
-          value={tableData}
+          value={expenses}
           data-testid="expenses-table"
         >
           {getExpenseTableColumns()}
