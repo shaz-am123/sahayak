@@ -22,7 +22,7 @@ describe("ExpenseCategoryForm component", () => {
     render(<ExpenseCategoryForm />);
   });
   test("renders correctly", () => {
-    const expenseCategoryForm = screen.getByTestId("expense-fategory-form");
+    const expenseCategoryForm = screen.getByTestId("expense-category-form");
     expect(expenseCategoryForm).toBeInTheDocument();
 
     const heading = screen.getByTestId("heading");
