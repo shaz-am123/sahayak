@@ -9,6 +9,7 @@ import { getExpenseCategories } from "../../api/expenseCategory";
 import ExpenseCategoryResponse from "../../types/ExpenseCategoryResponse";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
+import expenseFormSchema from "./expenseFormSchema";
 
 export default function ExpenseForm() {
   const router = useRouter();
@@ -30,7 +31,7 @@ export default function ExpenseForm() {
         description: "",
         date: null,
       },
-      // validationSchema: expenseCategoryFormSchema,
+      validationSchema: expenseFormSchema,
       onSubmit: (values, action) => {
         setLoading(true);
         addExpense(
@@ -62,6 +63,7 @@ export default function ExpenseForm() {
       </label>
       <InputText
         id="amount"
+        name="amount"
         keyfilter="pint"
         onChange={handleChange}
         value={values.amount}
@@ -80,6 +82,7 @@ export default function ExpenseForm() {
       </label>
       <Dropdown
         id="expenseCategory"
+        name="expenseCategory"
         value={values.expenseCategory}
         onChange={handleChange}
         options={expenseCategories}
@@ -88,7 +91,7 @@ export default function ExpenseForm() {
         className={`${errors.expenseCategory && touched.expenseCategory ? "p-invalid" : ""} ${styles.inputField}`}
       />
       {errors.expenseCategory && touched.expenseCategory && (
-        <p className={styles.fieldError}>{errors.expenseCategory}</p>
+        <p className={styles.fieldError}>{errors.expenseCategory as string}</p>
       )}
 
       <label className={`${styles.fieldLabel}`} htmlFor="description">
@@ -96,6 +99,8 @@ export default function ExpenseForm() {
       </label>
       <InputText
         id="description"
+        name="description"
+        autoComplete="off"
         onChange={handleChange}
         value={values.description}
         onBlur={handleBlur}
@@ -118,10 +123,11 @@ export default function ExpenseForm() {
         onChange={handleChange}
         value={values.date}
         onBlur={handleBlur}
+        dateFormat="dd M, yy"
         className={`${errors.date && touched.date ? "p-invalid" : ""} ${styles.inputField}`}
       />
       {errors.date && touched.date && (
-        <p className={styles.fieldError}>{errors.date}</p>
+        <p className={styles.fieldError}>{errors.date as string}</p>
       )}
 
       <Button
