@@ -31,7 +31,7 @@ export const getExpenses = async (): Promise<MultipleExpensesResponse> => {
 
 export const addExpense = async (
   expenseRequest: ExpenseRequest,
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ): Promise<void> => {
   if (!isAuthenticated()) {
     alert("Not Authenticated");
@@ -52,5 +52,5 @@ export const addExpense = async (
     throw new Error("Request failed");
   }
 
-  router.push("/expense")
+  router.push("/expense");
 };

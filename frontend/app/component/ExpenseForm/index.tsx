@@ -38,9 +38,9 @@ export default function ExpenseForm() {
           {
             ...values,
             expenseCategoryId: values.expenseCategory.id,
-            amount: parseInt(values.amount, 10)
+            amount: parseInt(values.amount, 10),
           },
-          router
+          router,
         ).then(() => {
           action.resetForm();
           setLoading(false);

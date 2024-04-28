@@ -6,10 +6,7 @@ import ExpenseForm from "../../component/ExpenseForm";
 
 export default function AddExpense() {
   const pageContent = (
-    <div
-      className={styles.formContainer}
-      data-testid="add-expense-form"
-    >
+    <div className={styles.formContainer} data-testid="add-expense-form">
       <ExpenseForm />
     </div>
   );

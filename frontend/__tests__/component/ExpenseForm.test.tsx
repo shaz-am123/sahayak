@@ -70,7 +70,7 @@ describe("ExpenseForm component", () => {
     await waitFor(() => {
       expect(screen.getByText("Amount is required")).toBeInTheDocument();
       expect(
-        screen.getByText("Expense category is required")
+        screen.getByText("Expense category is required"),
       ).toBeInTheDocument();
       expect(screen.getByText("Date is required")).toBeInTheDocument();
     });
