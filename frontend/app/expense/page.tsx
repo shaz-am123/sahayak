@@ -5,15 +5,20 @@ import { Column } from "primereact/column";
 import { useEffect, useState } from "react";
 import { getExpenses } from "../api/expense";
 import ExpenseResponse from "../types/ExpenseResponse";
+import { Button } from "primereact/button";
+import styles from "./styles.module.scss";
+import { useRouter } from "next/navigation";
 
 export default function Expense() {
-  const [expenses, setExpenses] = useState<ExpenseResponse[]>();
+  const router = useRouter();
 
+  const [expenses, setExpenses] = useState<ExpenseResponse[]>();
   useEffect(() => {
     getExpenses().then((response) => {
       setExpenses(response.expenses);
     });
   }, []);
+
   const expenseTableColumns = [
     {
       field: "amount",
@@ -62,6 +67,15 @@ export default function Expense() {
     ) : (
       <>
         <h2>My Expenses</h2>
+        <Button
+          className={styles.addExpenseButton}
+          size="small"
+          icon="pi pi-plus"
+          label="Add"
+          rounded
+          data-testid="add-button"
+          onClick={() => router.push("/expense/addExpense")}
+        />
         <DataTable
           stripedRows
           showGridlines

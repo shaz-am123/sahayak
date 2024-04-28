@@ -7,10 +7,7 @@ import {
   act,
   waitFor,
 } from "@testing-library/react";
-import {
-  addExpenseCategory,
-  isUniqueCategory,
-} from "../../app/api/expenseCategory";
+import { addExpenseCategory } from "../../app/api/expenseCategory";
 import ExpenseCategoryForm from "../../app/component/ExpenseCategoryForm";
 
 jest.mock("../../app/api/expenseCategory", () => ({
@@ -25,7 +22,7 @@ describe("ExpenseCategoryForm component", () => {
     render(<ExpenseCategoryForm />);
   });
   test("renders correctly", () => {
-    const expenseCategoryForm = screen.getByTestId("expense-fategory-form");
+    const expenseCategoryForm = screen.getByTestId("expense-category-form");
     expect(expenseCategoryForm).toBeInTheDocument();
 
     const heading = screen.getByTestId("heading");
@@ -33,7 +30,7 @@ describe("ExpenseCategoryForm component", () => {
     expect(heading.innerHTML).toEqual("Add Expense-Category");
   });
 
-  test("should have all the input fields and login button", () => {
+  test("should have all the input fields and add button", () => {
     expect(screen.getByLabelText("Expense-category name")).toBeInTheDocument();
     expect(screen.getByLabelText("Description")).toBeInTheDocument();
 

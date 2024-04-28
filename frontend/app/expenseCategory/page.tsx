@@ -13,11 +13,13 @@ export default function ExpenseCategory() {
   const router = useRouter();
   const [expenseCategories, setExpenseCategories] =
     useState<ExpenseCategoryResponse[]>();
+
   useEffect(() => {
     getExpenseCategories().then((response) => {
       setExpenseCategories(response.expenseCategories);
     });
   }, []);
+
   const pageContent =
     expenseCategories === undefined ? (
       <p>Loading</p>

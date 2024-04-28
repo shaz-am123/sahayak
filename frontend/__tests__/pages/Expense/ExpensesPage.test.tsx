@@ -1,16 +1,19 @@
 import React from "react";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Expense from "../../app/expense/page";
-import mockExpenses from "../../__mocks__/mockExpenses";
+import Expense from "../../../app/expense/page";
+import mockExpenses from "../../../__mocks__/mockExpenses";
+import mockRouter from "next-router-mock";
 
 jest.mock("next/navigation", () => require("next-router-mock"));
 
-jest.mock("../../app/api/auth", () => ({
+jest.mock("next/navigation", () => require("next-router-mock"));
+
+jest.mock("../../../app/api/auth", () => ({
   isAuthenticated: jest.fn(() => Promise.resolve(true)),
 }));
 
-jest.mock("../../app/api/expense", () => ({
+jest.mock("../../../app/api/expense", () => ({
   getExpenses: jest.fn(() => Promise.resolve(mockExpenses)),
 }));
 
@@ -39,6 +42,18 @@ describe("Expenses listing component", () => {
 
         expect(screen.getByText(date)).toBeInTheDocument();
       });
+    });
+  });
+
+  it("should have an add button which navigates to add expense page", async () => {
+    const pushMock = jest.fn();
+    mockRouter.push = pushMock;
+    expect(screen.getByText("Loading")).toBeInTheDocument();
+    await waitFor(() => {
+      const addButton = screen.getByTestId("add-button");
+      expect(addButton).toBeInTheDocument();
+      fireEvent.click(addButton);
+      expect(pushMock).toHaveBeenCalledWith("/expense/addExpense");
     });
   });
 });

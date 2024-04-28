@@ -30,7 +30,7 @@ export default function ExpenseCategoryForm() {
   return (
     <form
       className={styles.formContainer}
-      data-testid="expense-fategory-form"
+      data-testid="expense-category-form"
       onSubmit={handleSubmit}
     >
       <h2 data-testid="heading">Add Expense-Category</h2>
