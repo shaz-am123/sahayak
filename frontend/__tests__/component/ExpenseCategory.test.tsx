@@ -7,10 +7,7 @@ import {
   act,
   waitFor,
 } from "@testing-library/react";
-import {
-  addExpenseCategory,
-  isUniqueCategory,
-} from "../../app/api/expenseCategory";
+import { addExpenseCategory } from "../../app/api/expenseCategory";
 import ExpenseCategoryForm from "../../app/component/ExpenseCategoryForm";
 
 jest.mock("../../app/api/expenseCategory", () => ({

@@ -9,25 +9,25 @@ on:
 jobs:
   backend-test:
     runs-on: ubuntu-latest
-    
+
     env:
-      TESTING_DB_URL: '${{ secrets.TESTING_DB_URL }}'
-    
+      TESTING_DB_URL: "${{ secrets.TESTING_DB_URL }}"
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-      
+
       - name: Start MongoDB
         uses: supercharge/mongodb-github-action@1.10.0
-    
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
-    
+
       - name: Install dependencies
         run: |
           cd backend
           npm install
-      
+
       - name: Run Jest tests with coverage
         run: |
           cd backend
@@ -38,7 +38,7 @@ jobs:
           cd backend
           coverage_pct=$(jq -r '.total.statements.pct' coverage/coverage-summary.json)
           echo "Percentage of statements coverage: $coverage_pct"
-          
+
           if (( $(echo "$coverage_pct > 95" | bc -l) )); then
             echo "Test coverage is greater than 95%."
           else
@@ -78,20 +78,20 @@ jobs:
           cd frontend
           npm run format-check
   frontend-test:
-    runs-on: ubuntu-latest    
+    runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-    
+
       - name: Setup Node.js
         uses: actions/setup-node@v2
-    
+
       - name: Install dependencies
         run: |
           cd frontend
           npm install
-      
-      - name: Run Jest tests with coverage
+
+      - name: Run Jest tests
         run: |
           cd frontend
-          npm test -- --coverage --coverageReporters=json-summary
+          npm test
