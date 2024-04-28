@@ -1,6 +1,17 @@
 import React from "react";
-import styles from "./styles.module.css";
+import { Image } from "primereact/image";
+import styles from "./styles.module.scss";
 
 export default function AccessDenied() {
-  return <h1>Access Denied</h1>;
+  return (
+    <>
+      <Image
+        src="/assets/access-denied.png"
+        alt="access-denied-blob"
+        width="600"
+        height="600"
+        className={styles.accessDeniedBlob}
+      />
+    </>
+  );
 }
