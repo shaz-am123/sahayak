@@ -1,16 +1,16 @@
 import React from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import Expense from "../../app/expense/page";
-import mockExpenses from "../../__mocks__/mockExpenses";
+import Expense from "../../../app/expense/page";
+import mockExpenses from "../../../__mocks__/mockExpenses";
 
 jest.mock("next/navigation", () => require("next-router-mock"));
 
-jest.mock("../../app/api/auth", () => ({
+jest.mock("../../../app/api/auth", () => ({
   isAuthenticated: jest.fn(() => Promise.resolve(true)),
 }));
 
-jest.mock("../../app/api/expense", () => ({
+jest.mock("../../../app/api/expense", () => ({
   getExpenses: jest.fn(() => Promise.resolve(mockExpenses)),
 }));
 

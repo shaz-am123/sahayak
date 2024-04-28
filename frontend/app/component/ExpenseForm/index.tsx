@@ -81,7 +81,7 @@ export default function ExpenseForm() {
         Expense-category
       </label>
       <Dropdown
-        id="expenseCategory"
+        data-testid="expenseCategory"
         name="expenseCategory"
         value={values.expenseCategory}
         onChange={handleChange}
@@ -118,7 +118,7 @@ export default function ExpenseForm() {
       </label>
       <Calendar
         showIcon
-        id="date"
+        data-testid="date"
         name="date"
         onChange={handleChange}
         value={values.date}

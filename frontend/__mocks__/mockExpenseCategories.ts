@@ -13,7 +13,7 @@ const mockExpenseCategories: MultipleExpenseCategoriesResponse = {
       id: "2",
       userId: "A001",
       name: "Travel",
-      description: "Train Ticket",
+      description: "Travelling costs: bus, flight, train...",
       expenseCount: 2,
     },
     {

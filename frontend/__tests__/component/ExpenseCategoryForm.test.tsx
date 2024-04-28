@@ -30,7 +30,7 @@ describe("ExpenseCategoryForm component", () => {
     expect(heading.innerHTML).toEqual("Add Expense-Category");
   });
 
-  test("should have all the input fields and login button", () => {
+  test("should have all the input fields and add button", () => {
     expect(screen.getByLabelText("Expense-category name")).toBeInTheDocument();
     expect(screen.getByLabelText("Description")).toBeInTheDocument();
 

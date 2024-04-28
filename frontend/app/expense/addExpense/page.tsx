@@ -4,7 +4,7 @@ import styles from "./styles.module.scss";
 import ProtectedContent from "../../component/ProtectedContent";
 import ExpenseForm from "../../component/ExpenseForm";
 
-export default function AddCategory() {
+export default function AddExpense() {
   const pageContent = (
     <div
       className={styles.formContainer}
