@@ -70,7 +70,6 @@ export const getUser = async (): Promise<UserResponse> => {
 
   if (!res.ok) {
     const errorResponse = await res.json();
-    alert(`Couldn't get user: ${errorResponse.error}`);
     throw new Error(`Couldn't get user: ${errorResponse.error}`);
   } else {
     const data = await res.json();
@@ -100,7 +99,6 @@ export const isUniqueUsername = async (
   );
 
   if (!res.ok) {
-    alert("Server error");
     throw new Error("Server error");
   }
 

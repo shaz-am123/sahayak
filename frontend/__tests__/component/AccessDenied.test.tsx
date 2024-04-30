@@ -5,10 +5,6 @@ import AccessDenied from "../../app/component/AccessDenied";
 
 jest.mock("next/navigation", () => require("next-router-mock"));
 
-jest.mock("../../app/api/auth", () => ({
-  handleLogout: jest.fn(),
-}));
-
 describe("Navbar component", () => {
   beforeEach(() => {
     render(<AccessDenied />);
