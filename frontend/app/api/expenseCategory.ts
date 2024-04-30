@@ -10,7 +10,6 @@ const BACKEND_SERVICE_URL =
 export const getExpenseCategories =
   async (): Promise<MultipleExpenseCategoriesResponse> => {
     if (!isAuthenticated()) {
-      alert("Not Authenticated");
       throw new Error("Not Authenticated");
     }
 
@@ -23,7 +22,6 @@ export const getExpenseCategories =
     });
 
     if (!res.ok) {
-      alert("Request failed");
       throw new Error("Request failed");
     }
 
@@ -36,7 +34,6 @@ export const addExpenseCategory = async (
   router: AppRouterInstance,
 ): Promise<void> => {
   if (!isAuthenticated()) {
-    alert("Not Authenticated");
     throw new Error("Not Authenticated");
   }
 
@@ -53,7 +50,6 @@ export const addExpenseCategory = async (
   });
 
   if (!res.ok) {
-    alert("Request failed");
     throw new Error("Request failed");
   } else {
     router.push("/expenseCategory");
@@ -64,7 +60,6 @@ export const isUniqueCategory = async (
   categoryName: string,
 ): Promise<{ isUnique: boolean }> => {
   if (!isAuthenticated()) {
-    alert("Not Authenticated");
     throw new Error("Not Authenticated");
   }
 
@@ -80,7 +75,6 @@ export const isUniqueCategory = async (
   );
 
   if (!res.ok) {
-    alert("Server error");
     throw new Error("Server error");
   }
 

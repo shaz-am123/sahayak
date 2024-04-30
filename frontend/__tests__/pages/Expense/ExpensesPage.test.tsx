@@ -7,8 +7,6 @@ import mockRouter from "next-router-mock";
 
 jest.mock("next/navigation", () => require("next-router-mock"));
 
-jest.mock("next/navigation", () => require("next-router-mock"));
-
 jest.mock("../../../app/api/auth", () => ({
   isAuthenticated: jest.fn(() => Promise.resolve(true)),
 }));

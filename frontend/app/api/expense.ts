@@ -8,7 +8,6 @@ const BACKEND_SERVICE_URL =
 
 export const getExpenses = async (): Promise<MultipleExpensesResponse> => {
   if (!isAuthenticated()) {
-    alert("Not Authenticated");
     throw new Error("Not Authenticated");
   }
 
@@ -21,7 +20,6 @@ export const getExpenses = async (): Promise<MultipleExpensesResponse> => {
   });
 
   if (!res.ok) {
-    alert("Request failed");
     throw new Error("Request failed");
   }
 
@@ -34,7 +32,6 @@ export const addExpense = async (
   router: AppRouterInstance,
 ): Promise<void> => {
   if (!isAuthenticated()) {
-    alert("Not Authenticated");
     throw new Error("Not Authenticated");
   }
 
@@ -48,7 +45,6 @@ export const addExpense = async (
   });
 
   if (!res.ok) {
-    alert("Request failed");
     throw new Error("Request failed");
   }
 

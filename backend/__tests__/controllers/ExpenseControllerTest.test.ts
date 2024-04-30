@@ -3,8 +3,8 @@ import ExpenseRequest from "../../src/dto/ExpenseRequest";
 import ExpenseResponse from "../../src/dto/ExpenseResponse";
 import MultipleExpensesResponse from "../../src/dto/MultipleExpensesResponse";
 import { CustomValidationError } from "../../src/errors/CustomValidationError";
-import { ExpenseController } from "./../../src/controllers/ExpenseController";
-import { ExpenseService } from "./../../src/services/ExpenseService";
+import { ExpenseController } from "../../src/controllers/ExpenseController";
+import { ExpenseService } from "../../src/services/ExpenseService";
 
 jest.mock("../../src/services/ExpenseService", () => ({
   ExpenseService: {
