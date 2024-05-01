@@ -6,6 +6,7 @@ import { handleLogin } from "../../api/auth";
 import styles from "./styles.module.scss";
 import { useFormik } from "formik";
 import loginSchema from "./loginSchema";
+import PasswordInput from "../InputPassword";
 
 export default function LoginForm() {
   const router = useRouter();
@@ -21,6 +22,7 @@ export default function LoginForm() {
         setLoading(true);
         handleLogin({ ...values }, router).then(() => {
           action.resetForm();
+          setLoading(false);
         });
       },
     });
@@ -56,7 +58,7 @@ export default function LoginForm() {
       >
         Password
       </label>
-      <InputText
+      <PasswordInput
         id="password"
         type="password"
         onChange={handleChange}

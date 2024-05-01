@@ -29,7 +29,7 @@ export default function ExpenseForm() {
         amount: "",
         expenseCategory: null,
         description: "",
-        date: null,
+        date: new Date(),
       },
       validationSchema: expenseFormSchema,
       onSubmit: (values, action) => {

@@ -6,6 +6,7 @@ import { handleRegistration, isUniqueUsername } from "../../api/auth";
 import styles from "./styles.module.scss";
 import { useFormik } from "formik";
 import registrationSchema from "./registrationSchema";
+import PasswordInput from "../InputPassword";
 
 export default function RegistrationForm() {
   const router = useRouter();
@@ -24,6 +25,7 @@ export default function RegistrationForm() {
         setLoading(true);
         handleRegistration({ ...values }, router).then(() => {
           action.resetForm();
+          setLoading(false);
         });
       },
     });
@@ -60,7 +62,7 @@ export default function RegistrationForm() {
         Name
       </label>
       <InputText
-        keyfilter={"alpha"}
+        keyfilter={/^[a-zA-Z\s]*$/}
         id="name"
         autoComplete="off"
         value={values.name}
@@ -96,7 +98,7 @@ export default function RegistrationForm() {
       >
         Password
       </label>
-      <InputText
+      <PasswordInput
         id="password"
         type="password"
         onChange={handleChange}
@@ -114,7 +116,7 @@ export default function RegistrationForm() {
       >
         Confirm Password
       </label>
-      <InputText
+      <PasswordInput
         id="confirmPassword"
         type="password"
         onChange={handleChange}
