@@ -21,14 +21,14 @@ export default function Expense() {
 
   const expenseTableColumns = [
     {
-      field: "amount",
-      header: "Amount(₹)",
-      sort: true,
-    },
-    {
       field: "expenseCategory.name",
       header: "Category",
       sort: false,
+    },
+    {
+      field: "amount",
+      header: "Amount(₹)",
+      sort: true,
     },
     {
       field: "date",
