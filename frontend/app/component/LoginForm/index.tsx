@@ -22,6 +22,7 @@ export default function LoginForm() {
         setLoading(true);
         handleLogin({ ...values }, router).then(() => {
           action.resetForm();
+          setLoading(false);
         });
       },
     });
