@@ -2,7 +2,7 @@ import { IsNotEmpty, MaxLength, MinLength, validate } from "class-validator";
 
 class ExpenseCategoryRequest {
   @IsNotEmpty({ message: "Expense-category name is required" })
-  @MinLength(4, {
+  @MinLength(2, {
     message: "Expense-category name must be at least 2 characters long",
   })
   @MaxLength(30, {
