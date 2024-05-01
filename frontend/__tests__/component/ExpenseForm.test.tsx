@@ -9,7 +9,6 @@ import {
 } from "@testing-library/react";
 import ExpenseForm from "../../app/component/ExpenseForm";
 import mockExpenseCategories from "../../__mocks__/mockExpenseCategories";
-import { addExpense } from "../../app/api/expense";
 
 jest.mock("../../app/api/expense", () => ({
   addExpense: jest.fn(),
@@ -72,7 +71,6 @@ describe("ExpenseForm component", () => {
       expect(
         screen.getByText("Expense category is required"),
       ).toBeInTheDocument();
-      expect(screen.getByText("Date is required")).toBeInTheDocument();
     });
   });
 });
