@@ -60,7 +60,7 @@ export default function RegistrationForm() {
         Name
       </label>
       <InputText
-        keyfilter={"alpha"}
+        keyfilter={/^[a-zA-Z\s]*$/}
         id="name"
         autoComplete="off"
         value={values.name}
