@@ -75,35 +75,4 @@ describe("ExpenseForm component", () => {
       expect(screen.getByText("Date is required")).toBeInTheDocument();
     });
   });
-
-  //   test("should call addExpense when add button is clicked", async () => {
-  //     const addButton = screen.getByLabelText("Add");
-  //     const amountField = screen.getByLabelText("Amount");
-  //     const categoryField = screen.getByTestId("expenseCategory");
-  //     const descriptionField = screen.getByLabelText("Description");
-  //     const dateField = screen.getByTestId("date");
-
-  //     expect(amountField).toBeInTheDocument();
-  //     expect(categoryField).toBeInTheDocument();
-  //     expect(descriptionField).toBeInTheDocument();
-  //     expect(dateField).toBeInTheDocument();
-
-  //     expect(addButton).toBeInTheDocument();
-
-  //     fireEvent.change(amountField, { target: { value: "6000" } });
-  //     fireEvent.change(descriptionField, {
-  //       target: { value: "Flight Tickets from Bangalore to Hyd" },
-  //     });
-  //     fireEvent.change(categoryField, { target: "20 Apr, 2024" });
-
-  //     fireEvent.click(categoryField);
-  //     const optionElement = await screen.findByText("Travel");
-  //     fireEvent.click(optionElement);
-
-  //     fireEvent.click(addButton);
-
-  //     await waitFor(() => {
-  //       expect(addExpense).toHaveBeenCalled();
-  //     });
-  //   });
 });
