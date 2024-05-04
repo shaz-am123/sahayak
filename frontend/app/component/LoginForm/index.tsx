@@ -1,15 +1,24 @@
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { handleLogin } from "../../api/auth";
 import styles from "./styles.module.scss";
 import { useFormik } from "formik";
 import loginSchema from "./loginSchema";
 import PasswordInput from "../InputPassword";
+import { Toast } from "primereact/toast";
 
 export default function LoginForm() {
   const router = useRouter();
+  const toast = useRef(null);
+
+  const showAlert = (success: boolean, message: string) => {
+    toast.current.show({
+      severity: success ? "success" : "error",
+      detail: message,
+    });
+  };
   const [loading, setLoading] = useState(false);
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
@@ -20,8 +29,9 @@ export default function LoginForm() {
       validationSchema: loginSchema,
       onSubmit: (values, action) => {
         setLoading(true);
-        handleLogin({ ...values }, router).then(() => {
+        handleLogin({ ...values }, router).then((response) => {
           action.resetForm();
+          showAlert(response.success, response.message);
           setLoading(false);
         });
       },
@@ -34,6 +44,7 @@ export default function LoginForm() {
       onSubmit={handleSubmit}
     >
       <h2 data-testid="heading">Login</h2>
+      <Toast ref={toast} />
       <label
         className={`${styles.fieldLabel} ${styles.requiredField}`}
         htmlFor="username"

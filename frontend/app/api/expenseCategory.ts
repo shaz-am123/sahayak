@@ -3,6 +3,7 @@ import ExpenseCategoryRequest from "../types/ExpenseCategoryRequest";
 import MultipleExpenseCategoriesResponse from "../types/MultipleExpenseCategoriesResponse";
 import { isAuthenticated } from "./auth";
 import { capitalize } from "../utils/formatter";
+import ApiResponse from "../types/ApiResponse";
 
 const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
@@ -32,7 +33,7 @@ export const getExpenseCategories =
 export const addExpenseCategory = async (
   expenseCategoryRequest: ExpenseCategoryRequest,
   router: AppRouterInstance,
-): Promise<void> => {
+): Promise<ApiResponse | void> => {
   if (!isAuthenticated()) {
     throw new Error("Not Authenticated");
   }
@@ -50,10 +51,17 @@ export const addExpenseCategory = async (
   });
 
   if (!res.ok) {
-    throw new Error("Request failed");
-  } else {
-    router.push("/expenseCategory");
+    const errorResponse = await res.json();
+    return {
+      success: false,
+      message: errorResponse.error,
+    };
   }
+  router.push("/expenseCategory");
+  return {
+    success: true,
+    message: "Categpory added successfully",
+  };
 };
 
 export const isUniqueCategory = async (

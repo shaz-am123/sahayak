@@ -2,6 +2,7 @@ import { AppRouterInstance } from "next/dist/shared/lib/app-router-context.share
 import ExpenseRequest from "../types/ExpenseRequest";
 import MultipleExpensesResponse from "../types/MultipleExpensesResponse";
 import { isAuthenticated } from "./auth";
+import ApiResponse from "../types/ApiResponse";
 
 const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
@@ -30,7 +31,7 @@ export const getExpenses = async (): Promise<MultipleExpensesResponse> => {
 export const addExpense = async (
   expenseRequest: ExpenseRequest,
   router: AppRouterInstance,
-): Promise<void> => {
+): Promise<ApiResponse | void> => {
   if (!isAuthenticated()) {
     throw new Error("Not Authenticated");
   }
@@ -45,8 +46,15 @@ export const addExpense = async (
   });
 
   if (!res.ok) {
-    throw new Error("Request failed");
+    const errorResponse = await res.json();
+    return {
+      success: false,
+      message: errorResponse.error,
+    };
   }
-
   router.push("/expense");
+  return {
+    success: true,
+    message: "Expense added successfully",
+  };
 };

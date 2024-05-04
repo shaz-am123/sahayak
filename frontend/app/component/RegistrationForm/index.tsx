@@ -1,15 +1,25 @@
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { handleRegistration, isUniqueUsername } from "../../api/auth";
 import styles from "./styles.module.scss";
 import { useFormik } from "formik";
 import registrationSchema from "./registrationSchema";
 import PasswordInput from "../InputPassword";
+import { Toast } from "primereact/toast";
 
 export default function RegistrationForm() {
   const router = useRouter();
+  const toast = useRef(null);
+
+  const showAlert = (success: boolean, message: string) => {
+    toast.current.show({
+      severity: success ? "success" : "error",
+      detail: message,
+    });
+  };
+
   const [loading, setLoading] = useState(false);
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
@@ -23,8 +33,9 @@ export default function RegistrationForm() {
       validationSchema: registrationSchema,
       onSubmit: (values, action) => {
         setLoading(true);
-        handleRegistration({ ...values }, router).then(() => {
+        handleRegistration({ ...values }, router).then((response) => {
           action.resetForm();
+          showAlert(response.success, response.message);
           setLoading(false);
         });
       },
@@ -36,6 +47,7 @@ export default function RegistrationForm() {
       data-testid="registrationForm"
       onSubmit={handleSubmit}
     >
+      <Toast ref={toast} />
       <h2 data-testid="heading">Register</h2>
       <label
         className={`${styles.fieldLabel} ${styles.requiredField}`}

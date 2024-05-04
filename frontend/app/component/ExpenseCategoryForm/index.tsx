@@ -1,16 +1,27 @@
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import styles from "./styles.module.scss";
 import { useFormik } from "formik";
 import expenseCategoryFormSchema from "./expenseCategoryFormSchema";
 import { addExpenseCategory } from "../../api/expenseCategory";
 import { InputTextarea } from "primereact/inputtextarea";
+import ApiResponse from "../../types/ApiResponse";
+import { Toast } from "primereact/toast";
 
 export default function ExpenseCategoryForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
+  const toast = useRef(null);
+
+  const showAlert = (success: boolean, message: string) => {
+    toast.current.show({
+      severity: success ? "success" : "error",
+      detail: message,
+    });
+  };
+
   const { values, errors, touched, handleBlur, handleChange, handleSubmit } =
     useFormik({
       initialValues: {
@@ -20,10 +31,13 @@ export default function ExpenseCategoryForm() {
       validationSchema: expenseCategoryFormSchema,
       onSubmit: (values, action) => {
         setLoading(true);
-        addExpenseCategory({ ...values }, router).then(() => {
-          action.resetForm();
-          setLoading(false);
-        });
+        addExpenseCategory({ ...values }, router).then(
+          (response: ApiResponse) => {
+            action.resetForm();
+            showAlert(response.success, response.message);
+            setLoading(false);
+          },
+        );
       },
     });
 
@@ -33,6 +47,7 @@ export default function ExpenseCategoryForm() {
       data-testid="expense-category-form"
       onSubmit={handleSubmit}
     >
+      <Toast ref={toast} />
       <h2 data-testid="heading">Add Expense-Category</h2>
       <label
         className={`${styles.fieldLabel} ${styles.requiredField}`}

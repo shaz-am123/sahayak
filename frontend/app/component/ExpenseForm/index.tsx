@@ -1,6 +1,6 @@
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import styles from "./styles.module.scss";
 import { useFormik } from "formik";
 import { addExpense } from "../../api/expense";
@@ -10,12 +10,23 @@ import ExpenseCategoryResponse from "../../types/ExpenseCategoryResponse";
 import { InputText } from "primereact/inputtext";
 import { Calendar } from "primereact/calendar";
 import expenseFormSchema from "./expenseFormSchema";
+import { Toast } from "primereact/toast";
+import ApiResponse from "../../types/ApiResponse";
 
 export default function ExpenseForm() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [expenseCategories, setExpenseCategories] =
     useState<ExpenseCategoryResponse[]>();
+
+  const toast = useRef(null);
+
+  const showAlert = (success: boolean, message: string) => {
+    toast.current.show({
+      severity: success ? "success" : "error",
+      detail: message,
+    });
+  };
 
   useEffect(() => {
     getExpenseCategories().then((response) => {
@@ -41,8 +52,9 @@ export default function ExpenseForm() {
             amount: parseInt(values.amount, 10),
           },
           router,
-        ).then(() => {
+        ).then((response: ApiResponse) => {
           action.resetForm();
+          showAlert(response.success, response.message);
           setLoading(false);
         });
       },
@@ -54,6 +66,7 @@ export default function ExpenseForm() {
       data-testid="expense-form"
       onSubmit={handleSubmit}
     >
+      <Toast ref={toast} />
       <h2 data-testid="heading">Add Expense</h2>
       <label
         className={`${styles.fieldLabel} ${styles.requiredField}`}
@@ -63,6 +76,7 @@ export default function ExpenseForm() {
       </label>
       <InputText
         id="amount"
+        autoComplete="off"
         name="amount"
         keyfilter="pint"
         onChange={handleChange}
