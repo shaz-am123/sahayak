@@ -10,7 +10,7 @@ const BACKEND_SERVICE_URL =
 
 export const handleLogin = async (
   loginRequest: LoginRequest,
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ): Promise<ApiResponse> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/login`, {
     method: "POST",
@@ -37,7 +37,7 @@ export const handleLogin = async (
 };
 
 export const handleLogout = async (
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ): Promise<void> => {
   localStorage.removeItem("token");
   router.push("/");
@@ -45,7 +45,7 @@ export const handleLogout = async (
 
 export const handleRegistration = async (
   registrationRequest: RegistraionRequest,
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ): Promise<ApiResponse> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/register`, {
     method: "POST",
@@ -99,7 +99,7 @@ export const isAuthenticated = async (): Promise<boolean> => {
 };
 
 export const isUniqueUsername = async (
-  username: string
+  username: string,
 ): Promise<{ isUnique: boolean }> => {
   const res = await fetch(
     `${BACKEND_SERVICE_URL}/auth/check-username?username=${username}`,
@@ -108,7 +108,7 @@ export const isUniqueUsername = async (
       headers: {
         "Content-Type": "application/json",
       },
-    }
+    },
   );
 
   if (!res.ok) {

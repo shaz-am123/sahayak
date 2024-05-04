@@ -35,7 +35,7 @@ export default function RegistrationForm() {
         setLoading(true);
         handleRegistration({ ...values }, router).then((response) => {
           action.resetForm();
-          showAlert(response.success, response.message)
+          showAlert(response.success, response.message);
           setLoading(false);
         });
       },
