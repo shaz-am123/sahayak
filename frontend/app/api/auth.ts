@@ -3,14 +3,15 @@ import LoginRequest from "../types/LoginRequest";
 import UserResponse from "../types/UserResponse";
 import RegistraionRequest from "../types/RegistrationRequest";
 import LoginResponse from "../types/LoginResponse";
+import ApiResponse from "../types/ApiResponse";
 
 const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
 
 export const handleLogin = async (
   loginRequest: LoginRequest,
-  router: AppRouterInstance,
-): Promise<void> => {
+  router: AppRouterInstance
+): Promise<ApiResponse> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/login`, {
     method: "POST",
     body: JSON.stringify({ ...loginRequest }),
@@ -21,16 +22,22 @@ export const handleLogin = async (
 
   if (!res.ok) {
     const errorResponse = await res.json();
-    alert(`Login failed: ${errorResponse.error}`);
-  } else {
-    const data: LoginResponse = await res.json();
-    localStorage.setItem("token", data.token);
-    router.push("/home");
+    return {
+      success: false,
+      message: errorResponse.error,
+    };
   }
+  const data: LoginResponse = await res.json();
+  localStorage.setItem("token", data.token);
+  router.push("/home");
+  return {
+    success: true,
+    message: "Login successful",
+  };
 };
 
 export const handleLogout = async (
-  router: AppRouterInstance,
+  router: AppRouterInstance
 ): Promise<void> => {
   localStorage.removeItem("token");
   router.push("/");
@@ -38,8 +45,8 @@ export const handleLogout = async (
 
 export const handleRegistration = async (
   registrationRequest: RegistraionRequest,
-  router: AppRouterInstance,
-): Promise<void> => {
+  router: AppRouterInstance
+): Promise<ApiResponse> => {
   const res = await fetch(`${BACKEND_SERVICE_URL}/auth/register`, {
     method: "POST",
     body: JSON.stringify({
@@ -52,11 +59,17 @@ export const handleRegistration = async (
 
   if (!res.ok) {
     const errorResponse = await res.json();
-    console.log(errorResponse.error);
-  } else {
-    const loginRequest: LoginRequest = { ...registrationRequest };
-    handleLogin(loginRequest, router);
+    return {
+      success: false,
+      message: errorResponse.error,
+    };
   }
+  const loginRequest: LoginRequest = { ...registrationRequest };
+  handleLogin(loginRequest, router);
+  return {
+    success: true,
+    message: "Registration successful",
+  };
 };
 
 export const getUser = async (): Promise<UserResponse> => {
@@ -86,7 +99,7 @@ export const isAuthenticated = async (): Promise<boolean> => {
 };
 
 export const isUniqueUsername = async (
-  username: string,
+  username: string
 ): Promise<{ isUnique: boolean }> => {
   const res = await fetch(
     `${BACKEND_SERVICE_URL}/auth/check-username?username=${username}`,
@@ -95,7 +108,7 @@ export const isUniqueUsername = async (
       headers: {
         "Content-Type": "application/json",
       },
-    },
+    }
   );
 
   if (!res.ok) {
