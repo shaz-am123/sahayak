@@ -1,4 +1,4 @@
-import { ExpenseQueryParams } from './../queryParams/ExpenseQueryParams';
+import { ExpenseQueryParams } from "./../queryParams/ExpenseQueryParams";
 import ExpenseRequest from "../dto/ExpenseRequest";
 import HttpResponse from "../dto/HttpResponse";
 import validateRequest from "../dto/ValidateRequestDto";
@@ -14,7 +14,7 @@ export class ExpenseController {
   }
 
   public static getInstance(
-    expenseService: ExpenseService = ExpenseService.getInstance()
+    expenseService: ExpenseService = ExpenseService.getInstance(),
   ): ExpenseController {
     if (!ExpenseController.instance) {
       ExpenseController.instance = new ExpenseController(expenseService);
@@ -24,13 +24,13 @@ export class ExpenseController {
 
   async createExpense(
     userId: string,
-    createExpenseRequest: ExpenseRequest
+    createExpenseRequest: ExpenseRequest,
   ): Promise<HttpResponse> {
     try {
       await validateRequest(createExpenseRequest);
       const createExpenseResponse = await this.expenseService.createExpense(
         userId,
-        createExpenseRequest
+        createExpenseRequest,
       );
       return new HttpResponse({
         statusCode: 201,
@@ -43,12 +43,12 @@ export class ExpenseController {
 
   async getExpenses(
     userId: string,
-    expenseQueryParams: ExpenseQueryParams
+    expenseQueryParams: ExpenseQueryParams,
   ): Promise<HttpResponse> {
     try {
       const multipleExpensesResponse = await this.expenseService.getExpenses(
         userId,
-        expenseQueryParams
+        expenseQueryParams,
       );
       return new HttpResponse({
         statusCode: 200,
@@ -61,12 +61,12 @@ export class ExpenseController {
 
   async getExpenseById(
     userId: string,
-    expenseId: string
+    expenseId: string,
   ): Promise<HttpResponse> {
     try {
       const expenseCategoryResponse = await this.expenseService.getExpenseById(
         userId,
-        expenseId
+        expenseId,
       );
       return new HttpResponse({
         statusCode: 200,
@@ -79,12 +79,12 @@ export class ExpenseController {
 
   async deleteExpense(
     userId: string,
-    expenseId: string
+    expenseId: string,
   ): Promise<HttpResponse> {
     try {
       const deleteExpenseResponse = await this.expenseService.deleteExpense(
         userId,
-        expenseId
+        expenseId,
       );
       return new HttpResponse({
         statusCode: 200,
@@ -98,13 +98,13 @@ export class ExpenseController {
   async updateExpense(
     userId: string,
     expenseId: string,
-    updates: Partial<ExpenseRequest>
+    updates: Partial<ExpenseRequest>,
   ): Promise<HttpResponse> {
     try {
       const expenseResponse = await this.expenseService.updateExpense(
         userId,
         expenseId,
-        updates
+        updates,
       );
       return new HttpResponse({
         statusCode: 200,

@@ -19,12 +19,12 @@ router.post(
     });
     const createExpenseResponse = await expenseController.createExpense(
       userId,
-      createExpenseRequest
+      createExpenseRequest,
     );
     res
       .status(createExpenseResponse.statusCode)
       .json(createExpenseResponse.body);
-  }
+  },
 );
 
 router.get(
@@ -41,15 +41,15 @@ router.get(
         ? (req.query.expenseCategories as string).split(",")
         : null,
     };
-    
+
     const multipleExpensesResponse = await expenseController.getExpenses(
       userId,
-      expenseQueryParams
+      expenseQueryParams,
     );
     res
       .status(multipleExpensesResponse.statusCode)
       .json(multipleExpensesResponse.body);
-  }
+  },
 );
 
 router.get(
@@ -60,10 +60,10 @@ router.get(
     const expenseId = req.params.expenseId;
     const expenseResponse = await expenseController.getExpenseById(
       userId,
-      expenseId
+      expenseId,
     );
     res.status(expenseResponse.statusCode).json(expenseResponse.body);
-  }
+  },
 );
 
 router.delete(
@@ -74,10 +74,10 @@ router.delete(
     const expenseId = req.params.expenseId;
     const expenseResponse = await expenseController.deleteExpense(
       userId,
-      expenseId
+      expenseId,
     );
     res.status(expenseResponse.statusCode).json(expenseResponse.body);
-  }
+  },
 );
 
 router.put(
@@ -90,12 +90,12 @@ router.put(
     const expenseCategoryResponse = await expenseController.updateExpense(
       userId,
       expenseId,
-      updates
+      updates,
     );
     res
       .status(expenseCategoryResponse.statusCode)
       .json(expenseCategoryResponse.body);
-  }
+  },
 );
 
 export default router;

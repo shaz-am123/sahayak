@@ -4,6 +4,7 @@ import ExpenseRequest from "../../src/dto/ExpenseRequest";
 import ExpenseResponse from "../../src/dto/ExpenseResponse";
 import MultipleExpenseCategoriesResponse from "../../src/dto/MultipleExpenseCategoriesResponse";
 import MultipleExpensesResponse from "../../src/dto/MultipleExpensesResponse";
+import { ExpenseQueryParams } from "../../src/queryParams/ExpenseQueryParams";
 import { ExpenseRepository } from "../../src/repositories/ExpenseRepository";
 import { CategoryService } from "../../src/services/CategoryService";
 import { ExpenseService } from "../../src/services/ExpenseService";
@@ -238,17 +239,144 @@ describe("Expense Service tests", () => {
     expenseRepositoryMock.getExpenses.mockResolvedValueOnce(
       repositoryMockResponse,
     );
-    const actualResponse = await expenseService.getExpenses(userId);
+    const expenseQueryParams: ExpenseQueryParams = {
+      startDate: null,
+      endDate: null,
+      expenseCategories: null,
+    };
+    const actualResponse = await expenseService.getExpenses(
+      userId,
+      expenseQueryParams,
+    );
+    expect(actualResponse).toEqual(expectedResponse);
+  });
+
+  it("should be able to get filtered expenses of an user based on query params", async () => {
+    const userId = "A001";
+    const mockCategories = [
+      new ExpenseCategoryResponse({
+        id: "1",
+        userId: userId,
+        name: "Food",
+        description: "",
+        expenseCount: 1,
+      }),
+      new ExpenseCategoryResponse({
+        id: "2",
+        userId: userId,
+        name: "Travel",
+        description: "",
+        expenseCount: 1,
+      }),
+    ];
+
+    const repositoryMockResponse = [
+      new Expense({
+        id: "1",
+        userId: userId,
+        amount: 100,
+        expenseCategoryId: "1",
+        description: "",
+        date: new Date("2024-02-25"),
+      }),
+      new Expense({
+        id: "2",
+        userId: userId,
+        amount: 120,
+        expenseCategoryId: "1",
+        description: "",
+        date: new Date("2024-02-26"),
+      }),
+      new Expense({
+        id: "3",
+        userId: userId,
+        amount: 500,
+        expenseCategoryId: "2",
+        description: "",
+        date: new Date("2024-02-15"),
+      }),
+    ];
+
+    var expectedResponse = new MultipleExpensesResponse({
+      expenses: [
+        new ExpenseResponse({
+          id: "3",
+          userId: userId,
+          amount: 500,
+          expenseCategory: mockCategories[1],
+          description: "",
+          date: new Date("2024-02-15"),
+        }),
+      ],
+      totalRecords: 1,
+    });
+
+    categoryServiceMock.getExpenseCategories.mockResolvedValue(
+      new MultipleExpenseCategoriesResponse({
+        expenseCategories: mockCategories,
+        totalRecords: 2,
+      }),
+    );
+
+    expenseRepositoryMock.getExpenses.mockResolvedValue(repositoryMockResponse);
+
+    var expenseQueryParams: ExpenseQueryParams = {
+      startDate: null,
+      endDate: null,
+      expenseCategories: ["2"],
+    };
+    var actualResponse = await expenseService.getExpenses(
+      userId,
+      expenseQueryParams,
+    );
+    expect(actualResponse).toEqual(expectedResponse);
+
+    var expectedResponse = new MultipleExpensesResponse({
+      expenses: [
+        new ExpenseResponse({
+          id: "1",
+          userId: userId,
+          amount: 100,
+          expenseCategory: mockCategories[0],
+          description: "",
+          date: new Date("2024-02-25"),
+        }),
+        new ExpenseResponse({
+          id: "2",
+          userId: userId,
+          amount: 120,
+          expenseCategory: mockCategories[0],
+          description: "",
+          date: new Date("2024-02-26"),
+        }),
+      ],
+      totalRecords: 2,
+    });
+
+    var expenseQueryParams: ExpenseQueryParams = {
+      startDate: new Date("2024-02-20"),
+      endDate: new Date("2024-02-30"),
+      expenseCategories: ["1"],
+    };
+    var actualResponse = await expenseService.getExpenses(
+      userId,
+      expenseQueryParams,
+    );
     expect(actualResponse).toEqual(expectedResponse);
   });
 
   it("should be able to handle any error that occurs while getting expenses of an user", async () => {
     const userId = "A001";
     const mockError = new Error("Internal Server Error");
+    const expenseQueryParams: ExpenseQueryParams = {
+      startDate: null,
+      endDate: null,
+      expenseCategories: null,
+    };
 
     expenseRepositoryMock.getExpenses.mockRejectedValue(mockError);
     try {
-      await expenseService.getExpenses(userId);
+      await expenseService.getExpenses(userId, expenseQueryParams);
     } catch (error: any) {
       expect(error).toBeInstanceOf(Error);
       expect(error.message).toEqual(mockError.message);

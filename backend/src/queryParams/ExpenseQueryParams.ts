@@ -1,5 +1,5 @@
-export interface ExpenseQueryParams{
-    startDate: Date | null,
-    endDate: Date | null,
-    expenseCategories: string[] | null
+export interface ExpenseQueryParams {
+  startDate: Date | null;
+  endDate: Date | null;
+  expenseCategories: string[] | null;
 }

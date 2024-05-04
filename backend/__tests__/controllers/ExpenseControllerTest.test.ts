@@ -5,6 +5,7 @@ import MultipleExpensesResponse from "../../src/dto/MultipleExpensesResponse";
 import { CustomValidationError } from "../../src/errors/CustomValidationError";
 import { ExpenseController } from "../../src/controllers/ExpenseController";
 import { ExpenseService } from "../../src/services/ExpenseService";
+import { ExpenseQueryParams } from "../../src/queryParams/ExpenseQueryParams";
 
 jest.mock("../../src/services/ExpenseService", () => ({
   ExpenseService: {
@@ -127,8 +128,15 @@ describe("Expense Controller tests", () => {
     });
 
     expenseServiceMock.getExpenses.mockResolvedValue(expectedResponse);
-
-    const httpResponse = await expenseController.getExpenses(userId);
+    const expenseQueryParams: ExpenseQueryParams = {
+      startDate: null,
+      endDate: null,
+      expenseCategories: null,
+    };
+    const httpResponse = await expenseController.getExpenses(
+      userId,
+      expenseQueryParams,
+    );
 
     expect(httpResponse.body).toEqual(expectedResponse);
     expect(httpResponse.statusCode).toBe(200);
@@ -139,8 +147,15 @@ describe("Expense Controller tests", () => {
     const mockError = new Error("Internal Server Error");
 
     expenseServiceMock.getExpenses.mockRejectedValue(mockError);
-
-    const httpResponse = await expenseController.getExpenses(userId);
+    const expenseQueryParams: ExpenseQueryParams = {
+      startDate: null,
+      endDate: null,
+      expenseCategories: null,
+    };
+    const httpResponse = await expenseController.getExpenses(
+      userId,
+      expenseQueryParams,
+    );
 
     expect(httpResponse.body).toEqual({ error: mockError.message });
     expect(httpResponse.statusCode).toBe(500);
