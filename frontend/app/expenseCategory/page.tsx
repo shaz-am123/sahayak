@@ -13,10 +13,12 @@ export default function ExpenseCategory() {
   const router = useRouter();
   const [expenseCategories, setExpenseCategories] =
     useState<ExpenseCategoryResponse[]>();
+  const [totalCategories, setTotalCategories] = useState(0);
 
   useEffect(() => {
     getExpenseCategories().then((response) => {
       setExpenseCategories(response.expenseCategories);
+      setTotalCategories(response.totalRecords);
     });
   }, []);
 
@@ -25,7 +27,7 @@ export default function ExpenseCategory() {
       <p>Loading</p>
     ) : (
       <>
-        <h2 className="p-ml-4">My Expense Categories</h2>
+        <h2 className="p-ml-4 p-mb-0">Expense Categories ({totalCategories})</h2>
         <Button
           className={styles.addCategoryButton}
           size="small"
