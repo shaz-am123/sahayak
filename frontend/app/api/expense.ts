@@ -3,16 +3,20 @@ import ExpenseRequest from "../types/ExpenseRequest";
 import MultipleExpensesResponse from "../types/MultipleExpensesResponse";
 import { isAuthenticated } from "./auth";
 import ApiResponse from "../types/ApiResponse";
+import { ExpenseQueryParams } from "../types/ExpenseQueryParams";
+import { serializeExpenseQueryParams } from "../utils/expenseQueryConstructors";
 
 const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
 
-export const getExpenses = async (): Promise<MultipleExpensesResponse> => {
+export const getExpenses = async (
+  expenseQueryParams: ExpenseQueryParams,
+): Promise<MultipleExpensesResponse> => {
   if (!isAuthenticated()) {
     throw new Error("Not Authenticated");
   }
-
-  const res = await fetch(`${BACKEND_SERVICE_URL}/expenses`, {
+  const queryString = serializeExpenseQueryParams(expenseQueryParams);
+  const res = await fetch(`${BACKEND_SERVICE_URL}/expenses?${queryString}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",

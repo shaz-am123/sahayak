@@ -1,10 +1,6 @@
 import React from "react";
 import "@testing-library/jest-dom";
-import {
-  render,
-  screen,
-  fireEvent,
-} from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import FilterChip from "../../app/component/FilterChip";
 
 describe("FilterChip component", () => {
@@ -14,7 +10,7 @@ describe("FilterChip component", () => {
     const removeFilter = jest.fn();
 
     render(
-      <FilterChip label={label} value={value} removeFilter={removeFilter} />
+      <FilterChip label={label} value={value} removeFilter={removeFilter} />,
     );
 
     expect(screen.getByText(`${label}: ${value.name}`)).toBeInTheDocument();
@@ -26,7 +22,7 @@ describe("FilterChip component", () => {
     const removeFilter = jest.fn();
 
     const { getByTestId } = render(
-      <FilterChip label={label} value={value} removeFilter={removeFilter} />
+      <FilterChip label={label} value={value} removeFilter={removeFilter} />,
     );
 
     fireEvent.click(getByTestId("close-icon"));

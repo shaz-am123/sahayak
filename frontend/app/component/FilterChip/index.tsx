@@ -13,7 +13,7 @@ export default function FilterChip({
   removeFilter,
 }: FilterChipProps) {
   return (
-    <span className={styles.filterChip}>
+    <span className={styles.filterChip} data-testid="filter-chip">
       {label}: {value.name}
       <i
         data-testid="close-icon"
