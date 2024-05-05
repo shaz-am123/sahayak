@@ -2,6 +2,7 @@ import express from "express";
 import verifyToken from "../middleware/authMiddleware";
 import ExpenseRequest from "../dto/ExpenseRequest";
 import { ExpenseController } from "../controllers/ExpenseController";
+import { ExpenseQueryParams } from "../queryParams/ExpenseQueryParams";
 const router = express.Router();
 
 const expenseController = ExpenseController.getInstance();
@@ -31,9 +32,20 @@ router.get(
   verifyToken,
   async (req: express.Request, res: express.Response) => {
     const userId = req.userId!;
+    const expenseQueryParams: ExpenseQueryParams = {
+      startDate: req.query.startDate
+        ? new Date(req.query.startDate as string)
+        : null,
+      endDate: req.query.endDate ? new Date(req.query.endDate as string) : null,
+      expenseCategories: req.query.expenseCategories
+        ? (req.query.expenseCategories as string).split(",")
+        : null,
+    };
 
-    const multipleExpensesResponse =
-      await expenseController.getExpenses(userId);
+    const multipleExpensesResponse = await expenseController.getExpenses(
+      userId,
+      expenseQueryParams,
+    );
     res
       .status(multipleExpensesResponse.statusCode)
       .json(multipleExpensesResponse.body);

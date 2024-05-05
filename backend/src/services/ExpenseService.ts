@@ -1,3 +1,4 @@
+import { ExpenseQueryParams } from "./../queryParams/ExpenseQueryParams";
 import Expense from "../domain/Expense";
 import ExpenseCategory from "../domain/ExpenseCategory";
 import ExpenseCategoryResponse from "../dto/ExpenseCategoryResponse";
@@ -71,8 +72,26 @@ export class ExpenseService {
     });
   }
 
-  async getExpenses(userId: string): Promise<MultipleExpensesResponse> {
-    const expenses = await this.expenseRepository.getExpenses(userId);
+  async getExpenses(
+    userId: string,
+    expenseQueryParams: ExpenseQueryParams,
+  ): Promise<MultipleExpensesResponse> {
+    var expenses = await this.expenseRepository.getExpenses(userId);
+    if (expenseQueryParams.expenseCategories) {
+      expenses = expenses.filter((expense) =>
+        expenseQueryParams.expenseCategories!.includes(
+          expense.expenseCategoryId,
+        ),
+      );
+    }
+
+    if (expenseQueryParams.startDate && expenseQueryParams.endDate) {
+      expenses = expenses.filter(
+        (expense) =>
+          expense.date >= expenseQueryParams.startDate! &&
+          expense.date <= expenseQueryParams.endDate!,
+      );
+    }
     const idToExpenseCategoryMap = new Map<string, ExpenseCategory>();
 
     const { expenseCategories } =

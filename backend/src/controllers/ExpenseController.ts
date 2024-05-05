@@ -1,3 +1,4 @@
+import { ExpenseQueryParams } from "./../queryParams/ExpenseQueryParams";
 import ExpenseRequest from "../dto/ExpenseRequest";
 import HttpResponse from "../dto/HttpResponse";
 import validateRequest from "../dto/ValidateRequestDto";
@@ -40,10 +41,15 @@ export class ExpenseController {
     }
   }
 
-  async getExpenses(userId: string): Promise<HttpResponse> {
+  async getExpenses(
+    userId: string,
+    expenseQueryParams: ExpenseQueryParams,
+  ): Promise<HttpResponse> {
     try {
-      const multipleExpensesResponse =
-        await this.expenseService.getExpenses(userId);
+      const multipleExpensesResponse = await this.expenseService.getExpenses(
+        userId,
+        expenseQueryParams,
+      );
       return new HttpResponse({
         statusCode: 200,
         body: multipleExpensesResponse,

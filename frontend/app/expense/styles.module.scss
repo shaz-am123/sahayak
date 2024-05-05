@@ -1,5 +1,31 @@
 .addExpenseButton {
     position: absolute;
     right: 2.4rem;
-    top: 7rem;
+    top: 10.5rem;
+}
+
+.filters{
+    position: relative;
+    margin-top: 1%;
+}
+
+.filterPanel {
+    width: 28vw;
+    height: 30vh;
+}
+
+.dateFilter {
+    position: absolute;
+    bottom: 6px;
+    left: 7%;
+    width: 21vw;
+}
+
+.dateRangeSelector {
+    width: 90%;
+}
+
+.filterOptions {
+    width: 45%;
+    float: left;
 }

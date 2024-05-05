@@ -4,6 +4,7 @@ import "@testing-library/jest-dom";
 import Expense from "../../../app/expense/page";
 import mockExpenses from "../../../__mocks__/mockExpenses";
 import mockRouter from "next-router-mock";
+import mockExpenseCategories from "../../../__mocks__/mockExpenseCategories";
 
 jest.mock("next/navigation", () => require("next-router-mock"));
 
@@ -15,10 +16,15 @@ jest.mock("../../../app/api/expense", () => ({
   getExpenses: jest.fn(() => Promise.resolve(mockExpenses)),
 }));
 
+jest.mock("../../../app/api/expenseCategory", () => ({
+  getExpenseCategories: jest.fn(() => Promise.resolve(mockExpenseCategories)),
+}));
+
 describe("Expenses listing component", () => {
   beforeEach(() => {
     render(<Expense />);
   });
+
   it("renders expenses table", async () => {
     expect(screen.getByText("Loading")).toBeInTheDocument();
 
@@ -40,6 +46,43 @@ describe("Expenses listing component", () => {
 
         expect(screen.getByText(date)).toBeInTheDocument();
       });
+    });
+  });
+
+  it("renders filters", async () => {
+    expect(screen.getByText("Loading")).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(screen.getByTestId("expense-filters")).toBeInTheDocument();
+      expect(screen.getByTestId("date-range-picker")).toBeInTheDocument();
+      expect(screen.getByTestId("filter-button")).toBeInTheDocument();
+    });
+  });
+
+  it("should open overlay panel when the filter button is clicked", async () => {
+    expect(screen.getByText("Loading")).toBeInTheDocument();
+
+    await waitFor(() => {
+      const filterButton = screen.getByTestId("filter-button");
+      fireEvent.click(filterButton);
+      const filterPanel = screen.getByTestId("filter-panel");
+      expect(filterPanel).toBeInTheDocument();
+    });
+  });
+
+  it("should display filterchips filters are checked", async () => {
+    expect(screen.getByText("Loading")).toBeInTheDocument();
+
+    await waitFor(() => {
+      const filterButton = screen.getByTestId("filter-button");
+      fireEvent.click(filterButton);
+      const filterPanel = screen.getByTestId("filter-panel");
+      expect(filterPanel).toBeInTheDocument();
+      const filterOption = screen.getByLabelText("Food");
+      expect(filterOption).toBeInTheDocument();
+      expect(screen.queryByTestId("filter-chip")).not.toBeInTheDocument();
+      fireEvent.click(filterOption);
+      expect(screen.queryByTestId("filter-chip")).toBeInTheDocument();
     });
   });
 
