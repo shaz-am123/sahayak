@@ -17,8 +17,6 @@ import { Checkbox } from "primereact/checkbox";
 import FilterChip from "../component/FilterChip";
 import expenseTableColumns from "./ExpenseTableColumns";
 import { ExpenseQueryParams } from "../types/ExpenseQueryParams";
-import { Row } from "primereact/row";
-import { ColumnGroup } from "primereact/columngroup";
 
 export default function Expense() {
   const router = useRouter();
