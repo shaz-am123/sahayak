@@ -17,6 +17,8 @@ import { Checkbox } from "primereact/checkbox";
 import FilterChip from "../component/FilterChip";
 import expenseTableColumns from "./ExpenseTableColumns";
 import { ExpenseQueryParams } from "../types/ExpenseQueryParams";
+import { Row } from "primereact/row";
+import { ColumnGroup } from "primereact/columngroup";
 
 export default function Expense() {
   const router = useRouter();
@@ -30,6 +32,8 @@ export default function Expense() {
 
   const [expenses, setExpenses] = useState<ExpenseResponse[]>();
   const [categories, setCategories] = useState<ExpenseCategoryResponse[]>([]);
+  const [totalAmount, setTotalAmount] = useState<number>(0);
+  const [totalRecords, setTotalRecords] = useState<number>(0);
 
   const [selectedCategories, setSelectedCategories] = useState<
     ExpenseCategoryResponse[]
@@ -65,7 +69,11 @@ export default function Expense() {
       expenseCategories: selectedCategories.map((it) => it.id),
     };
     getExpenses(expenseQueryParams).then((response) => {
-      setExpenses(response.expenses);
+      const expenses = response.expenses;
+      setExpenses(expenses);
+      const total = expenses.reduce((acc, expense) => acc + expense.amount, 0);
+      setTotalAmount(total);
+      setTotalRecords(response.totalRecords);
     });
 
     getExpenseCategories().then((response) =>
@@ -83,6 +91,15 @@ export default function Expense() {
         {...(column.body && { body: column.body })}
       />
     ));
+
+  const totalRow = (
+    <div data-testid="total-row">
+      <span>Total Records: {totalRecords}</span>
+      <span className={styles.totalAmountSpan}>
+        Total Amount: ₹{totalAmount}
+      </span>
+    </div>
+  );
 
   const pageContent =
     expenses === undefined ? (
@@ -175,6 +192,9 @@ export default function Expense() {
           showGridlines
           value={expenses}
           data-testid="expenses-table"
+          scrollable
+          scrollHeight="56vh"
+          footer={totalRow}
         >
           {getExpenseTableColumns()}
         </DataTable>

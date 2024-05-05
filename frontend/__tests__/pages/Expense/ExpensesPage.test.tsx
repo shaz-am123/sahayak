@@ -45,6 +45,8 @@ describe("Expenses listing component", () => {
         });
 
         expect(screen.getByText(date)).toBeInTheDocument();
+
+        expect(screen.getByTestId("total-row")).toBeInTheDocument();
       });
     });
   });

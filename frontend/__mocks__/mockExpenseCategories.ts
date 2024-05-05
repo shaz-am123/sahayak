@@ -6,7 +6,7 @@ const mockExpenseCategories: MultipleExpenseCategoriesResponse = {
       id: "1",
       userId: "A001",
       name: "Food",
-      description: "Lunch",
+      description: "Breafast, Lunch, Dinner",
       expenseCount: 1,
     },
     {
