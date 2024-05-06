@@ -71,4 +71,11 @@ describe("Expenses listing component", () => {
       expect(pushMock).toHaveBeenCalledWith("/expenseCategory/addCategory");
     });
   });
+
+  it("should render date-range-picker", async () => {
+    expect(screen.getByText("Loading")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId("date-range-picker")).toBeInTheDocument();
+    });
+  });
 });

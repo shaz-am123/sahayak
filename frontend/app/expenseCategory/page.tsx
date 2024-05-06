@@ -7,12 +7,19 @@ import styles from "./styles.module.scss";
 import { Button } from "primereact/button";
 import { useRouter } from "next/navigation";
 import { getExpenses } from "../api/expense";
+import { Calendar } from "primereact/calendar";
 
 export default function ExpenseCategory() {
   const router = useRouter();
   const [expenseCategories, setExpenseCategories] =
     useState<ExpenseCategoryResponse[]>();
   const [totalCategories, setTotalCategories] = useState(0);
+
+  const currentDate = new Date();
+  const [dates, setDates] = useState([
+    new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
+    currentDate,
+  ]);
 
   const [categoryIdToExpenseMap, setCategoryIdToExpenseMap] = useState<{
     [categoryId: string]: number;
@@ -26,8 +33,8 @@ export default function ExpenseCategory() {
 
     const currentDate = new Date();
     const expenseQueryParams = {
-      startDate: new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
-      endDate: currentDate,
+      startDate: dates[0],
+      endDate: dates[1] ? dates[1] : currentDate,
       expenseCategories: [],
     };
     getExpenses(expenseQueryParams).then((response) => {
@@ -45,7 +52,7 @@ export default function ExpenseCategory() {
       });
       setCategoryIdToExpenseMap(expenseCategoryMap);
     });
-  }, []);
+  }, [dates]);
 
   const pageContent =
     expenseCategories === undefined ? (
@@ -55,6 +62,19 @@ export default function ExpenseCategory() {
         <h2 className="p-ml-4 p-mb-0">
           Expense Categories ({totalCategories})
         </h2>
+        <div className="p-mt-4 p-ml-4">
+          <Calendar
+            value={dates}
+            onChange={(e) => setDates(e.value)}
+            selectionMode="range"
+            readOnlyInput
+            dateFormat="dd M, yy"
+            hideOnRangeSelection
+            showIcon
+            className={styles.dateRangeSelector}
+            data-testid="date-range-picker"
+          />
+        </div>
         <Button
           className={styles.addCategoryButton}
           size="small"
