@@ -4,6 +4,7 @@ import "@testing-library/jest-dom";
 import ExpenseCategory from "../../../app/expenseCategory/page";
 import mockRouter from "next-router-mock";
 import mockExpenseCategories from "../../../__mocks__/mockExpenseCategories";
+import mockExpenses from "../../../__mocks__/mockExpenses";
 
 jest.mock("next/navigation", () => require("next-router-mock"));
 
@@ -15,6 +16,16 @@ jest.mock("../../../app/api/expenseCategory", () => ({
   getExpenseCategories: jest.fn(() => Promise.resolve(mockExpenseCategories)),
 }));
 
+jest.mock("../../../app/api/expense", () => ({
+  getExpenses: jest.fn(() => Promise.resolve(mockExpenses)),
+}));
+
+const mockCategoryIdToExpenseMap = {
+  "1": 160,
+  "2": 1800,
+  "3": 0,
+};
+
 describe("Expenses listing component", () => {
   beforeEach(() => {
     render(<ExpenseCategory />);
@@ -23,7 +34,11 @@ describe("Expenses listing component", () => {
     expect(screen.getByText("Loading")).toBeInTheDocument();
 
     await waitFor(() => {
-      expect(screen.getByText("My Expense Categories")).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          `Expense Categories (${mockExpenseCategories.totalRecords})`,
+        ),
+      ).toBeInTheDocument();
       const expenseCategoryCards = screen.getAllByTestId(
         "expense-category-card",
       );
@@ -31,7 +46,12 @@ describe("Expenses listing component", () => {
       mockExpenseCategories.expenseCategories.map((expenseCategory): void => {
         expect(screen.getByText(expenseCategory.name)).toBeInTheDocument();
         expect(
-          screen.getByText(`Expenses: ${expenseCategory.expenseCount}`),
+          screen.getByText(`Expense count: ${expenseCategory.expenseCount}`),
+        ).toBeInTheDocument();
+        expect(
+          screen.getByText(
+            `Total Expenses: ₹${mockCategoryIdToExpenseMap[expenseCategory.id]}`,
+          ),
         ).toBeInTheDocument();
         expect(
           screen.getByText(expenseCategory.description),
@@ -49,6 +69,13 @@ describe("Expenses listing component", () => {
       expect(addButton).toBeInTheDocument();
       fireEvent.click(addButton);
       expect(pushMock).toHaveBeenCalledWith("/expenseCategory/addCategory");
+    });
+  });
+
+  it("should render date-range-picker", async () => {
+    expect(screen.getByText("Loading")).toBeInTheDocument();
+    await waitFor(() => {
+      expect(screen.getByTestId("date-range-picker")).toBeInTheDocument();
     });
   });
 });
