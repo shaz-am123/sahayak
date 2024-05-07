@@ -1,9 +1,9 @@
 "use client";
 import ProtectedContent from "../component/ProtectedContent";
-import { DataTable } from "primereact/datatable";
+import { DataTable, DataTableRowEditCompleteEvent } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useEffect, useRef, useState } from "react";
-import { getExpenses } from "../api/expense";
+import { getExpenses, updateExpense } from "../api/expense";
 import ExpenseResponse from "../types/ExpenseResponse";
 import { Button } from "primereact/button";
 import styles from "./styles.module.scss";
@@ -17,17 +17,28 @@ import { Checkbox } from "primereact/checkbox";
 import FilterChip from "../component/FilterChip";
 import expenseTableColumns from "./ExpenseTableColumns";
 import { ExpenseQueryParams } from "../types/ExpenseQueryParams";
+import ExpenseRequest from "../types/ExpenseRequest";
+import { Toast } from "primereact/toast";
 
 export default function Expense() {
   const router = useRouter();
   const filterPanel = useRef(null);
+  const toast = useRef(null);
+
+  const showAlert = (success: boolean, message: string) => {
+    toast.current.show({
+      severity: success ? "success" : "error",
+      detail: message,
+    });
+  };
 
   const currentDate = new Date();
   const [dates, setDates] = useState([
     new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
     currentDate,
   ]);
-
+  
+  const [refreshToggle, setRefreshToggle] = useState(false);
   const [expenses, setExpenses] = useState<ExpenseResponse[]>();
   const [categories, setCategories] = useState<ExpenseCategoryResponse[]>([]);
   const [totalAmount, setTotalAmount] = useState<number>(0);
@@ -40,7 +51,7 @@ export default function Expense() {
   const removeFilter = (categoryId: string) => {
     let _selectedCategories = [...selectedCategories];
     _selectedCategories = _selectedCategories.filter(
-      (category) => category.id !== categoryId,
+      (category) => category.id !== categoryId
     );
 
     setSelectedCategories(_selectedCategories);
@@ -75,9 +86,10 @@ export default function Expense() {
     });
 
     getExpenseCategories().then((response) =>
-      setCategories(response.expenseCategories),
+      setCategories(response.expenseCategories)
     );
-  }, [selectedCategories, dates]);
+
+  }, [selectedCategories, dates, refreshToggle]);
 
   const getExpenseTableColumns = () =>
     expenseTableColumns.map((column) => (
@@ -87,6 +99,7 @@ export default function Expense() {
         header={column.header}
         sortable={column.sort}
         {...(column.body && { body: column.body })}
+        {...(column.editor && { editor: column.editor })}
       />
     ));
 
@@ -99,12 +112,27 @@ export default function Expense() {
     </div>
   );
 
+  const onRowEditComplete = (e: DataTableRowEditCompleteEvent) => {
+    const { id, amount, date, description } = e.newData;
+    const updateRequest: Partial<ExpenseRequest> = {
+      amount: amount,
+      date: date,
+      description: description,
+    };
+    updateExpense(id, updateRequest).then((response)=>{
+      setRefreshToggle(!refreshToggle)
+      showAlert(response.success, response.message);
+    });
+  };
+
   const pageContent =
     expenses === undefined ? (
       <p>Loading</p>
     ) : (
       <>
         <h2>My Expenses</h2>
+        <Toast ref={toast} />
+
         <div className={styles.filters} data-testid="expense-filters">
           <div className={styles.dateFilter}>
             <Calendar
@@ -150,7 +178,7 @@ export default function Expense() {
                       value={category}
                       onChange={onCategoryChange}
                       checked={selectedCategories.some(
-                        (item) => item.id === category.id,
+                        (item) => item.id === category.id
                       )}
                     />
                     <label htmlFor={category.id} className="p-mx-2">
@@ -188,13 +216,21 @@ export default function Expense() {
         <DataTable
           stripedRows
           showGridlines
+          editMode="row"
           value={expenses}
           data-testid="expenses-table"
           scrollable
           scrollHeight="56vh"
           footer={totalRow}
+          lazy
+          onRowEditComplete={onRowEditComplete}
         >
           {getExpenseTableColumns()}
+          <Column
+            headerStyle={{ width: "10rem" }}
+            bodyStyle={{ textAlign: "left" }}
+            rowEditor
+          ></Column>
         </DataTable>
       </>
     );

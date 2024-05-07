@@ -92,7 +92,7 @@ export default function ExpenseCategory() {
               className={styles.categoryCard}
               data-testid="expense-category-card"
             >
-              <h2>{expenseCategory.name}</h2>
+              <h2 style={{color: "#6366f1"}}>{expenseCategory.name}</h2>
               <p className={styles.categoryDescription}>
                 {expenseCategory.description
                   ? expenseCategory.description

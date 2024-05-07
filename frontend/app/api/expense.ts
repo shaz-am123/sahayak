@@ -10,7 +10,7 @@ const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
 
 export const getExpenses = async (
-  expenseQueryParams: ExpenseQueryParams,
+  expenseQueryParams: ExpenseQueryParams
 ): Promise<MultipleExpensesResponse> => {
   if (!isAuthenticated()) {
     throw new Error("Not Authenticated");
@@ -34,7 +34,7 @@ export const getExpenses = async (
 
 export const addExpense = async (
   expenseRequest: ExpenseRequest,
-  router: AppRouterInstance,
+  router: AppRouterInstance
 ): Promise<ApiResponse | void> => {
   if (!isAuthenticated()) {
     throw new Error("Not Authenticated");
@@ -60,5 +60,35 @@ export const addExpense = async (
   return {
     success: true,
     message: "Expense added successfully",
+  };
+};
+
+export const updateExpense = async (
+  expenseId: string,
+  updateExpense: Partial<ExpenseRequest>,
+): Promise<ApiResponse> => {
+  if (!isAuthenticated()) {
+    throw new Error("Not Authenticated");
+  }
+
+  const res = await fetch(`${BACKEND_SERVICE_URL}/expenses/${expenseId}`, {
+    method: "PUT",
+    body: JSON.stringify({ ...updateExpense }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token")!,
+    },
+  });
+
+  if (!res.ok) {
+    const errorResponse = await res.json();
+    return {
+      success: false,
+      message: errorResponse.error,
+    };
+  }
+  return {
+    success: true,
+    message: "Expense updated successfully",
   };
 };
