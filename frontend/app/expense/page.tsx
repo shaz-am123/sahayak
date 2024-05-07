@@ -19,6 +19,8 @@ import expenseTableColumns from "./ExpenseTableColumns";
 import { ExpenseQueryParams } from "../types/ExpenseQueryParams";
 import ExpenseRequest from "../types/ExpenseRequest";
 import { Toast } from "primereact/toast";
+import { ColumnGroup } from "primereact/columngroup";
+import { Row } from "primereact/row";
 
 export default function Expense() {
   const router = useRouter();
@@ -37,7 +39,7 @@ export default function Expense() {
     new Date(currentDate.getFullYear(), currentDate.getMonth(), 1),
     currentDate,
   ]);
-  
+
   const [refreshToggle, setRefreshToggle] = useState(false);
   const [expenses, setExpenses] = useState<ExpenseResponse[]>();
   const [categories, setCategories] = useState<ExpenseCategoryResponse[]>([]);
@@ -51,7 +53,7 @@ export default function Expense() {
   const removeFilter = (categoryId: string) => {
     let _selectedCategories = [...selectedCategories];
     _selectedCategories = _selectedCategories.filter(
-      (category) => category.id !== categoryId
+      (category) => category.id !== categoryId,
     );
 
     setSelectedCategories(_selectedCategories);
@@ -86,9 +88,8 @@ export default function Expense() {
     });
 
     getExpenseCategories().then((response) =>
-      setCategories(response.expenseCategories)
+      setCategories(response.expenseCategories),
     );
-
   }, [selectedCategories, dates, refreshToggle]);
 
   const getExpenseTableColumns = () =>
@@ -104,12 +105,13 @@ export default function Expense() {
     ));
 
   const totalRow = (
-    <div data-testid="total-row">
-      <span>Total Records: {totalRecords}</span>
-      <span className={styles.totalAmountSpan}>
-        Total Amount: ₹{totalAmount}
-      </span>
-    </div>
+    <ColumnGroup>
+      <Row>
+        <Column colSpan={0} footerStyle={{ textAlign: "right" }} />
+        <Column footer={`Total Records: ${totalRecords}`} />
+        <Column footer={`Total Amount: ₹${totalAmount}`} />
+      </Row>
+    </ColumnGroup>
   );
 
   const onRowEditComplete = (e: DataTableRowEditCompleteEvent) => {
@@ -119,8 +121,8 @@ export default function Expense() {
       date: date,
       description: description,
     };
-    updateExpense(id, updateRequest).then((response)=>{
-      setRefreshToggle(!refreshToggle)
+    updateExpense(id, updateRequest).then((response) => {
+      setRefreshToggle(!refreshToggle);
       showAlert(response.success, response.message);
     });
   };
@@ -178,7 +180,7 @@ export default function Expense() {
                       value={category}
                       onChange={onCategoryChange}
                       checked={selectedCategories.some(
-                        (item) => item.id === category.id
+                        (item) => item.id === category.id,
                       )}
                     />
                     <label htmlFor={category.id} className="p-mx-2">
@@ -213,25 +215,28 @@ export default function Expense() {
             />
           ))}
         </div>
-        <DataTable
-          stripedRows
-          showGridlines
-          editMode="row"
-          value={expenses}
-          data-testid="expenses-table"
-          scrollable
-          scrollHeight="56vh"
-          footer={totalRow}
-          lazy
-          onRowEditComplete={onRowEditComplete}
-        >
-          {getExpenseTableColumns()}
-          <Column
-            headerStyle={{ width: "10rem" }}
-            bodyStyle={{ textAlign: "left" }}
-            rowEditor
-          ></Column>
-        </DataTable>
+        <div className={styles.tableContainer}>
+          <DataTable
+            stripedRows
+            showGridlines
+            editMode="row"
+            value={expenses}
+            data-testid="expenses-table"
+            scrollable
+            scrollHeight="56vh"
+            footerColumnGroup={totalRow}
+            lazy
+            onRowEditComplete={onRowEditComplete}
+            size="small"
+          >
+            {getExpenseTableColumns()}
+            <Column
+              headerStyle={{ width: "10rem" }}
+              bodyStyle={{ textAlign: "left" }}
+              rowEditor
+            ></Column>
+          </DataTable>
+        </div>
       </>
     );
   return <ProtectedContent pageContent={pageContent} />;

@@ -24,7 +24,12 @@ const numberEditor = (options) => {
 
 const dateEditor = (options) => {
   return (
-    <Calendar showIcon readOnlyInput value={new Date(options.value)} dateFormat="dd M, yy" />
+    <Calendar
+      showIcon
+      readOnlyInput
+      value={new Date(options.value)}
+      dateFormat="dd M, yy"
+    />
   );
 };
 

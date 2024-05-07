@@ -10,7 +10,7 @@ const BACKEND_SERVICE_URL =
   process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
 
 export const getExpenses = async (
-  expenseQueryParams: ExpenseQueryParams
+  expenseQueryParams: ExpenseQueryParams,
 ): Promise<MultipleExpensesResponse> => {
   if (!isAuthenticated()) {
     throw new Error("Not Authenticated");
@@ -34,7 +34,7 @@ export const getExpenses = async (
 
 export const addExpense = async (
   expenseRequest: ExpenseRequest,
-  router: AppRouterInstance
+  router: AppRouterInstance,
 ): Promise<ApiResponse | void> => {
   if (!isAuthenticated()) {
     throw new Error("Not Authenticated");
