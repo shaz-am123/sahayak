@@ -92,21 +92,18 @@ export default function ExpenseCategory() {
               className={styles.categoryCard}
               data-testid="expense-category-card"
             >
-              <h2>{expenseCategory.name}</h2>
+              <h2 style={{ color: "#6366f1" }}>{expenseCategory.name}</h2>
               <p className={styles.categoryDescription}>
                 {expenseCategory.description
                   ? expenseCategory.description
                   : "Add description?"}
               </p>
-              <div className={styles.categoryDetails}>
-                <p>Expense count: {expenseCategory.expenseCount}</p>
-                <p>
-                  Total Expenses: ₹
-                  {categoryIdToExpenseMap[expenseCategory.id]
-                    ? categoryIdToExpenseMap[expenseCategory.id]
-                    : 0}
-                </p>
-              </div>
+              <p className={styles.categoryDetail}>
+                Total Expenses: ₹
+                {categoryIdToExpenseMap[expenseCategory.id]
+                  ? categoryIdToExpenseMap[expenseCategory.id]
+                  : 0}
+              </p>
             </div>
           );
         })}

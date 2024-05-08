@@ -46,9 +46,6 @@ describe("Expenses listing component", () => {
       mockExpenseCategories.expenseCategories.map((expenseCategory): void => {
         expect(screen.getByText(expenseCategory.name)).toBeInTheDocument();
         expect(
-          screen.getByText(`Expense count: ${expenseCategory.expenseCount}`),
-        ).toBeInTheDocument();
-        expect(
           screen.getByText(
             `Total Expenses: ₹${mockCategoryIdToExpenseMap[expenseCategory.id]}`,
           ),

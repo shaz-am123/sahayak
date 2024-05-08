@@ -5,6 +5,7 @@ import Expense from "../../../app/expense/page";
 import mockExpenses from "../../../__mocks__/mockExpenses";
 import mockRouter from "next-router-mock";
 import mockExpenseCategories from "../../../__mocks__/mockExpenseCategories";
+import { updateExpense } from "../../../app/api/expense";
 
 jest.mock("next/navigation", () => require("next-router-mock"));
 
@@ -14,6 +15,9 @@ jest.mock("../../../app/api/auth", () => ({
 
 jest.mock("../../../app/api/expense", () => ({
   getExpenses: jest.fn(() => Promise.resolve(mockExpenses)),
+  updateExpense: jest.fn(() =>
+    Promise.resolve({ success: true, message: "Update successful" }),
+  ),
 }));
 
 jest.mock("../../../app/api/expenseCategory", () => ({
@@ -45,8 +49,6 @@ describe("Expenses listing component", () => {
         });
 
         expect(screen.getByText(date)).toBeInTheDocument();
-
-        expect(screen.getByTestId("total-row")).toBeInTheDocument();
       });
     });
   });
@@ -97,6 +99,47 @@ describe("Expenses listing component", () => {
       expect(addButton).toBeInTheDocument();
       fireEvent.click(addButton);
       expect(pushMock).toHaveBeenCalledWith("/expense/addExpense");
+    });
+  });
+
+  it("each row should have a edit button and clicking on it should open the table-row in editable mode", async () => {
+    const { container } = render(<Expense />);
+
+    await waitFor(() => {
+      const rowEditbuttons =
+        container.getElementsByClassName("p-row-editor-init");
+      expect(rowEditbuttons[0]).toBeInTheDocument();
+      expect(rowEditbuttons.length).toEqual(mockExpenses.totalRecords);
+
+      expect(screen.queryByTestId("desc-editor")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("amount-editor")).not.toBeInTheDocument();
+      expect(screen.queryByTestId("date-editor")).not.toBeInTheDocument();
+
+      fireEvent.click(rowEditbuttons[0]);
+      expect(screen.queryByTestId("desc-editor")).toBeInTheDocument();
+      expect(screen.queryByTestId("amount-editor")).toBeInTheDocument();
+      expect(screen.queryByTestId("date-editor")).toBeInTheDocument();
+    });
+  });
+
+  it("should be able to update an expense", async () => {
+    const { container } = render(<Expense />);
+
+    await waitFor(() => {
+      const rowEditbuttons =
+        container.getElementsByClassName("p-row-editor-init");
+
+      fireEvent.click(rowEditbuttons[0]);
+      const amountEditor = screen.getByTestId("amount-editor");
+      fireEvent.change(amountEditor, {
+        target: { value: "190" },
+      });
+      const saveButton = container.getElementsByClassName(
+        "p-row-editor-save p-link",
+      )[0];
+      expect(saveButton).toBeInTheDocument();
+      fireEvent.click(saveButton);
+      expect(updateExpense).toHaveBeenCalled();
     });
   });
 });

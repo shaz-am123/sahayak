@@ -62,3 +62,33 @@ export const addExpense = async (
     message: "Expense added successfully",
   };
 };
+
+export const updateExpense = async (
+  expenseId: string,
+  updateExpense: Partial<ExpenseRequest>,
+): Promise<ApiResponse> => {
+  if (!isAuthenticated()) {
+    throw new Error("Not Authenticated");
+  }
+
+  const res = await fetch(`${BACKEND_SERVICE_URL}/expenses/${expenseId}`, {
+    method: "PUT",
+    body: JSON.stringify({ ...updateExpense }),
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token")!,
+    },
+  });
+
+  if (!res.ok) {
+    const errorResponse = await res.json();
+    return {
+      success: false,
+      message: errorResponse.error,
+    };
+  }
+  return {
+    success: true,
+    message: "Expense updated successfully",
+  };
+};
