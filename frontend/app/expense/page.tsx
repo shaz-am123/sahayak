@@ -53,7 +53,7 @@ export default function Expense() {
   const removeFilter = (categoryId: string) => {
     let _selectedCategories = [...selectedCategories];
     _selectedCategories = _selectedCategories.filter(
-      (category) => category.id !== categoryId,
+      (category) => category.id !== categoryId
     );
 
     setSelectedCategories(_selectedCategories);
@@ -88,7 +88,7 @@ export default function Expense() {
     });
 
     getExpenseCategories().then((response) =>
-      setCategories(response.expenseCategories),
+      setCategories(response.expenseCategories)
     );
   }, [selectedCategories, dates, refreshToggle]);
 
@@ -182,7 +182,7 @@ export default function Expense() {
                       value={category}
                       onChange={onCategoryChange}
                       checked={selectedCategories.some(
-                        (item) => item.id === category.id,
+                        (item) => item.id === category.id
                       )}
                     />
                     <label htmlFor={category.id} className="p-mx-2">
@@ -220,7 +220,6 @@ export default function Expense() {
         <div className={styles.tableContainer}>
           <DataTable
             stripedRows
-            showGridlines
             editMode="row"
             value={expenses}
             data-testid="expenses-table"
@@ -231,10 +230,11 @@ export default function Expense() {
             size="small"
             sortField="date"
             sortOrder={-1}
+            removableSort
           >
             {getExpenseTableColumns()}
             <Column
-              headerStyle={{ width: "10rem" }}
+              headerStyle={{ width: "7rem" }}
               bodyStyle={{ textAlign: "left" }}
               rowEditor
             ></Column>
