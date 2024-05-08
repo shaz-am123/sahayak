@@ -107,9 +107,11 @@ export default function Expense() {
   const totalRow = (
     <ColumnGroup>
       <Row>
-        <Column colSpan={0} footerStyle={{ textAlign: "right" }} />
         <Column footer={`Total Records: ${totalRecords}`} />
         <Column footer={`Total Amount: ₹${totalAmount}`} />
+        <Column/>
+        <Column/>
+        <Column/>
       </Row>
     </ColumnGroup>
   );
@@ -225,9 +227,10 @@ export default function Expense() {
             scrollable
             scrollHeight="56vh"
             footerColumnGroup={totalRow}
-            lazy
             onRowEditComplete={onRowEditComplete}
             size="small"
+            sortField="date" 
+            sortOrder={-1}
           >
             {getExpenseTableColumns()}
             <Column
