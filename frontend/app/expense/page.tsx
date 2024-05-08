@@ -109,9 +109,9 @@ export default function Expense() {
       <Row>
         <Column footer={`Total Records: ${totalRecords}`} />
         <Column footer={`Total Amount: ₹${totalAmount}`} />
-        <Column/>
-        <Column/>
-        <Column/>
+        <Column />
+        <Column />
+        <Column />
       </Row>
     </ColumnGroup>
   );
@@ -229,7 +229,7 @@ export default function Expense() {
             footerColumnGroup={totalRow}
             onRowEditComplete={onRowEditComplete}
             size="small"
-            sortField="date" 
+            sortField="date"
             sortOrder={-1}
           >
             {getExpenseTableColumns()}

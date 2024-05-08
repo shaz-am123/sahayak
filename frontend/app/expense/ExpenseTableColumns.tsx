@@ -7,6 +7,7 @@ const textEditor = (options) => {
       type="text"
       value={options.value}
       onChange={(e) => options.editorCallback(e.target.value)}
+      data-testid="desc-editor"
     />
   );
 };
@@ -18,6 +19,7 @@ const numberEditor = (options) => {
       type="number"
       value={options.value}
       onChange={(e) => options.editorCallback(e.target.value)}
+      data-testid="amount-editor"
     />
   );
 };
@@ -29,6 +31,7 @@ const dateEditor = (options) => {
       readOnlyInput
       value={new Date(options.value)}
       dateFormat="dd M, yy"
+      data-testid="date-editor"
     />
   );
 };
