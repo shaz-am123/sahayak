@@ -26,12 +26,14 @@ Follow these instructions to get the project up and running on your local machin
 - Node.js and npm installed on your machine
 - MongoDB installed and running
 
-### Local Setup for Backend
+### Local Setup
 
 1. Clone the repository:
 ```bash
 git clone https://github.com/yourusername/personal-finance-api.git
 ```
+
+### Backend
 2. Navigate to the project directory
 ```bash
 cd sahayak/backend
@@ -45,6 +47,22 @@ npm install
 npm start
 ```
 
-## Local Setup for frontend
-Frontend yet to be built
+### Frontend
+6. Navigate to the project directory
+```bash
+cd sahayak/frontend
+```
+7. Install npm packages
+```bash
+npm install
+```
+8. Start the frontend server:
+```bash
+npm run dev
+```
+
+### Browser
+9. Open any browser of your choice
+10. Go to http://localhost:3000/
+
    
