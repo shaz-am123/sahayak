@@ -1,12 +1,16 @@
 import { Calendar } from "primereact/calendar";
 import { InputText } from "primereact/inputtext";
+import { InputTextarea } from "primereact/inputtextarea";
 
 const textEditor = (options) => {
   return (
-    <InputText
-      type="text"
+    <InputTextarea
+      autoResize
+      rows={1}
+      autoComplete="off"
       value={options.value}
       onChange={(e) => options.editorCallback(e.target.value)}
+      style={{ width: "100%" }}
       data-testid="desc-editor"
     />
   );

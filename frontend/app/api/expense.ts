@@ -92,3 +92,31 @@ export const updateExpense = async (
     message: "Expense updated successfully",
   };
 };
+
+export const deleteExpense = async (
+  expenseId: string,
+): Promise<ApiResponse> => {
+  if (!isAuthenticated()) {
+    throw new Error("Not Authenticated");
+  }
+
+  const res = await fetch(`${BACKEND_SERVICE_URL}/expenses/${expenseId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: localStorage.getItem("token")!,
+    },
+  });
+
+  if (!res.ok) {
+    const errorResponse = await res.json();
+    return {
+      success: false,
+      message: errorResponse.error,
+    };
+  }
+  return {
+    success: true,
+    message: "Expense deleted successfully",
+  };
+};

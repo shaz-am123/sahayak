@@ -3,7 +3,7 @@ import ProtectedContent from "../component/ProtectedContent";
 import { DataTable, DataTableRowEditCompleteEvent } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { useEffect, useRef, useState } from "react";
-import { getExpenses, updateExpense } from "../api/expense";
+import { deleteExpense, getExpenses, updateExpense } from "../api/expense";
 import ExpenseResponse from "../types/ExpenseResponse";
 import { Button } from "primereact/button";
 import styles from "./styles.module.scss";
@@ -21,6 +21,7 @@ import ExpenseRequest from "../types/ExpenseRequest";
 import { Toast } from "primereact/toast";
 import { ColumnGroup } from "primereact/columngroup";
 import { Row } from "primereact/row";
+import { ConfirmPopup, confirmPopup } from "primereact/confirmpopup";
 
 export default function Expense() {
   const router = useRouter();
@@ -72,6 +73,27 @@ export default function Expense() {
     } else removeFilter(e.value.id);
   };
 
+  const accept = (expenseId: string) => {
+    toast.current.show({
+      severity: "success",
+      summary: "Deleted",
+      detail: "Expense deleted successfully",
+      life: 3000,
+    });
+    deleteExpense(expenseId);
+    setRefreshToggle(!refreshToggle);
+  };
+
+  const confirmDeletion = (event, expenseId: string) => {
+    confirmPopup({
+      target: event.currentTarget,
+      message: "Are you sure you want to proceed with deleting the expense?",
+      icon: "pi pi-exclamation-triangle",
+      defaultFocus: "reject",
+      accept: () => accept(expenseId),
+    });
+  };
+
   useEffect(() => {
     const currentDate = new Date();
     const expenseQueryParams: ExpenseQueryParams = {
@@ -109,6 +131,7 @@ export default function Expense() {
       <Row>
         <Column footer={`Total Records: ${totalRecords}`} />
         <Column footer={`Total Amount: ₹${totalAmount}`} />
+        <Column />
         <Column />
         <Column />
         <Column />
@@ -218,9 +241,9 @@ export default function Expense() {
           ))}
         </div>
         <div className={styles.tableContainer}>
+          <ConfirmPopup />
           <DataTable
             stripedRows
-            showGridlines
             editMode="row"
             value={expenses}
             data-testid="expenses-table"
@@ -231,12 +254,24 @@ export default function Expense() {
             size="small"
             sortField="date"
             sortOrder={-1}
+            removableSort
           >
             {getExpenseTableColumns()}
             <Column
-              headerStyle={{ width: "10rem" }}
-              bodyStyle={{ textAlign: "left" }}
+              headerStyle={{ width: "7rem" }}
+              bodyStyle={{ textAlign: "right" }}
               rowEditor
+            ></Column>
+            <Column
+              headerStyle={{ width: "7rem" }}
+              bodyStyle={{ textAlign: "left" }}
+              body={(rowData) => (
+                <i
+                  data-testid="delete-expense-button"
+                  className={`pi pi-trash ${styles.deleteButton}`}
+                  onClick={(e) => confirmDeletion(e, rowData.id)}
+                ></i>
+              )}
             ></Column>
           </DataTable>
         </div>
