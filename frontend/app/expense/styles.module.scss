@@ -4,7 +4,7 @@
     top: 10.5rem;
 }
 
-.filters{
+.filters {
     position: relative;
     margin-top: 1%;
 }
@@ -30,13 +30,17 @@
     float: left;
 }
 
-.totalAmountSpan{
+.totalAmountSpan {
     position: relative;
     left: 13.5%;
 }
 
-.tableContainer{
+.tableContainer {
     padding: 1%;
     background-color: white;
     border-radius: 12px;
+}
+
+.deleteButton {
+    cursor: pointer;
 }
