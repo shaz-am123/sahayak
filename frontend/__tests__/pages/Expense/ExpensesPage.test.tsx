@@ -5,7 +5,7 @@ import Expense from "../../../app/expense/page";
 import mockExpenses from "../../../__mocks__/mockExpenses";
 import mockRouter from "next-router-mock";
 import mockExpenseCategories from "../../../__mocks__/mockExpenseCategories";
-import { updateExpense } from "../../../app/api/expense";
+import { deleteExpense, updateExpense } from "../../../app/api/expense";
 
 jest.mock("next/navigation", () => require("next-router-mock"));
 
@@ -17,6 +17,9 @@ jest.mock("../../../app/api/expense", () => ({
   getExpenses: jest.fn(() => Promise.resolve(mockExpenses)),
   updateExpense: jest.fn(() =>
     Promise.resolve({ success: true, message: "Update successful" }),
+  ),
+  deleteExpense: jest.fn(() =>
+    Promise.resolve({ success: true, message: "Delete successful" }),
   ),
 }));
 
@@ -140,6 +143,30 @@ describe("Expenses listing component", () => {
       expect(saveButton).toBeInTheDocument();
       fireEvent.click(saveButton);
       expect(updateExpense).toHaveBeenCalled();
+    });
+  });
+
+  it("each row should have a trash(delete) button", async () => {
+    await waitFor(() => {
+      const deleteButtons = screen.getAllByTestId("delete-expense-button");
+      expect(deleteButtons[0]).toBeInTheDocument();
+      expect(deleteButtons.length).toEqual(mockExpenses.totalRecords);
+      fireEvent.click(deleteButtons[0]);
+      expect(
+        screen.getByText(
+          "Are you sure you want to proceed with deleting the expense?",
+        ),
+      ).toBeInTheDocument();
+    });
+  });
+
+  it("should be able to delete an expense", async () => {
+    await waitFor(() => {
+      const deleteButtons = screen.getAllByTestId("delete-expense-button");
+
+      fireEvent.click(deleteButtons[0]);
+      fireEvent.click(screen.getByText("Yes"));
+      expect(deleteExpense).toHaveBeenCalled();
     });
   });
 });

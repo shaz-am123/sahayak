@@ -54,7 +54,7 @@ export default function Expense() {
   const removeFilter = (categoryId: string) => {
     let _selectedCategories = [...selectedCategories];
     _selectedCategories = _selectedCategories.filter(
-      (category) => category.id !== categoryId
+      (category) => category.id !== categoryId,
     );
 
     setSelectedCategories(_selectedCategories);
@@ -81,7 +81,7 @@ export default function Expense() {
       life: 3000,
     });
     deleteExpense(expenseId);
-    setRefreshToggle(!refreshToggle)
+    setRefreshToggle(!refreshToggle);
   };
 
   const confirmDeletion = (event, expenseId: string) => {
@@ -110,7 +110,7 @@ export default function Expense() {
     });
 
     getExpenseCategories().then((response) =>
-      setCategories(response.expenseCategories)
+      setCategories(response.expenseCategories),
     );
   }, [selectedCategories, dates, refreshToggle]);
 
@@ -205,7 +205,7 @@ export default function Expense() {
                       value={category}
                       onChange={onCategoryChange}
                       checked={selectedCategories.some(
-                        (item) => item.id === category.id
+                        (item) => item.id === category.id,
                       )}
                     />
                     <label htmlFor={category.id} className="p-mx-2">
@@ -267,6 +267,7 @@ export default function Expense() {
               bodyStyle={{ textAlign: "left" }}
               body={(rowData) => (
                 <i
+                  data-testid="delete-expense-button"
                   className={`pi pi-trash ${styles.deleteButton}`}
                   onClick={(e) => confirmDeletion(e, rowData.id)}
                 ></i>
