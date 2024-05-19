@@ -45,6 +45,7 @@
   },
   "scripts": {
     "start": "nodemon",
+    "build": "rimraf .build && tsc",
     "test": "jest",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "format-check": "prettier --check \"**/*.{ts,tsx}\""
