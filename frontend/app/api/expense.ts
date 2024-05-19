@@ -6,8 +6,7 @@ import ApiResponse from "../types/ApiResponse";
 import { ExpenseQueryParams } from "../types/ExpenseQueryParams";
 import { serializeExpenseQueryParams } from "../utils/expenseQueryConstructors";
 
-const BACKEND_SERVICE_URL =
-  process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
+const BACKEND_SERVICE_URL = process.env.BACKEND_SERVICE_URL;
 
 export const getExpenses = async (
   expenseQueryParams: ExpenseQueryParams,

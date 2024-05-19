@@ -5,8 +5,7 @@ import { isAuthenticated } from "./auth";
 import { capitalize } from "../utils/formatter";
 import ApiResponse from "../types/ApiResponse";
 
-const BACKEND_SERVICE_URL =
-  process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
+const BACKEND_SERVICE_URL = process.env.BACKEND_SERVICE_URL;
 
 export const getExpenseCategories =
   async (): Promise<MultipleExpenseCategoriesResponse> => {

@@ -5,8 +5,7 @@ import RegistraionRequest from "../types/RegistrationRequest";
 import LoginResponse from "../types/LoginResponse";
 import ApiResponse from "../types/ApiResponse";
 
-const BACKEND_SERVICE_URL =
-  process.env.BACKEND_SERVICE_URL || "http://localhost:8080";
+const BACKEND_SERVICE_URL = process.env.BACKEND_SERVICE_URL;
 
 export const handleLogin = async (
   loginRequest: LoginRequest,
