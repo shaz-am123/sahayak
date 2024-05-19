@@ -24,4 +24,7 @@ app.use("/categories", userRoutes);
 app.use("/expenses", expenseRoutes);
 
 const PORT = process.env.PORT;
+app.get("/", (req, res) => {
+  res.send("<h1>Sahayak Backend</h1>");
+});
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
