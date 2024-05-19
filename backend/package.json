@@ -44,11 +44,19 @@
     "typescript": "^5.4.3"
   },
   "scripts": {
-    "start": "nodemon",
+    "start": "nodemon src/index.ts",
+    "build": "rimraf dist && tsc",
+    "ts.check": "tsc --project tsconfig.json",
+    "add-build": "git add dist",
     "test": "jest",
     "format": "prettier --write \"**/*.{ts,tsx}\"",
     "format-check": "prettier --check \"**/*.{ts,tsx}\""
   },
+  "pre-commit": [
+    "ts.check",
+    "build",
+    "add-build"
+  ],
   "author": "Shubham Prasad",
   "license": "ISC"
 }

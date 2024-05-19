@@ -15,7 +15,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node16",
-    "outDir": "./build",
+    "outDir": "dist",
     "rootDir": "./",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
