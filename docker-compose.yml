@@ -1,0 +1,41 @@
+services:
+  frontend:
+    build: ./frontend
+    restart: always
+    ports:
+      - "3000:3000"
+    stdin_open: true
+    tty: true
+    depends_on:
+      - backend
+    env_file:
+      - ./frontend/.env.local
+  
+  backend:
+    build: ./backend
+    container_name: node-api
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      - database
+    networks:
+      - mern_network
+    env_file:
+      - ./backend/.env
+  
+  database:
+    image: mongo
+    container_name: mongo-db
+    volumes:
+      - /mongo-backup:/data/db
+    networks:
+      - mern_network
+
+networks:
+  mern_network:
+    driver: bridge
+
+volumes:
+  mongo-data:
+    name: mongo_data_volume
