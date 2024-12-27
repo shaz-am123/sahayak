@@ -20,7 +20,25 @@ This is a personal finance management application. It allows users to register a
 ## Getting Started
 
 Follow these instructions to get the project up and running on your local machine.
+## Option 1 (Using Docker)
+1. Start a docker engine (e.g. Docker Desktop)
+2. Clone the repository:
+```bash
+git clone https://github.com/shaz-am123/sahayak.git
+```
+3. Navigate to the project directory in the command line.
+```bash
+cd sahayak/backend
+```
+4. Run the following command
+```bash
+docker-compose up
+```
+### Browser
+5. Open any browser of your choice
+6. Go to http://localhost:3000/
 
+## Option 2
 ### Prerequisites
 
 - Node.js and npm installed on your machine
